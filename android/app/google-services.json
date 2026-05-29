@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "352431174992",
+    "project_id": "salestracker-c5cc5",
+    "storage_bucket": "salestracker-c5cc5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:352431174992:android:32f4e0afc7418f5d5c6855",
+        "android_client_info": {
+          "package_name": "com.synergy.puri"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEis8JPZq1K-p7fnZtI_w5temdjZ0UiNI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:352431174992:android:db2fdc2a5a34c47e5c6855",
+        "android_client_info": {
+          "package_name": "com.synergy.salestracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEis8JPZq1K-p7fnZtI_w5temdjZ0UiNI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
