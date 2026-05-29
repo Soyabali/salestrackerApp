@@ -65,7 +65,7 @@ dependencies:
   package_info_plus: ^8.0.0
   flutter_rating_bar: ^4.0.1
   permission_handler: ^11.3.1
-  google_fonts: ^6.2.1
+  google_fonts: ^8.1.0
   glassmorphism: ^3.0.0
   firebase_messaging: ^15.2.4
   firebase_core: ^3.12.1

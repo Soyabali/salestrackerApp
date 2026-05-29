@@ -75,7 +75,7 @@ class _SplaceState extends State<SplashView> {
   void initState() {
     // TODO: implement initState
    // checkForNotification();
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 4), () {
       checkUserConnection();
     });
 
@@ -193,12 +193,27 @@ class SplaceScreen extends StatelessWidget {
       home: Stack(
         children: [
           // Full-screen background image
+          /// Full Screen Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/images/bg2.jpeg',
+              'assets/images/salesplace.jpeg',
               fit: BoxFit.cover,
             ),
           ),
+
+          /// Optional Dark Overlay
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withOpacity(0.2),
+            ),
+          ),
+          // Positioned.fill(
+          //   child: Image.asset(
+          //     'assets/images/salesplace.jpeg',
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
+
           Positioned(
             top: 210, // Adjust as needed
             left: 0,

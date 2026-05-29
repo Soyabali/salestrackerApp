@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../app/generalFunction.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -107,8 +108,12 @@ class _LoginPageState extends State<LoginPageAfterSplace> {
 
                 /// FIXED BACKGROUND IMAGE
                 Positioned.fill(
+                  // child: Image.asset(
+                  //   "assets/images/bg1.jpeg",
+                  //   fit: BoxFit.cover,
+                  // ),
                   child: Image.asset(
-                    "assets/images/bg1.jpeg",
+                    "assets/images/loginbg.jpeg",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -159,9 +164,11 @@ class _LoginPageState extends State<LoginPageAfterSplace> {
 
                                 child: Padding(
 
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: isTablet ? 40 : 18,
-                                    vertical: 20,
+                                  padding: EdgeInsets.only(
+                                    left: isTablet ? 40 : 18,
+                                    top: 20,
+                                    bottom: 20,
+                                    right: 0,
                                   ),
 
                                   child: isTablet
@@ -187,11 +194,8 @@ class _LoginPageState extends State<LoginPageAfterSplace> {
   //===========================================================
   // MOBILE UI
   //===========================================================
-
   Widget _mobileLayout() {
-
     return Column(
-
       mainAxisSize: MainAxisSize.min,
 
       children: [
@@ -203,18 +207,52 @@ class _LoginPageState extends State<LoginPageAfterSplace> {
 
         /// LOGIN CARD
         Padding(
-
-          padding: const EdgeInsets.symmetric(
-            horizontal: 18,
+          padding: const EdgeInsets.only(
+            top: 160,
           ),
 
-          child: _loginCard(),
+          child: Align(
+            alignment: Alignment.centerLeft,
+
+            child: _loginCard(),
+          ),
         ),
 
         const SizedBox(height: 20),
       ],
     );
   }
+
+  // Widget _mobileLayout() {
+  //   return Column(
+  //     mainAxisSize: MainAxisSize.min,
+  //
+  //     children: [
+  //
+  //       /// RESPONSIVE TOP SPACE
+  //       SizedBox(
+  //         height: MediaQuery.of(context).size.height * 0.16,
+  //       ),
+  //
+  //       /// LOGIN CARD
+  //       Padding(
+  //         padding: const EdgeInsets.only(
+  //           left: 18,
+  //           top: 160,
+  //           right: 0,
+  //         ),
+  //
+  //         child: Align(
+  //           alignment: Alignment.centerLeft,
+  //
+  //           child: _loginCard(),
+  //         ),
+  //       ),
+  //
+  //       const SizedBox(height: 20),
+  //     ],
+  //   );
+  // }
   //===========================================================
   // TABLET UI
   //===========================================================
@@ -327,303 +365,1121 @@ class _LoginPageState extends State<LoginPageAfterSplace> {
   //===========================================================
   // LOGIN CARD
   //===========================================================
-
   Widget _loginCard() {
-    return Container(
-      decoration: BoxDecoration(
-
-        borderRadius: BorderRadius.circular(24),
-
-        boxShadow: [
-
-          BoxShadow(
-
-            color: Colors.black.withOpacity(0.18),
-
-            blurRadius: 30,
-
-            offset: const Offset(0, 15),
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 20,
+        top: 20,
+        bottom: 20,
+        right: 0,
       ),
-      child: GlassmorphicContainer(
-        width: double.infinity,
-        //height: 420,
-        height: MediaQuery.of(context).size.height < 700 ? 470 : 420,
 
-        borderRadius: 24,
+      child: Align(
+        alignment: Alignment.centerRight, // RIGHT SIDE FIX
 
-        blur: 20,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
 
-        alignment: Alignment.center,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.18),
+                blurRadius: 30,
+                offset: const Offset(0, 15),
+              ),
+            ],
+          ),
 
-        border: 1.5,
+          child: GlassmorphicContainer(
 
-        linearGradient: LinearGradient(
+            /// 70% WIDTH
+            width: MediaQuery.of(context).size.width * 0.7,
 
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+            height: MediaQuery.of(context).size.height < 700
+                ? 470
+                : 420,
 
-          colors: [
+            borderRadius: 24,
+            blur: 20,
+            alignment: Alignment.center,
+            border: 1.5,
+            linearGradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
 
-            const Color(0xFF1B4965).withOpacity(0.18),
+              colors: [
 
-            const Color(0xFF0F172A).withOpacity(0.10),
+                /// 90% WHITE
+                Colors.white.withOpacity(0.90),
 
-            Colors.black.withOpacity(0.05),
-          ],
-        ),
+                /// 10% APP PRIMARY COLOR
+                const Color(0xFFe1befa).withOpacity(0.5),
 
-        borderGradient: LinearGradient(
-
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-
-          colors: [
-
-            Colors.white.withOpacity(0.25),
-
-            Colors.white.withOpacity(0.08),
-
-            Colors.transparent,
-          ],
-        ),
-
-
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-
-          child: Form(
-            key: _formKey,
-
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-
-              children: [
-                /// TITLE
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-
-                  // decoration: BoxDecoration(
-                  //   borderRadius: BorderRadius.circular(18),
-                  //  // color: Colors.white.withOpacity(0.18),
-                  //   //color: const Color(0xFF0F6FB5).withOpacity(0.5),
-                  //   color: const Color(0xFF0B2FBD).withOpacity(0.5),
-                  // ),
-
-                  child: const Center(
-                    child: Text(
-                      "User Authentication",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                /// MOBILE FIELD
-                TextFormField(
-                  controller: _phoneNumberController,
-
-                  focusNode: phoneNumberfocus,
-
-                  keyboardType: TextInputType.phone,
-
-                  textInputAction: TextInputAction.next,
-                  // color white
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-
-                  // inputFormatters: [
-                  //   LengthLimitingTextInputFormatter(10),
-                  //   FilteringTextInputFormatter.digitsOnly,
-                  // ],
-
-                  decoration: _inputDecoration(
-                    label: "User Id",
-                    icon: Icons.verified_user,
-                  ),
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Enter User Id';
-                    }
-
-                    if (value.length != 1) {
-                      return 'User Id must be 1 digits';
-                    }
-
-                    // if (!RegExp(r'^[6-9]').hasMatch(value)) {
-                    //   return 'Invalid mobile number';
-                    // }
-
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 22),
-
-                /// PASSWORD FIELD
-                TextFormField(
-                  controller: passwordController,
-
-                  focusNode: passWordfocus,
-
-                  obscureText: _isObscured,
-
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-
-                  decoration: _inputDecoration(
-                    label: "Password",
-                    icon: Icons.lock,
-                    suffix: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _isObscured = !_isObscured;
-                        });
-                      },
-
-                      icon: Icon(
-                        _isObscured ? Icons.visibility : Icons.visibility_off,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Enter password';
-                    }
-
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 35),
-
-                /// LOGIN BUTTON
-                SizedBox(
-                  width: double.infinity,
-                  height: 55,
-
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      //backgroundColor: const Color(0xFF0F6FB5),
-                      backgroundColor: Color(0xFF0B2FBD).withOpacity(0.5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                    ),
-                    onPressed: ()async{
-                      print("--------login ------");
-                      // DashBoardSalesTrackerHome
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DashBoardSalesTrackerHome(),
-                        ),
-                      );
-                    },
-
-                    /// todo here you uncomments this is a running code
-                    ///
-                    // onPressed: () async {
-                    //   /// KEEP YOUR FULL LOGIN FUNCTIONALITY HERE
-                    //   /// YOUR EXISTING API LOGIC WILL WORK SAME
-                    //
-                    //   String phone = _phoneNumberController.text.trim();
-                    //   String password = passwordController.text.trim();
-                    //
-                    //   if (_formKey.currentState!.validate() &&
-                    //       phone.isNotEmpty &&
-                    //       password.isNotEmpty) {
-                    //     /// YOUR LOGIN API
-                    //     loginMap = await LoginRepo().login(
-                    //       context,
-                    //       phone,
-                    //       password,
-                    //     );
-                    //     result = "${loginMap['Result']}";
-                    //     msg = "${loginMap['Msg']}";
-                    //     print("-------330----$loginMap");
-                    //     if (result == "0") {
-                    //       displayToast(msg);
-                    //     }
-                    //     if (result == "1") {
-                    //       // to store the fetch data into the local database
-                    //       var iUserId = loginMap["Data"][0]["iUserId"].toString();
-                    //       var sUserName = loginMap["Data"][0]["sUserName"]
-                    //           .toString();
-                    //       var sContactNo = loginMap["Data"][0]["sContactNo"]
-                    //           .toString();
-                    //       var sToken = loginMap["Data"][0]["sToken"].toString();
-                    //       var iUserType = loginMap["Data"][0]["iUserType"]
-                    //           .toString();
-                    //       var dLastLoginAt = loginMap["Data"][0]["dLastLoginAt"]
-                    //           .toString();
-                    //
-                    //       // to store the value into the sharedPreference
-                    //       SharedPreferences prefs =
-                    //           await SharedPreferences.getInstance();
-                    //       prefs.setString('iUserId', iUserId).toString();
-                    //       prefs.setString('sUserName', sUserName).toString();
-                    //       prefs.setString('sContactNo', sContactNo).toString();
-                    //       prefs.setString('sToken', sToken).toString();
-                    //       prefs.setString('iUserType', iUserType).toString();
-                    //       prefs
-                    //           .setString('dLastLoginAt', dLastLoginAt)
-                    //           .toString();
-                    //
-                    //       if (iUserType == "2") {
-                    //         //context.go('/VmsHome');
-                    //         context.go('/VisitorDashboard');
-                    //         // displayToast("Login ADmin Successfully $iUserType");
-                    //       } else if (iUserType == "1") {
-                    //         // context.go('/VisitorDashboard');
-                    //        // context.go('/VmsHome');
-                    //        //  Navigator.push(
-                    //        //    context,
-                    //        //    MaterialPageRoute(
-                    //        //      builder: (context) => VmsHome(),
-                    //        //    ),
-                    //        //  );
-                    //         Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //             builder: (context) => VmsHome(),
-                    //           ),
-                    //         );
-                    //         // displayToast("Login visitor Successfully $iUserType");
-                    //       } else {}
-                    //     }
-                    //   }
-                    // },
-
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
+                /// SOFT PURPLE TOUCH
+                //const Color(0xFF7B2CBF).withOpacity(0.08),
+                Colors.white.withOpacity(0.10),
               ],
+            ),
+
+            borderGradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+
+              colors: [
+
+                /// WHITE BORDER SHINE
+                Colors.white.withOpacity(0.85),
+
+                /// PURPLE TOUCH
+                const Color(0xFFB957FF).withOpacity(0.12),
+
+                /// LIGHT WHITE FINISH
+                Colors.white.withOpacity(0.70),
+              ],
+            ),
+            // linearGradient: LinearGradient(
+            //   begin: Alignment.topLeft,
+            //   end: Alignment.bottomRight,
+            //
+            //   colors: [
+            //
+            //     /// 90% APP PRIMARY COLOR
+            //     const Color(0xFFB957FF).withOpacity(0.90),
+            //
+            //     /// 10% WHITE TOUCH
+            //     Colors.white.withOpacity(0.10),
+            //
+            //     /// DARK PURPLE SUPPORT
+            //     const Color(0xFF7B2CBF).withOpacity(0.85),
+            //   ],
+            // ),
+            //
+            // borderGradient: LinearGradient(
+            //   begin: Alignment.topLeft,
+            //   end: Alignment.bottomRight,
+            //
+            //   colors: [
+            //
+            //     /// LIGHT WHITE SHINE
+            //     Colors.white.withOpacity(0.18),
+            //
+            //     /// PRIMARY BORDER GLOW
+            //     const Color(0xFFB957FF).withOpacity(0.90),
+            //
+            //     /// SOFT WHITE FINISH
+            //     Colors.white.withOpacity(0.05),
+            //   ],
+            // ),
+            // linearGradient: LinearGradient(
+            //   begin: Alignment.topLeft,
+            //   end: Alignment.bottomRight,
+            //
+            //   colors: [
+            //     const Color(0xFFB957FF).withOpacity(0.35),
+            //     Colors.white.withOpacity(0.12),
+            //     const Color(0xFF7B2CBF).withOpacity(0.18),
+            //   ],
+            // ),
+            //
+            // borderGradient: LinearGradient(
+            //   begin: Alignment.topLeft,
+            //   end: Alignment.bottomRight,
+            //
+            //   colors: [
+            //     Colors.white.withOpacity(0.45),
+            //     const Color(0xFFB957FF).withOpacity(0.25),
+            //     Colors.white.withOpacity(0.08),
+            //   ],
+            // ),
+
+            child: Padding(
+
+              /// INSIDE MARGIN
+              padding: const EdgeInsets.all(20),
+
+              child: Form(
+                key: _formKey,
+
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+
+                    /// TITLE
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+
+                      child: Center(
+                        child: Text(
+                          "User Authentication",
+                          style: GoogleFonts.lato(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                            //fontStyle: FontStyle.italic,
+                            color: Colors.black87,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 30),
+
+                    /// USER ID
+                    TextFormField(
+                      controller: _phoneNumberController,
+                      focusNode: phoneNumberfocus,
+                      keyboardType: TextInputType.phone,
+                      textInputAction: TextInputAction.next,
+
+                      /// TYPING TEXT STYLE
+                      style: GoogleFonts.lato(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
+                        letterSpacing: 1.0,
+                      ),
+
+                      decoration: InputDecoration(
+
+                        /// LABEL
+                        labelText: "User Id",
+
+                        /// LABEL STYLE
+                        labelStyle: GoogleFonts.lato(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black54,
+                          letterSpacing: 1,
+                        ),
+
+                        /// PREFIX ICON
+                        prefixIcon: const Icon(
+                          Icons.verified_user,
+                          color: Color(0xFFB957FF),
+                        ),
+
+                        /// ENABLE BORDER
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+
+                          borderSide: const BorderSide(
+                            //color: Color(0xFFB957FF), // Purple Border
+                            color: Colors.grey,
+                            width: 1.2,
+                          ),
+                        ),
+
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+
+                          borderSide: const BorderSide(
+                            //color: Color(0xFFB957FF), // Focus Purple Border
+                            color: Colors.grey,
+                            width: 1.8,
+                          ),
+                        ),
+                        /// ERROR BORDER
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                          ),
+                        ),
+
+                        /// FOCUSED ERROR BORDER
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                            width: 1.5,
+                          ),
+                        ),
+
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.15),
+                      ),
+                    ),
+                    const SizedBox(height: 22),
+
+                    /// PASSWORD
+                    TextFormField(
+                      controller: passwordController,
+                      focusNode: passWordfocus,
+                      obscureText: _isObscured,
+
+                      /// INPUT TEXT STYLE
+                      style: GoogleFonts.lato(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
+                        letterSpacing: 1.0,
+                      ),
+
+                      decoration: InputDecoration(
+
+                        /// LABEL
+                        labelText: "Password",
+
+                        /// LABEL STYLE
+                        labelStyle: GoogleFonts.lato(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black54,
+                          letterSpacing: 1,
+                        ),
+
+                        /// PREFIX ICON
+                        prefixIcon: const Icon(
+                          Icons.lock,
+                          color: Color(0xFFB957FF),
+                        ),
+
+                        /// SUFFIX ICON
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isObscured = !_isObscured;
+                            });
+                          },
+
+                          icon: Icon(
+                            _isObscured
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+
+                            color: Colors.grey,
+                          ),
+                        ),
+
+                        /// ENABLE BORDER
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+
+                          borderSide: const BorderSide(
+                            //color: Color(0xFFB957FF), // Purple Border
+                             color: Colors.grey,
+                            width: 1.2,
+                          ),
+                        ),
+
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+
+                          borderSide: const BorderSide(
+                            //color: Color(0xFFB957FF), // Focus Purple Border
+                            color: Colors.grey,
+                            width: 1.8,
+                          ),
+                        ),
+
+                        /// ERROR BORDER
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                          ),
+                        ),
+
+                        /// FOCUSED ERROR BORDER
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                            width: 1.5,
+                          ),
+                        ),
+
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.15),
+                      ),
+                    ),
+                    // TextFormField(
+                    //   controller: passwordController,
+                    //   focusNode: passWordfocus,
+                    //   obscureText: _isObscured,
+                    //
+                    //   style: const TextStyle(
+                    //     color: Colors.black45, // INPUT TEXT COLOR
+                    //   ),
+                    //
+                    //   decoration: InputDecoration(
+                    //
+                    //     /// LABEL
+                    //     labelText: "Password",
+                    //
+                    //     labelStyle: const TextStyle(
+                    //       color: Colors.black45, // LABEL COLOR
+                    //     ),
+                    //
+                    //     /// PREFIX ICON
+                    //     prefixIcon: const Icon(
+                    //       Icons.lock,
+                    //       color: Colors.black45,
+                    //     ),
+                    //
+                    //     /// SUFFIX ICON
+                    //     suffixIcon: IconButton(
+                    //       onPressed: () {
+                    //         setState(() {
+                    //           _isObscured = !_isObscured;
+                    //         });
+                    //       },
+                    //
+                    //       icon: Icon(
+                    //         _isObscured
+                    //             ? Icons.visibility
+                    //             : Icons.visibility_off,
+                    //
+                    //         color: Colors.black45, // EYE ICON COLOR
+                    //       ),
+                    //     ),
+                    //
+                    //     /// ENABLE BORDER
+                    //     enabledBorder: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(14),
+                    //
+                    //       borderSide: const BorderSide(
+                    //         color: Colors.black26,
+                    //       ),
+                    //     ),
+                    //
+                    //     /// FOCUS BORDER
+                    //     focusedBorder: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(14),
+                    //
+                    //       borderSide: const BorderSide(
+                    //         color: Colors.black45,
+                    //         width: 1.5,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+
+                    const SizedBox(height: 35),
+
+                    /// LOGIN BUTTON
+                    SizedBox(
+                      width: double.infinity,
+                      height: 58,
+
+                      child: DecoratedBox(
+
+                        decoration: BoxDecoration(
+
+                          borderRadius: BorderRadius.circular(18),
+
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+
+                            colors: [
+
+                              /// LIGHT PURPLE
+                              Color(0xFFB957FF),
+
+                              /// DARK PURPLE
+                              Color(0xFF7B2CBF),
+                            ],
+                          ),
+
+                          boxShadow: [
+
+                            /// PURPLE GLOW
+                            BoxShadow(
+                              color: const Color(0xFFB957FF).withOpacity(0.45),
+                              blurRadius: 18,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+
+                        child: ElevatedButton(
+
+                          onPressed: () async {
+
+                            /// BUTTON PRESS ACTION
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DashBoardSalesTrackerHome(),
+                              ),
+                            );
+                          },
+
+                          style: ElevatedButton.styleFrom(
+
+                            backgroundColor: Colors.transparent,
+
+                            shadowColor: Colors.transparent,
+
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                          ),
+
+                          child: Ink(
+
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+
+                            child: Container(
+
+                              alignment: Alignment.center,
+
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+
+                                children: [
+
+                                  /// BUTTON TEXT
+                                  Text(
+                                    "Login",
+
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+
+                                  SizedBox(width: 10),
+
+                                  /// OPTIONAL ICON
+                                  Icon(
+                                    Icons.arrow_forward_rounded,
+                                    color: Colors.white,
+                                    size: 22,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    // SizedBox(
+                    //   width: double.infinity,
+                    //   height: 55,
+                    //
+                    //   child: ElevatedButton(
+                    //     style: ElevatedButton.styleFrom(
+                    //       backgroundColor:
+                    //       const Color(0xFF0B2FBD).withOpacity(0.5),
+                    //
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(18),
+                    //       ),
+                    //     ),
+                    //     onPressed: () async {
+                    //       Navigator.pushReplacement(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //           builder: (context) =>
+                    //               DashBoardSalesTrackerHome(),
+                    //         ),
+                    //       );
+                    //     },
+                    //     child: const Text(
+                    //       "Login",
+                    //       style: TextStyle(
+                    //         fontSize: 18,
+                    //         fontWeight: FontWeight.bold,
+                    //         color: Colors.white,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
       ),
     );
+    // return Padding(
+    //   padding: const EdgeInsets.only(
+    //     left: 20,
+    //     top: 20,
+    //     bottom: 20,
+    //     right: 0,
+    //   ),
+    //
+    //   child: Align(
+    //     alignment: Alignment.centerLeft,
+    //
+    //     child: Container(
+    //       decoration: BoxDecoration(
+    //         borderRadius: BorderRadius.circular(24),
+    //
+    //         boxShadow: [
+    //           BoxShadow(
+    //             color: Colors.black.withOpacity(0.18),
+    //             blurRadius: 30,
+    //             offset: const Offset(0, 15),
+    //           ),
+    //         ],
+    //       ),
+    //
+    //       child: GlassmorphicContainer(
+    //         width: MediaQuery.of(context).size.width,
+    //        // width: MediaQuery.of(context).size.width * 0.7,
+    //         height:
+    //         MediaQuery.of(context).size.height < 700
+    //             ? 470
+    //             : 420,
+    //
+    //         borderRadius: 24,
+    //         blur: 20,
+    //         alignment: Alignment.center,
+    //         border: 1.5,
+    //
+    //         linearGradient: LinearGradient(
+    //           begin: Alignment.topLeft,
+    //           end: Alignment.bottomRight,
+    //
+    //           colors: [
+    //             const Color(0xFF1B4965).withOpacity(0.18),
+    //             const Color(0xFF0F172A).withOpacity(0.10),
+    //             Colors.black.withOpacity(0.05),
+    //           ],
+    //         ),
+    //
+    //         borderGradient: LinearGradient(
+    //           begin: Alignment.topLeft,
+    //           end: Alignment.bottomRight,
+    //
+    //           colors: [
+    //             Colors.white.withOpacity(0.25),
+    //             Colors.white.withOpacity(0.08),
+    //             Colors.transparent,
+    //           ],
+    //         ),
+    //
+    //         child: Padding(
+    //           padding: const EdgeInsets.only(
+    //             left: 24,
+    //             top: 24,
+    //             bottom: 24,
+    //             right: 0,
+    //           ),
+    //
+    //           child: Form(
+    //             key: _formKey,
+    //
+    //             child: Column(
+    //               crossAxisAlignment:
+    //               CrossAxisAlignment.start,
+    //
+    //               children: [
+    //
+    //                 /// YOUR ALL WIDGETS HERE
+    //                 /// TITLE
+    //                 Container(
+    //                   width: double.infinity,
+    //                   padding: const EdgeInsets.symmetric(vertical: 14),
+    //
+    //                   child: const Center(
+    //                     child: Text(
+    //                       "User Authentication",
+    //                       style: TextStyle(
+    //                         fontSize: 22,
+    //                         fontWeight: FontWeight.bold,
+    //                         color: Colors.white,
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 ),
+    //                 const SizedBox(height: 30),
+    //                 /// MOBILE FIELD
+    //                 TextFormField(
+    //                   controller: _phoneNumberController,
+    //
+    //                   focusNode: phoneNumberfocus,
+    //
+    //                   keyboardType: TextInputType.phone,
+    //
+    //                   textInputAction: TextInputAction.next,
+    //                   // color white
+    //                   style: const TextStyle(
+    //                     color: Colors.white,
+    //                   ),
+    //
+    //                   // inputFormatters: [
+    //                   //   LengthLimitingTextInputFormatter(10),
+    //                   //   FilteringTextInputFormatter.digitsOnly,
+    //                   // ],
+    //
+    //                   decoration: _inputDecoration(
+    //                     label: "User Id",
+    //                     icon: Icons.verified_user,
+    //                   ),
+    //
+    //                   validator: (value) {
+    //                     if (value == null || value.isEmpty) {
+    //                       return 'Enter User Id';
+    //                     }
+    //
+    //                     if (value.length != 1) {
+    //                       return 'User Id must be 1 digits';
+    //                     }
+    //
+    //                     // if (!RegExp(r'^[6-9]').hasMatch(value)) {
+    //                     //   return 'Invalid mobile number';
+    //                     // }
+    //
+    //                     return null;
+    //                   },
+    //                 ),
+    //                 const SizedBox(height: 22),
+    //                 /// PASSWORD FIELD
+    //                 TextFormField(
+    //                   controller: passwordController,
+    //
+    //                   focusNode: passWordfocus,
+    //
+    //                   obscureText: _isObscured,
+    //
+    //                   style: const TextStyle(
+    //                     color: Colors.white,
+    //                   ),
+    //
+    //                   decoration: _inputDecoration(
+    //                     label: "Password",
+    //                     icon: Icons.lock,
+    //                     suffix: IconButton(
+    //                       onPressed: () {
+    //                         setState(() {
+    //                           _isObscured = !_isObscured;
+    //                         });
+    //                       },
+    //
+    //                       icon: Icon(
+    //                         _isObscured ? Icons.visibility : Icons.visibility_off,
+    //                         color: Colors.white,
+    //                       ),
+    //                     ),
+    //                   ),
+    //
+    //                   validator: (value) {
+    //                     if (value == null || value.isEmpty) {
+    //                       return 'Enter password';
+    //                     }
+    //
+    //                     return null;
+    //                   },
+    //                 ),
+    //                 const SizedBox(height: 35),
+    //                 /// LOGIN BUTTON
+    //                 SizedBox(
+    //                   width: double.infinity,
+    //                   height: 55,
+    //
+    //                   child: ElevatedButton(
+    //                     style: ElevatedButton.styleFrom(
+    //                       //backgroundColor: const Color(0xFF0F6FB5),
+    //                       backgroundColor: Color(0xFF0B2FBD).withOpacity(0.5),
+    //                       shape: RoundedRectangleBorder(
+    //                         borderRadius: BorderRadius.circular(18),
+    //                       ),
+    //                     ),
+    //                     onPressed: ()async{
+    //                       print("--------login ------");
+    //                       // DashBoardSalesTrackerHome
+    //                       Navigator.pushReplacement(
+    //                         context,
+    //                         MaterialPageRoute(
+    //                           builder: (context) => DashBoardSalesTrackerHome(),
+    //                         ),
+    //                       );
+    //                     },
+    //
+    //                     /// todo here you uncomments this is a running code
+    //                     ///
+    //                     // onPressed: () async {
+    //                     //   /// KEEP YOUR FULL LOGIN FUNCTIONALITY HERE
+    //                     //   /// YOUR EXISTING API LOGIC WILL WORK SAME
+    //                     //
+    //                     //   String phone = _phoneNumberController.text.trim();
+    //                     //   String password = passwordController.text.trim();
+    //                     //
+    //                     //   if (_formKey.currentState!.validate() &&
+    //                     //       phone.isNotEmpty &&
+    //                     //       password.isNotEmpty) {
+    //                     //     /// YOUR LOGIN API
+    //                     //     loginMap = await LoginRepo().login(
+    //                     //       context,
+    //                     //       phone,
+    //                     //       password,
+    //                     //     );
+    //                     //     result = "${loginMap['Result']}";
+    //                     //     msg = "${loginMap['Msg']}";
+    //                     //     print("-------330----$loginMap");
+    //                     //     if (result == "0") {
+    //                     //       displayToast(msg);
+    //                     //     }
+    //                     //     if (result == "1") {
+    //                     //       // to store the fetch data into the local database
+    //                     //       var iUserId = loginMap["Data"][0]["iUserId"].toString();
+    //                     //       var sUserName = loginMap["Data"][0]["sUserName"]
+    //                     //           .toString();
+    //                     //       var sContactNo = loginMap["Data"][0]["sContactNo"]
+    //                     //           .toString();
+    //                     //       var sToken = loginMap["Data"][0]["sToken"].toString();
+    //                     //       var iUserType = loginMap["Data"][0]["iUserType"]
+    //                     //           .toString();
+    //                     //       var dLastLoginAt = loginMap["Data"][0]["dLastLoginAt"]
+    //                     //           .toString();
+    //                     //
+    //                     //       // to store the value into the sharedPreference
+    //                     //       SharedPreferences prefs =
+    //                     //           await SharedPreferences.getInstance();
+    //                     //       prefs.setString('iUserId', iUserId).toString();
+    //                     //       prefs.setString('sUserName', sUserName).toString();
+    //                     //       prefs.setString('sContactNo', sContactNo).toString();
+    //                     //       prefs.setString('sToken', sToken).toString();
+    //                     //       prefs.setString('iUserType', iUserType).toString();
+    //                     //       prefs
+    //                     //           .setString('dLastLoginAt', dLastLoginAt)
+    //                     //           .toString();
+    //                     //
+    //                     //       if (iUserType == "2") {
+    //                     //         //context.go('/VmsHome');
+    //                     //         context.go('/VisitorDashboard');
+    //                     //         // displayToast("Login ADmin Successfully $iUserType");
+    //                     //       } else if (iUserType == "1") {
+    //                     //         // context.go('/VisitorDashboard');
+    //                     //        // context.go('/VmsHome');
+    //                     //        //  Navigator.push(
+    //                     //        //    context,
+    //                     //        //    MaterialPageRoute(
+    //                     //        //      builder: (context) => VmsHome(),
+    //                     //        //    ),
+    //                     //        //  );
+    //                     //         Navigator.push(
+    //                     //           context,
+    //                     //           MaterialPageRoute(
+    //                     //             builder: (context) => VmsHome(),
+    //                     //           ),
+    //                     //         );
+    //                     //         // displayToast("Login visitor Successfully $iUserType");
+    //                     //       } else {}
+    //                     //     }
+    //                     //   }
+    //                     // },
+    //
+    //                     child: const Text(
+    //                       "Login",
+    //                       style: TextStyle(
+    //                         fontSize: 18,
+    //                         fontWeight: FontWeight.bold,
+    //                         color: Colors.white,
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 ),
+    //
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
+  // Widget _loginCard() {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //
+  //       borderRadius: BorderRadius.circular(24),
+  //
+  //       boxShadow: [
+  //
+  //         BoxShadow(
+  //
+  //           color: Colors.black.withOpacity(0.18),
+  //
+  //           blurRadius: 30,
+  //
+  //           offset: const Offset(0, 15),
+  //         ),
+  //       ],
+  //     ),
+  //     child: GlassmorphicContainer(
+  //       width: double.infinity,
+  //       //height: 420,
+  //       height: MediaQuery.of(context).size.height < 700 ? 470 : 420,
+  //
+  //       borderRadius: 24,
+  //
+  //       blur: 20,
+  //
+  //       alignment: Alignment.center,
+  //
+  //       border: 1.5,
+  //
+  //       linearGradient: LinearGradient(
+  //
+  //         begin: Alignment.topLeft,
+  //         end: Alignment.bottomRight,
+  //
+  //         colors: [
+  //
+  //           const Color(0xFF1B4965).withOpacity(0.18),
+  //
+  //           const Color(0xFF0F172A).withOpacity(0.10),
+  //
+  //           Colors.black.withOpacity(0.05),
+  //         ],
+  //       ),
+  //
+  //       borderGradient: LinearGradient(
+  //
+  //         begin: Alignment.topLeft,
+  //         end: Alignment.bottomRight,
+  //
+  //         colors: [
+  //
+  //           Colors.white.withOpacity(0.25),
+  //
+  //           Colors.white.withOpacity(0.08),
+  //
+  //           Colors.transparent,
+  //         ],
+  //       ),
+  //
+  //
+  //       child: Padding(
+  //         padding: const EdgeInsets.all(24),
+  //
+  //         child: Form(
+  //           key: _formKey,
+  //
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //
+  //             children: [
+  //               /// TITLE
+  //               Container(
+  //                 width: double.infinity,
+  //                 padding: const EdgeInsets.symmetric(vertical: 14),
+  //
+  //                 child: const Center(
+  //                   child: Text(
+  //                     "User Authentication",
+  //                     style: TextStyle(
+  //                       fontSize: 22,
+  //                       fontWeight: FontWeight.bold,
+  //                       color: Colors.white,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 30),
+  //               /// MOBILE FIELD
+  //               TextFormField(
+  //                 controller: _phoneNumberController,
+  //
+  //                 focusNode: phoneNumberfocus,
+  //
+  //                 keyboardType: TextInputType.phone,
+  //
+  //                 textInputAction: TextInputAction.next,
+  //                 // color white
+  //                 style: const TextStyle(
+  //                   color: Colors.white,
+  //                 ),
+  //
+  //                 // inputFormatters: [
+  //                 //   LengthLimitingTextInputFormatter(10),
+  //                 //   FilteringTextInputFormatter.digitsOnly,
+  //                 // ],
+  //
+  //                 decoration: _inputDecoration(
+  //                   label: "User Id",
+  //                   icon: Icons.verified_user,
+  //                 ),
+  //
+  //                 validator: (value) {
+  //                   if (value == null || value.isEmpty) {
+  //                     return 'Enter User Id';
+  //                   }
+  //
+  //                   if (value.length != 1) {
+  //                     return 'User Id must be 1 digits';
+  //                   }
+  //
+  //                   // if (!RegExp(r'^[6-9]').hasMatch(value)) {
+  //                   //   return 'Invalid mobile number';
+  //                   // }
+  //
+  //                   return null;
+  //                 },
+  //               ),
+  //               const SizedBox(height: 22),
+  //               /// PASSWORD FIELD
+  //               TextFormField(
+  //                 controller: passwordController,
+  //
+  //                 focusNode: passWordfocus,
+  //
+  //                 obscureText: _isObscured,
+  //
+  //                 style: const TextStyle(
+  //                   color: Colors.white,
+  //                 ),
+  //
+  //                 decoration: _inputDecoration(
+  //                   label: "Password",
+  //                   icon: Icons.lock,
+  //                   suffix: IconButton(
+  //                     onPressed: () {
+  //                       setState(() {
+  //                         _isObscured = !_isObscured;
+  //                       });
+  //                     },
+  //
+  //                     icon: Icon(
+  //                       _isObscured ? Icons.visibility : Icons.visibility_off,
+  //                       color: Colors.white,
+  //                     ),
+  //                   ),
+  //                 ),
+  //
+  //                 validator: (value) {
+  //                   if (value == null || value.isEmpty) {
+  //                     return 'Enter password';
+  //                   }
+  //
+  //                   return null;
+  //                 },
+  //               ),
+  //               const SizedBox(height: 35),
+  //               /// LOGIN BUTTON
+  //               SizedBox(
+  //                 width: double.infinity,
+  //                 height: 55,
+  //
+  //                 child: ElevatedButton(
+  //                   style: ElevatedButton.styleFrom(
+  //                     //backgroundColor: const Color(0xFF0F6FB5),
+  //                     backgroundColor: Color(0xFF0B2FBD).withOpacity(0.5),
+  //                     shape: RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(18),
+  //                     ),
+  //                   ),
+  //                   onPressed: ()async{
+  //                     print("--------login ------");
+  //                     // DashBoardSalesTrackerHome
+  //                     Navigator.pushReplacement(
+  //                       context,
+  //                       MaterialPageRoute(
+  //                         builder: (context) => DashBoardSalesTrackerHome(),
+  //                       ),
+  //                     );
+  //                   },
+  //
+  //                   /// todo here you uncomments this is a running code
+  //                   ///
+  //                   // onPressed: () async {
+  //                   //   /// KEEP YOUR FULL LOGIN FUNCTIONALITY HERE
+  //                   //   /// YOUR EXISTING API LOGIC WILL WORK SAME
+  //                   //
+  //                   //   String phone = _phoneNumberController.text.trim();
+  //                   //   String password = passwordController.text.trim();
+  //                   //
+  //                   //   if (_formKey.currentState!.validate() &&
+  //                   //       phone.isNotEmpty &&
+  //                   //       password.isNotEmpty) {
+  //                   //     /// YOUR LOGIN API
+  //                   //     loginMap = await LoginRepo().login(
+  //                   //       context,
+  //                   //       phone,
+  //                   //       password,
+  //                   //     );
+  //                   //     result = "${loginMap['Result']}";
+  //                   //     msg = "${loginMap['Msg']}";
+  //                   //     print("-------330----$loginMap");
+  //                   //     if (result == "0") {
+  //                   //       displayToast(msg);
+  //                   //     }
+  //                   //     if (result == "1") {
+  //                   //       // to store the fetch data into the local database
+  //                   //       var iUserId = loginMap["Data"][0]["iUserId"].toString();
+  //                   //       var sUserName = loginMap["Data"][0]["sUserName"]
+  //                   //           .toString();
+  //                   //       var sContactNo = loginMap["Data"][0]["sContactNo"]
+  //                   //           .toString();
+  //                   //       var sToken = loginMap["Data"][0]["sToken"].toString();
+  //                   //       var iUserType = loginMap["Data"][0]["iUserType"]
+  //                   //           .toString();
+  //                   //       var dLastLoginAt = loginMap["Data"][0]["dLastLoginAt"]
+  //                   //           .toString();
+  //                   //
+  //                   //       // to store the value into the sharedPreference
+  //                   //       SharedPreferences prefs =
+  //                   //           await SharedPreferences.getInstance();
+  //                   //       prefs.setString('iUserId', iUserId).toString();
+  //                   //       prefs.setString('sUserName', sUserName).toString();
+  //                   //       prefs.setString('sContactNo', sContactNo).toString();
+  //                   //       prefs.setString('sToken', sToken).toString();
+  //                   //       prefs.setString('iUserType', iUserType).toString();
+  //                   //       prefs
+  //                   //           .setString('dLastLoginAt', dLastLoginAt)
+  //                   //           .toString();
+  //                   //
+  //                   //       if (iUserType == "2") {
+  //                   //         //context.go('/VmsHome');
+  //                   //         context.go('/VisitorDashboard');
+  //                   //         // displayToast("Login ADmin Successfully $iUserType");
+  //                   //       } else if (iUserType == "1") {
+  //                   //         // context.go('/VisitorDashboard');
+  //                   //        // context.go('/VmsHome');
+  //                   //        //  Navigator.push(
+  //                   //        //    context,
+  //                   //        //    MaterialPageRoute(
+  //                   //        //      builder: (context) => VmsHome(),
+  //                   //        //    ),
+  //                   //        //  );
+  //                   //         Navigator.push(
+  //                   //           context,
+  //                   //           MaterialPageRoute(
+  //                   //             builder: (context) => VmsHome(),
+  //                   //           ),
+  //                   //         );
+  //                   //         // displayToast("Login visitor Successfully $iUserType");
+  //                   //       } else {}
+  //                   //     }
+  //                   //   }
+  //                   // },
+  //
+  //                   child: const Text(
+  //                     "Login",
+  //                     style: TextStyle(
+  //                       fontSize: 18,
+  //                       fontWeight: FontWeight.bold,
+  //                       color: Colors.white,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   //===========================================================
   // INPUT DECORATION
