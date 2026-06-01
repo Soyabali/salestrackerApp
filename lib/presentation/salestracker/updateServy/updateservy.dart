@@ -13,7 +13,6 @@ class UpdateServeSalesTracker extends StatefulWidget {
   State<UpdateServeSalesTracker> createState() => _DashBoardSalesTrackerHomeState();
 }
 
-
 class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
   var _dropDownSector;
   final sectorFocus = GlobalKey();
@@ -240,6 +239,8 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                   child: ListView(
                       //crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // header part
+
                         Row(
                             children: [
                               GestureDetector(
@@ -271,45 +272,44 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                   'Add Reimbursement',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                        // Add more widgets here--
-                        const Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(height: 40),
-                            Text('Submit Your expenses',style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14
-                            ),),
-                            Text('and get reimbursed',style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14
-                            ),),
-                            Text('easily',style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14
-                            ),),
-
-                          ],
-                        ),
-                        SizedBox(height: 100),
+                        SizedBox(height: 250),
                         Container(
                           height: 50,
                           color: Colors.white,
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              Icon(Icons.ac_unit,size: 20,
-                                color: Color(0xFF6503AB)),
-                              SizedBox(width: 20),
-                              Text(
+
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF4EBFF),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.contact_mail,
+                                      size: 30,
+                                      color: Color(0xFF6503AB),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              // Icon(Icons.contact_mail,size: 20,
+                              //   color: Color(0xFF6503AB)),
+                              const SizedBox(width: 20),
+                              const Text(
                                 'Basic Information',
                                 style: TextStyle(
                                   color: Color(0xFF6503AB),
@@ -333,31 +333,50 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                         Container(
                           height: 50,
                           decoration: BoxDecoration(
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: Colors.grey.shade300, // Border color
+                              width: 1,
+                            ),
                           ),
                           clipBehavior: Clip.hardEdge,
                           child: Row(
                             children: [
                               Expanded(
                                 flex: 2,
-                                child: Container(
-                                 // color: const Color(0xFF6503AB),
-                                  color: Colors.white,
-                                  child: const Align(
-                                      alignment: Alignment.center,
-                                      child: Icon(Icons.ac_unit,color: Colors.grey)),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    color: Colors.white,
+                                    child: Container(
+                                      height: 40,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFF4EBFF),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.business_center,
+                                          size: 20,
+                                          color: Color(0xFF6503AB),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                               Expanded(
                                 flex: 8,
                                 child: _WhomToMeet(),
-
-
                               ),
                             ],
                           ),
                         ),
                         // Expense Category
+                        SizedBox(height: 5),
                         const Text(
                           'Expense Category',
                           style: TextStyle(
@@ -370,31 +389,117 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                         Container(
                           height: 50,
                           decoration: BoxDecoration(
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: Colors.grey.shade300, // Border color
+                              width: 1,
+                            ),
                           ),
                           clipBehavior: Clip.hardEdge,
                           child: Row(
                             children: [
                               Expanded(
                                 flex: 2,
-                                child: Container(
-                                  // color: const Color(0xFF6503AB),
-                                  color: Colors.white,
-                                  child: const Align(
-                                      alignment: Alignment.center,
-                                      child: Icon(Icons.ac_unit,color: Colors.grey)),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    color: Colors.white,
+                                    child: Container(
+                                      height: 40,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFF4EBFF),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.window,
+                                          size: 20,
+                                          color: Color(0xFF6503AB),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                               Expanded(
                                 flex: 8,
                                 child: _WhomToMeet(),
-
-
                               ),
                             ],
                           ),
                         ),
+                        // Container(
+                        //   height: 60,
+                        //   padding: const EdgeInsets.symmetric(
+                        //     horizontal: 8,
+                        //     vertical: 5,
+                        //   ),
+                        //   decoration: BoxDecoration(
+                        //     color: Colors.white,
+                        //     borderRadius: BorderRadius.circular(5),
+                        //     border: Border.all(
+                        //       color: Colors.grey.shade400,
+                        //       width: 1,
+                        //     ),
+                        //   ),
+                        //   child: Row(
+                        //     children: [
+                        //       Expanded(
+                        //         flex: 2,
+                        //         child:  Padding(
+                        //           padding: const EdgeInsets.only(left: 10),
+                        //           child: Container(
+                        //             alignment: Alignment.centerLeft,
+                        //             color: Colors.white,
+                        //             child: Container(
+                        //               height: 40,
+                        //               width: 40,
+                        //               decoration: BoxDecoration(
+                        //                 color: const Color(0xFFF4EBFF),
+                        //                 borderRadius: BorderRadius.circular(8),
+                        //               ),
+                        //               child: const Center(
+                        //                 child: Icon(
+                        //                   Icons.window,
+                        //                   size: 20,
+                        //                   color: Color(0xFF6503AB),
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         ),
+                        //         // child: Center(
+                        //         //   child: Container(
+                        //         //     height: 40,
+                        //         //     width: 40,
+                        //         //     decoration: BoxDecoration(
+                        //         //       color: const Color(0xFFF4EBFF),
+                        //         //       borderRadius: BorderRadius.circular(8),
+                        //         //     ),
+                        //         //     child: const Center(
+                        //         //       child: Icon(
+                        //         //         Icons.window,
+                        //         //         size: 20,
+                        //         //         color: Color(0xFF6503AB),
+                        //         //       ),
+                        //         //     ),
+                        //         //   ),
+                        //         // ),
+                        //       ),
+                        //       const SizedBox(width: 8),
+                        //       Expanded(
+                        //         flex: 8,
+                        //         child: _WhomToMeet(),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         // Bill/ Expense Date
+                        SizedBox(height: 5),
+
                         const Text(
                           'Bill/ Expense Date',
                           style: TextStyle(
@@ -404,29 +509,69 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
+                        SizedBox(height: 5),
                         // calander row
                         Container(
                           height: 50,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(5),
                             border: Border.all(
-                              color: Colors.grey.shade300,
+                              color: Colors.grey.shade300, // Border color
+                              width: 1,
                             ),
                           ),
+                          clipBehavior: Clip.hardEdge,
                           child: Row(
                             children: [
 
                               // Left Icon (20%)
                               Expanded(
                                 flex: 2,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: const Icon(
-                                    Icons.calendar_month_outlined,
-                                    color: Colors.grey,
+                                child:  Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    color: Colors.white,
+                                    child: Container(
+                                      height: 40,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFF4EBFF),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.calendar_month,
+                                          size: 20,
+                                          color: Color(0xFF6503AB),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
+                                // child:  Container(
+                                //   // color: const Color(0xFF6503AB),
+                                //   color: Colors.white,
+                                //   child: Container(
+                                //     height: 40,
+                                //     width: 40,
+                                //     decoration: BoxDecoration(
+                                //       color: const Color(0xFFF4EBFF),
+                                //       borderRadius: BorderRadius.circular(8),
+                                //     ),
+                                //     child: const Center(
+                                //       child: Icon(
+                                //         Icons.calendar_month,
+                                //         size: 20,
+                                //         color: Color(0xFF6503AB),
+                                //       ),
+                                //     ),
+                                //   ),
+                                //   // child: const Align(
+                                //   //     alignment: Alignment.center,
+                                //   //     child: Icon(Icons.business_center,color:Color(0xFF6503AB),)),
+                                // ),
                               ),
 
                               // TextField (60%)
@@ -463,6 +608,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                             ],
                           ),
                         ),
+                        SizedBox(height: 5),
                         // Amount
                         const Text(
                           "Amount (₹)",
@@ -476,21 +622,40 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                         Container(
                           height: 50,
                           decoration: BoxDecoration(
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: Colors.grey.shade300, // Border color
+                              width: 1,
+                            ),
                           ),
                           clipBehavior: Clip.hardEdge,
+                          // padding: const EdgeInsets.symmetric(
+                          //   horizontal: 8,
+                          //   vertical: 5,
+                          // ),
+                          // decoration: BoxDecoration(
+                          //   color: Colors.white,
+                          //   borderRadius: BorderRadius.circular(5),
+                          //   border: Border.all(
+                          //     color: Colors.grey.shade300,
+                          //     width: 1,
+                          //   ),
+                          // ),
                           child: Row(
                             children: [
                               Expanded(
                                 flex: 2,
-                                child: Container(
-                                  color: Colors.white,
-                                  child: Center(
+                                child:Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    color: Colors.white,
                                     child: Container(
-                                      width: 40,
-                                      height: 40,
+                                      width: 30,
+                                      height: 30,
                                       decoration: const BoxDecoration(
-                                        color: Color(0xFF6503AB), // Blue/Purple background
+                                        color: Color(0xFF6503AB),
                                         shape: BoxShape.circle,
                                       ),
                                       child: const Center(
@@ -498,26 +663,29 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                           '₹',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 20,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                )
+                                ),
                               ),
+                              const SizedBox(width: 8),
                               Expanded(
                                 flex: 8,
-                                child:  TextFormField(
+                                child: TextFormField(
                                   controller: _phoneNumberController,
                                   keyboardType: TextInputType.number,
                                   decoration: const InputDecoration(
                                     hintText: "Enter Amount",
                                     border: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
                                     contentPadding: EdgeInsets.symmetric(
                                       horizontal: 12,
-                                      vertical: 15,
+                                      vertical: 12,
                                     ),
                                   ),
                                 ),
@@ -720,11 +888,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                               print("Submit Reimbursement");
                           }
                         ),
-
-
-
-
-
                       ],
                     ),
                 ),
@@ -733,19 +896,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
 
         )
     );
-      // body: Column(
-      //   mainAxisAlignment: MainAxisAlignment.start,
-      //   crossAxisAlignment: CrossAxisAlignment.start,
-      //   children: <Widget>[
-      //     Center(
-      //       child: Text('Update Serve', style: TextStyle(
-      //           color: Colors.black,
-      //           fontSize: 20
-      //       ),),
-      //     )
-      //   ],
-      // ),
-
 
   }
 }
