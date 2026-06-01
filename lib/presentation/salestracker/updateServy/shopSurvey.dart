@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../app/loader_helper.dart';
 import '../../../services/baseurl.dart';
+import '../../loginaftersplace/loginaftersplace.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/app_text_style.dart';
 import '../../resources/values_manager.dart';
@@ -1085,12 +1086,14 @@ class _MyHomePageState extends State<UpdateServeyInfo> {
             backgroundColor: Color(0xFF0098a6),
             leading: InkWell(
               onTap: () {
+
+               // LoginPageAfterSplace
                 // Navigator.pop(context);
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) => const ExpenseManagement()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const LoginPageAfterSplace()),
+                );
               },
               child: const Padding(
                 padding: EdgeInsets.only(left: 5.0),

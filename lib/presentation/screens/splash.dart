@@ -107,7 +107,8 @@ class _SplaceState extends State<SplashView> {
 
       print('-----89---Visitor DashBoard');//
 
-      context.go('/VisitorDashboard');
+     // context.go('/VisitorDashboard');
+      context.go('/Loginaftersplace');
 
 
     } else if(iUserType != null && iUserType != '' && iUserType == '1') {
@@ -115,7 +116,8 @@ class _SplaceState extends State<SplashView> {
       print('-----112----vms HOME WITH ONLY vistitor box-------');
 
      // context.go('/Loginaftersplace');
-      context.go('/VmsHome');
+     // context.go('/VmsHome');
+      context.go('/Loginaftersplace');
 
     }else{
       print('-----117----FirstTime go login after splace-------');

@@ -84,9 +84,9 @@ Future<void> firebaseBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   // if (Firebase.apps.isEmpty) {
   //   await Firebase.initializeApp(
   //     options: DefaultFirebaseOptions.currentPlatform,
@@ -144,7 +144,8 @@ Future<void> openVisitorListDirectly() async {
     safeNavigate('/LoginScreen_2');
   } else {
     // here you simple navigate Dashboard
-    safeNavigate('/VisitorList');
+   // safeNavigate('/VisitorList');
+    safeNavigate('/LoginScreen_2');
   }
 }
 
@@ -214,7 +215,8 @@ void navigateToNotificationScreen(String payload) async {
   if (iUserId == null || iUserId.isEmpty) {
     safeNavigate('/LoginScreen_2');
   } else {
-    safeNavigate('/VisitorList', payload: payload);
+   // safeNavigate('/VisitorList', payload: payload);
+    safeNavigate('/LoginScreen_2');
   }
 }
 
