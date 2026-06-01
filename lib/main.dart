@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:go_router/go_router.dart';
 import 'package:puri/presentation/login/loginScreen_2.dart';
 import 'package:puri/presentation/loginaftersplace/loginaftersplace.dart';
+import 'package:puri/presentation/salestracker/updateServy/updateservy.dart';
 import 'package:puri/presentation/screens/splash.dart';
 import 'package:puri/presentation/visitorDashboard/visitorDashBoard.dart';
 import 'package:puri/presentation/visitorList/visitorList.dart';
@@ -216,7 +217,7 @@ void navigateToNotificationScreen(String payload) async {
     safeNavigate('/LoginScreen_2');
   } else {
    // safeNavigate('/VisitorList', payload: payload);
-    safeNavigate('/LoginScreen_2');
+    safeNavigate('/UpdateServeSalesTracker');
   }
 }
 
@@ -232,6 +233,7 @@ class MyApp extends StatelessWidget {
       GoRoute(name: 'VmsHome', path: '/VmsHome', builder: (context, state) => VmsHome()),
       GoRoute(name: 'VisitorLoginEntry', path: '/VisitorLoginEntry', builder: (context, state) => VisitorLoginEntry()),
       GoRoute(name: 'LoginScreen_2', path: '/LoginScreen_2', builder: (context, state) => LoginScreen_2()),
+      GoRoute(name: 'UpdateServeSalesTracker', path: '/UpdateServeSalesTracker', builder: (context, state) => UpdateServeSalesTracker()),
       GoRoute(
         name: 'VisitorList',
         path: '/VisitorList',

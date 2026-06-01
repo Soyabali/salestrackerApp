@@ -1,4 +1,5 @@
 // TextFormField
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:glassmorphism/glassmorphism.dart';
@@ -7,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 Widget commonTextFormField({
   required TextEditingController controller,
   required String labelText,
-  required IconData prefixIcon,
+   IconData? prefixIcon,
 
   FocusNode? focusNode,
   TextInputType keyboardType = TextInputType.text,
@@ -335,6 +336,120 @@ Widget commonGlassFormCard({
           ),
         ),
       ),
+    ),
+  );
+}
+
+// uplode document Cards
+
+Widget uploadDocumentCard({
+  VoidCallback? onCameraTap,
+  VoidCallback? onGalleryTap,
+}) {
+  return Card(
+    elevation: 8,
+    shadowColor: Colors.black12,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: DottedBorder(
+      options: const RoundedRectDottedBorderOptions(
+        radius: Radius.circular(20),
+        dashPattern: [8, 5],
+        strokeWidth: 1.5,
+        color: Color(0xFFB957FF),
+      ),
+      child: Container(
+        height: 105,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+
+            /// Camera
+            Expanded(
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: onCameraTap,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 42,
+                      width: 42,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF6503AB).withOpacity(0.08),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.camera_alt_rounded,
+                        size: 24,
+                        color: Color(0xFF6503AB),
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    const Text(
+                      "Click Photo",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF6503AB),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Container(
+            //   width: 1,
+            //   margin: const EdgeInsets.symmetric(vertical: 15),
+            //   color: Colors.grey.shade200,
+            // ),
+
+            /// Gallery
+            Expanded(
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: onGalleryTap,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 42,
+                      width: 42,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF6503AB).withOpacity(0.08),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.photo_library_rounded,
+                        size: 24,
+                        color: Color(0xFF6503AB),
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    const Text(
+                      "Select Photo",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF6503AB),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      )
     ),
   );
 }

@@ -2,15 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:glassmorphism/glassmorphism.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../app/generalFunction.dart' hide displayToast;
-import 'package:fluttertoast/fluttertoast.dart';
 import '../../app/sakestrackingtypography.dart';
 import '../../services/loginRepo.dart';
-import '../salestracker/dashboard/dashboard.dart';
 import '../salestracker/updateServy/updateservy.dart';
 import '../visitorList/visitorList.dart' hide displayToast;
 import '../vmsHome/vmsHome.dart' hide displayToast;
@@ -423,21 +418,6 @@ class _LoginPageState extends State<LoginPageAfterSplace> {
             }
           }
         },
-        // onPressed: (){
-        //  var userId = _phoneNumberController.text;
-        //  var password = passwordController.text;
-        //
-        //    print("-----$userId");
-        //    print("-----$password");
-        // }
-        // onPressed: () {
-        //   Navigator.pushReplacement(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => UpdateServeSalesTracker(),
-        //     ),
-        //   );
-        // },
       ),
     );
   }

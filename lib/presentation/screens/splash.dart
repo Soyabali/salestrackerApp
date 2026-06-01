@@ -117,7 +117,7 @@ class _SplaceState extends State<SplashView> {
 
      // context.go('/Loginaftersplace');
      // context.go('/VmsHome');
-      context.go('/Loginaftersplace');
+      context.go('/UpdateServeSalesTracker');
 
     }else{
       print('-----117----FirstTime go login after splace-------');

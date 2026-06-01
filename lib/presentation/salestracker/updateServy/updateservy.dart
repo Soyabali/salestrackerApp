@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../app/generalFunction.dart';
+import '../../../app/sakestrackingtypography.dart';
 import '../../../services/BindWhomToMeetVisitor.dart';
 import '../../resources/app_text_style.dart';
 
@@ -21,12 +22,34 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
   List<dynamic> whomToMeet = [];
   var _dropDownWhomToValue;
   var _selectedWhomToMeetValue;
+  final TextEditingController dateController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _expenseController =
+  TextEditingController();
 
   whoomToWidget() async {
     whomToMeet = await BindWhomToMeetVisitorRepo().getbindWhomToMeetVisitor();
     print("$whomToMeet");
     setState(() {});
   }
+
+  //
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null) {
+      dateController.text =
+      "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+    }
+  }
+
+
   // DropDownHomeToMeet
   Widget _WhomToMeet() {
     return Material(
@@ -64,12 +87,15 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                     children: [
 
                       /// TITLE
-                      const Text(
-                        "Whom To Meet",
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Whom To Meet",
 
-                        style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.w600,
+                          style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
 
@@ -191,6 +217,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
   @override
   void dispose() {
     // TODO: implement dispose
+    _phoneNumberController.dispose();
     super.dispose();
   }
 
@@ -306,7 +333,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                         Container(
                           height: 50,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           clipBehavior: Clip.hardEdge,
                           child: Row(
@@ -314,9 +341,11 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                               Expanded(
                                 flex: 2,
                                 child: Container(
-                                  //color: const Color(0xFF6503AB),
+                                 // color: const Color(0xFF6503AB),
                                   color: Colors.white,
-                                  child: Icon(Icons.ac_unit,color: Colors.grey),
+                                  child: const Align(
+                                      alignment: Alignment.center,
+                                      child: Icon(Icons.ac_unit,color: Colors.grey)),
                                 ),
                               ),
                               Expanded(
@@ -328,6 +357,372 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                             ],
                           ),
                         ),
+                        // Expense Category
+                        const Text(
+                          'Expense Category',
+                          style: TextStyle(
+                            // color: Color(0xFF6503AB),
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          clipBehavior: Clip.hardEdge,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  // color: const Color(0xFF6503AB),
+                                  color: Colors.white,
+                                  child: const Align(
+                                      alignment: Alignment.center,
+                                      child: Icon(Icons.ac_unit,color: Colors.grey)),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 8,
+                                child: _WhomToMeet(),
+
+
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Bill/ Expense Date
+                        const Text(
+                          'Bill/ Expense Date',
+                          style: TextStyle(
+                            // color: Color(0xFF6503AB),
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        // calander row
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+
+                              // Left Icon (20%)
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: const Icon(
+                                    Icons.calendar_month_outlined,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+
+                              // TextField (60%)
+                              Expanded(
+                                flex: 6,
+                                child: TextFormField(
+                                  controller: dateController,
+                                  readOnly: true,
+                                  decoration: const InputDecoration(
+                                    hintText: "Select Date",
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              // Right Icon (20%)
+                              Expanded(
+                                flex: 2,
+                                child: InkWell(
+                                  onTap: () => _selectDate(context),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: const Icon(
+                                      Icons.calendar_today,
+                                      color: Color(0xFF6503AB),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Amount
+                        const Text(
+                          "Amount (₹)",
+                          style: TextStyle(
+                            // color: Color(0xFF6503AB),
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          clipBehavior: Clip.hardEdge,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  color: Colors.white,
+                                  child: Center(
+                                    child: Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFF6503AB), // Blue/Purple background
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          '₹',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ),
+                              Expanded(
+                                flex: 8,
+                                child:  TextFormField(
+                                  controller: _phoneNumberController,
+                                  keyboardType: TextInputType.number,
+                                  decoration: const InputDecoration(
+                                    hintText: "Enter Amount",
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Expense Details
+                        const Text(
+                          "Expense Details",
+                          style: TextStyle(
+                            // color: Color(0xFF6503AB),
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              height: 120,
+                              child: TextFormField(
+                                controller: _expenseController,
+                                maxLines: null,
+                                expands: true,
+                                maxLength: 500,
+                                textAlignVertical: TextAlignVertical.top,
+                                decoration: InputDecoration(
+                                  hintText: "Enter Expense Details",
+                                  contentPadding: const EdgeInsets.only(
+                                    left: 12,
+                                    right: 12,
+                                    top: 12,
+                                    bottom: 12,
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  counterText: "",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                onChanged: (_) {
+                                  setState(() {});
+                                },
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 4,
+                                right: 8,
+                              ),
+                              child: Text(
+                                "${_expenseController.text.length}/500",
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Supporting Documents
+                        Container(
+                          height: 50,
+                          color: Colors.white,
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Icon(Icons.ac_unit,size: 20,
+                                  color: Color(0xFF6503AB)),
+                              SizedBox(width: 20),
+                             Column(
+                               mainAxisAlignment: MainAxisAlignment.start,
+                               crossAxisAlignment: CrossAxisAlignment.start,
+                               children: <Widget>[
+                                 Text(
+                                   'Supporting Documents',
+                                   style: TextStyle(
+                                     color: Color(0xFF6503AB),
+                                     fontSize: 14,
+                                     fontWeight: FontWeight.w400,
+                                   ),
+                                 ),
+                                 Text(
+                                   'Upload up to 5 supporting documents',
+                                   style: TextStyle(
+                                     color: Colors.grey,
+                                     fontSize: 12,
+                                     fontWeight: FontWeight.w400,
+                                   ),
+                                 ),
+                               ],
+                             ),
+
+                            ],
+                          ),
+                        ),
+                        const Text(
+                          "Supported Documents - 1",
+                          style: TextStyle(
+                            // color: Color(0xFF6503AB),
+                            color: Color(0xFF6503AB),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        uploadDocumentCard(
+                          onCameraTap: () {
+                            print("Open Camera");
+                          },
+                          onGalleryTap: () {
+                            print("Open Gallery");
+                          },
+                        ),
+                        SizedBox(height: 5),
+                        const Text(
+                          "Supported Documents - 2",
+                          style: TextStyle(
+                            // color: Color(0xFF6503AB),
+                            color: Color(0xFF6503AB),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        uploadDocumentCard(
+                          onCameraTap: () {
+                            print("Open Camera");
+                          },
+                          onGalleryTap: () {
+                            print("Open Gallery");
+                          },
+                        ),
+                        SizedBox(height: 5),
+                        const Text(
+                          "Supported Documents - 3",
+                          style: TextStyle(
+                            // color: Color(0xFF6503AB),
+                            color: Color(0xFF6503AB),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        uploadDocumentCard(
+                          onCameraTap: () {
+                            print("Open Camera");
+                          },
+                          onGalleryTap: () {
+                            print("Open Gallery");
+                          },
+                        ),
+                        SizedBox(height: 5),
+                        const Text(
+                          "Supported Documents - 4",
+                          style: TextStyle(
+                            // color: Color(0xFF6503AB),
+                            color: Color(0xFF6503AB),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        uploadDocumentCard(
+                          onCameraTap: () {
+                            print("Open Camera");
+                          },
+                          onGalleryTap: () {
+                            print("Open Gallery");
+                          },
+                        ),
+                        SizedBox(height: 5),
+                        const Text(
+                          "Supported Documents - 5",
+                          style: TextStyle(
+                            // color: Color(0xFF6503AB),
+                            color: Color(0xFF6503AB),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        uploadDocumentCard(
+                          onCameraTap: () {
+                            print("Open Camera");
+                          },
+                          onGalleryTap: () {
+                            print("Open Gallery");
+                          },
+                        ),
+                        SizedBox(height: 10),
+                         commonGradientButton(
+                          label: "Submit Reimbursement",
+                          onPressed: (){
+                              print("Submit Reimbursement");
+                          }
+                        ),
+
+
+
 
 
                       ],
