@@ -1,8 +1,17 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart' as fp;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../app/generalFunction.dart';
-import '../../../app/sakestrackingtypography.dart';
+import '../../../app/loader_helper.dart';
+import '../../../app/sakestrackingtypography.dart' hide displayToast;
 import '../../../services/BindWhomToMeetVisitor.dart';
+import '../../../services/baseurl.dart';
+import '../../../services/reimbursement.dart';
 import '../../loginaftersplace/loginaftersplace.dart';
 import '../../resources/app_text_style.dart';
 
@@ -25,169 +34,101 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
   final TextEditingController dateController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _expenseController = TextEditingController();
-
-  whoomToWidget() async {
-    whomToMeet = await BindWhomToMeetVisitorRepo().getbindWhomToMeetVisitor();
-    print("$whomToMeet");
-    setState(() {});
+  File? image, image2, image3, image4,image5;
+  File? selectedFile;
+  String? fileName;
+  var msg;
+  var result;
+  bool isPdf = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  var uplodedImage, uplodedImage2, uplodedImage3, uplodedImage4,uplodedImage5;
+  void clearAllImages() {
+    setState(() {
+      image = null;
+      image2 = null;
+      image3 = null;
+      image4 = null;
+      image5 = null;
+    });
   }
-
   //
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2100),
-    );
+  // DropDownHomeToMeet
+  Future<void> pickDocument_1() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? sToken = prefs.getString('sToken');
 
-    if (pickedDate != null) {
-      dateController.text =
-          "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+      fp.FilePickerResult? result =
+      await fp.FilePicker.platform.pickFiles(
+        type: fp.FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+        withData: true,
+      );
+
+      if (result != null) {
+        selectedFile = File(result.files.single.path!);
+        fileName = result.files.single.name;
+
+        isPdf = fileName!.toLowerCase().endsWith('.pdf');
+
+        setState(() {});
+
+        print("Selected File: $fileName");
+        print("Path: ${selectedFile!.path}");
+
+        uploadImage(sToken!, selectedFile!);
+      } else {
+        print("No file selected");
+      }
+    } catch (e) {
+      print("Error: $e");
     }
   }
+  // pdf set
+  Widget buildPreview() {
+    if (selectedFile == null) {
+      return const Text("No file selected");
+    }
 
-  // DropDownHomeToMeet
-  Widget _WhomToMeet() {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(10),
-
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-
-        onTap: () {
-          FocusScope.of(context).unfocus();
-
-          showDialog(
-            context: context,
-
-            builder: (context) {
-              return Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-
-                child: Container(
-                  width: 400,
-
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 18,
-                  ),
-
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-
-                    children: [
-                      /// TITLE
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Whom To Meet",
-
-                          style: TextStyle(
-                            fontSize: 19,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      /// DIVIDER
-                      const Divider(height: 1, thickness: 1),
-
-                      /// LIST
-                      SizedBox(
-                        height: 300,
-
-                        child: ListView.separated(
-                          padding: EdgeInsets.zero,
-
-                          itemCount: whomToMeet.length,
-
-                          separatorBuilder: (context, index) {
-                            return const Divider(height: 1, thickness: 0.8);
-                          },
-
-                          itemBuilder: (context, index) {
-                            final item = whomToMeet[index];
-
-                            return InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _dropDownWhomToValue = item['sUserName'];
-
-                                  _selectedWhomToMeetValue = item['iUserId'];
-                                });
-
-                                print(
-                                  "----whom To meet --149--xx-->>>..xxx.---$_selectedWhomToMeetValue",
-                                );
-
-                                Navigator.pop(context);
-                              },
-
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 10,
-                                ),
-
-                                child: Text(
-                                  item['sUserName'].toString(),
-
-                                  overflow: TextOverflow.ellipsis,
-
-                                  style: AppTextStyle
-                                      .font14OpenSansRegularBlack45TextStyle,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
-
-        child: Container(
-          width: MediaQuery.of(context).size.width - 50,
-          height: 42,
-
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-            children: [
-              Expanded(
-                child: Text(
-                  _dropDownWhomToValue ?? "Whom To Meet",
-
-                  overflow: TextOverflow.ellipsis,
-
-                  style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
-                ),
-              ),
-
-              const Icon(Icons.arrow_drop_down),
-            ],
-          ),
+    if (isPdf) {
+      return Container(
+        height: 120,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(10),
         ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.picture_as_pdf,
+              color: Colors.red,
+              size: 50,
+            ),
+            Text(fileName ?? ''),
+          ],
+        ),
+      );
+    }
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Image.file(
+        selectedFile!,
+        height: 120,
+        width: double.infinity,
+        fit: BoxFit.cover,
       ),
     );
   }
 
+
+
   @override
   void initState() {
-    whoomToWidget();
+    //whoomToWidget();
     super.initState();
   }
 
@@ -197,6 +138,751 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
     _phoneNumberController.dispose();
     super.dispose();
   }
+  Future pickImage() async {
+    image=null;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+    try {
+      final pickFileid = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 65);
+      if (pickFileid != null) {
+        image = File(pickFileid.path);
+        setState(() {
+          image = File(pickFileid.path);
+        });
+        //  print('Image File path Id Proof-------167----->$image');
+        // multipartProdecudre();
+        uploadImage(sToken!, image!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+  Future pickImage2() async {
+    // clearAllImages();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 65);
+      if (pickFileid != null) {
+        image2 = File(pickFileid.path);
+        setState(() {
+          image2 = File(pickFileid.path);
+        });
+        print('Image File path Id Proof--camra-----195----->$image2');
+        // multipartProdecudre();
+        print('token----$sToken');
+        print('Images----$image2');
+
+        uploadImage2(sToken!, image2!);
+
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+  Future pickImage3() async {
+    image3=null;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 65);
+      if (pickFileid != null) {
+        setState(() {
+          image3 = File(pickFileid.path);
+        });
+        print('Image File path Id Proof-------167----->$image');
+        // multipartProdecudre();
+        uploadImage3(sToken!, image3!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+  Future pickImage4() async {
+    image4=null;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 65);
+      if (pickFileid != null) {
+
+        setState(() {
+          image4 = File(pickFileid.path);
+        });
+        print('Image File path Id Proof-------167----->$image');
+        // multipartProdecudre();
+        uploadImage4(sToken!, image4!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+  Future pickImage5() async {
+    image5=null;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 65);
+      if (pickFileid != null) {
+
+        setState(() {
+          image5 = File(pickFileid.path);
+        });
+        print('Image File path Id Proof-------167----->$image');
+        // multipartProdecudre();
+        uploadImage5(sToken!, image5!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+  // you shold add 1 more
+
+  // pick image from a Gallery
+  Future pickImageGallery() async {
+    image=null;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 65);
+      if (pickFileid != null) {
+        image = File(pickFileid.path);
+        setState(() {});
+        print('Image File path Id Proof-------167----->$image');
+        // multipartProdecudre();
+        uploadImage(sToken!, image!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+  Future pickImageGallery2() async {
+    // clearAllImages();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 65);
+      if (pickFileid != null) {
+        // image2 = File(pickFileid.path);
+        setState(() {
+          image2 = File(pickFileid.path);
+        });
+        print('Image File path Id Proof-------273----->$image2');
+        // multipartProdecudre();
+        uploadImage2(sToken!, image2!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+  Future pickImageGallery3() async {
+    image3=null;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 65);
+      if (pickFileid != null) {
+        image3 = File(pickFileid.path);
+        setState(() {});
+        print('Image File path Id Proof-------167----->$image');
+        // multipartProdecudre();
+        uploadImage3(sToken!, image3!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+  Future pickImageGallery4() async {
+    image4=null;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 65);
+      if (pickFileid != null) {
+        image4 = File(pickFileid.path);
+        setState(() {});
+        print('Image File path Id Proof-------167----->$image');
+        // multipartProdecudre();
+        uploadImage4(sToken!, image4!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+  Future pickImageGallery5() async {
+    image5=null;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 65);
+      if (pickFileid != null) {
+        image5 = File(pickFileid.path);
+        setState(() {});
+        print('Image File path Id Proof-------167----->$image');
+        // multipartProdecudre();
+        uploadImage5(sToken!, image5!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+  // // camra code
+  // Future pickImage() async {
+  //   image=null;
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? sToken = prefs.getString('sToken');
+  //   print('---Token----113--$sToken');
+  //   try {
+  //     final pickFileid = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 65);
+  //     if (pickFileid != null) {
+  //
+  //       print("-------227------$pickFileid");
+  //       image = File(pickFileid.path);
+  //       setState(() {
+  //         image = File(pickFileid.path);
+  //       });
+  //       //  print('Image File path Id Proof-------167----->$image');
+  //       // multipartProdecudre();
+  //       uploadImage(sToken!, image!);
+  //     } else {
+  //       print('no image selected');
+  //     }
+  //   } catch (e) {}
+  // }
+  // // image pick a gallery
+  // Future pickImageGallery() async {
+  //   image=null;
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? sToken = prefs.getString('sToken');
+  //   print('---Token----113--$sToken');
+  //
+  //   try {
+  //     final pickFileid = await ImagePicker()
+  //         .pickImage(source: ImageSource.gallery, imageQuality: 65);
+  //     if (pickFileid != null) {
+  //       image = File(pickFileid.path);
+  //       setState(() {});
+  //       print('Image File path Id Proof-------167----->$image');
+  //       // multipartProdecudre();
+  //       uploadImage(sToken!, image!);
+  //     } else {
+  //       print('no image selected');
+  //     }
+  //   } catch (e) {}
+  // }
+  // api call
+  // Future<void> uploadImage(String token, File imageFile) async {
+  //   print('----image file path--338---$imageFile');
+  //   var baseURL = BaseRepo().baseurl;
+  //     // http://49.50.76.136/hrmsapis/api/
+  //   var endPoint = "PostMultipleImage/PostMultipleImage";
+  //   var uplodeImageApi = "$baseURL$endPoint";
+  //  // var uplodeImageApi = "http://49.50.76.136/hrmsapis/api/UploadTrackingImage/UploadTrackingImage";
+  //   try {
+  //     print('-----xx-x----214----');
+  //     showLoader();
+  //     // Create a multipart request
+  //     var request = http.MultipartRequest('POST',
+  //       Uri.parse('$uplodeImageApi'),
+  //     );
+  //     // Add headers
+  //     request.headers['token'] = token;
+  //     // Add the image file as a part of the request
+  //     request.files.add(await http.MultipartFile.fromPath(
+  //       'sImagePath',
+  //       imageFile.path,
+  //     ));
+  //     // Send the request
+  //     var streamedResponse = await request.send();
+  //
+  //     // Get the response
+  //     var response = await http.Response.fromStream(streamedResponse);
+  //     // Parse the response JSON
+  //     List<dynamic> responseData = json.decode(response.body);
+  //     // Extracting the image path
+  //     uplodedImage = responseData[0]['Data'][0]['sImagePath'];
+  //     print('Uploaded Image Path----375--: $uplodedImage');
+  //     hideLoader();
+  //   } catch (error) {
+  //     hideLoader();
+  //     print('Error uploading image: $error');
+  //   }
+  // }
+  Future<void> uploadImage(String token, File imageFile) async {
+
+    var baseURL = BaseRepo().baseurl;
+    var endPoint = "PostMultipleImage/PostMultipleImage";
+    var uplodeImageApi = "$baseURL$endPoint";
+
+    try {
+
+      showLoader();
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+          uplodeImageApi,
+        ),
+      );
+
+      request.headers['token'] = token;
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'sImagePath',
+          imageFile.path,
+        ),
+      );
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      print("Status Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
+
+      if (response.statusCode == 200) {
+
+        Map<String, dynamic> responseData =
+        jsonDecode(response.body);
+
+        print("Decoded Response: $responseData");
+
+        if (responseData['Data'] != null &&
+            responseData['Data'].isNotEmpty) {
+
+          uplodedImage =
+          responseData['Data'][0]['sImagePath'];
+
+          print("Uploaded Image Path: $uplodedImage");
+        }
+
+      } else {
+        print("API Error: ${response.reasonPhrase}");
+      }
+
+      hideLoader();
+
+    } catch (e) {
+
+      hideLoader();
+      print("Error uploading image: $e");
+
+    }
+  }
+
+  Future<void> uploadImage2(String token, File imageFile) async {
+
+    var baseURL = BaseRepo().baseurl;
+    var endPoint = "PostMultipleImage/PostMultipleImage";
+    var uplodeImageApi = "$baseURL$endPoint";
+
+    try {
+
+      showLoader();
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+          uplodeImageApi,
+        ),
+      );
+
+      request.headers['token'] = token;
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'sImagePath',
+          imageFile.path,
+        ),
+      );
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      print("Status Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
+
+      if (response.statusCode == 200) {
+
+        Map<String, dynamic> responseData =
+        jsonDecode(response.body);
+
+        print("Decoded Response: $responseData");
+
+        if (responseData['Data'] != null &&
+            responseData['Data'].isNotEmpty) {
+
+          uplodedImage2 =
+          responseData['Data'][0]['sImagePath'];
+
+          print("Uploaded Image Path: $uplodedImage");
+        }
+
+      } else {
+        print("API Error: ${response.reasonPhrase}");
+      }
+
+      hideLoader();
+
+    } catch (e) {
+
+      hideLoader();
+      print("Error uploading image: $e");
+
+    }
+  }
+
+  // Future<void> uploadImage2(String token, File imageFile) async {
+  //   print('----image file path--338---$imageFile');
+  //   var baseURL = BaseRepo().baseurl;
+  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
+  //   var uplodeImageApi = "$baseURL$endPoint";
+  //   try {
+  //     print('-----xx-x----214----');
+  //     showLoader();
+  //     // Create a multipart request
+  //     var request = http.MultipartRequest('POST',
+  //       Uri.parse('$uplodeImageApi'),
+  //     );
+  //     // Add headers
+  //     request.headers['token'] = token;
+  //     // Add the image file as a part of the request
+  //     request.files.add(await http.MultipartFile.fromPath(
+  //       'sImagePath',
+  //       imageFile.path,
+  //     ));
+  //     // Send the request
+  //     var streamedResponse = await request.send();
+  //
+  //     // Get the response
+  //     var response = await http.Response.fromStream(streamedResponse);
+  //     // Parse the response JSON
+  //     List<dynamic> responseData = json.decode(response.body);
+  //     // Extracting the image path
+  //     uplodedImage2 = responseData[0]['Data'][0]['sImagePath'];
+  //     print('Uploaded Image 2 Path----423--: $uplodedImage2');
+  //     hideLoader();
+  //   } catch (error) {
+  //     hideLoader();
+  //     print('Error uploading image: $error');
+  //   }
+  // }
+  Future<void> uploadImage3(String token, File imageFile) async {
+
+    var baseURL = BaseRepo().baseurl;
+    var endPoint = "PostMultipleImage/PostMultipleImage";
+    var uplodeImageApi = "$baseURL$endPoint";
+
+    try {
+
+      showLoader();
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+          uplodeImageApi,
+        ),
+      );
+
+      request.headers['token'] = token;
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'sImagePath',
+          imageFile.path,
+        ),
+      );
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      print("Status Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
+
+      if (response.statusCode == 200) {
+
+        Map<String, dynamic> responseData =
+        jsonDecode(response.body);
+
+        print("Decoded Response: $responseData");
+
+        if (responseData['Data'] != null &&
+            responseData['Data'].isNotEmpty) {
+
+          uplodedImage3 =
+          responseData['Data'][0]['sImagePath'];
+
+          print("Uploaded Image Path: $uplodedImage");
+        }
+
+      } else {
+        print("API Error: ${response.reasonPhrase}");
+      }
+
+      hideLoader();
+
+    } catch (e) {
+
+      hideLoader();
+      print("Error uploading image: $e");
+
+    }
+  }
+  // Future<void> uploadImage3(String token, File imageFile) async {
+  //   print('----image file path--338---$imageFile');
+  //   var baseURL = BaseRepo().baseurl;
+  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
+  //   var uplodeImageApi = "$baseURL$endPoint";
+  //   try {
+  //     print('-----xx-x----214----');
+  //     showLoader();
+  //     // Create a multipart request
+  //     var request = http.MultipartRequest('POST',
+  //       Uri.parse('$uplodeImageApi'),
+  //     );
+  //     // Add headers
+  //     request.headers['token'] = token;
+  //     // Add the image file as a part of the request
+  //     request.files.add(await http.MultipartFile.fromPath(
+  //       'sImagePath',
+  //       imageFile.path,
+  //     ));
+  //     // Send the request
+  //     var streamedResponse = await request.send();
+  //
+  //     // Get the response
+  //     var response = await http.Response.fromStream(streamedResponse);
+  //     // Parse the response JSON
+  //     List<dynamic> responseData = json.decode(response.body);
+  //     // Extracting the image path
+  //     uplodedImage3 = responseData[0]['Data'][0]['sImagePath'];
+  //     print('Uploaded Image Path----495--: $uplodedImage3');
+  //     hideLoader();
+  //   } catch (error) {
+  //     hideLoader();
+  //     print('Error uploading image: $error');
+  //   }
+  // }
+  Future<void> uploadImage4(String token, File imageFile) async {
+
+    var baseURL = BaseRepo().baseurl;
+    var endPoint = "PostMultipleImage/PostMultipleImage";
+    var uplodeImageApi = "$baseURL$endPoint";
+
+    try {
+
+      showLoader();
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+          uplodeImageApi,
+        ),
+      );
+
+      request.headers['token'] = token;
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'sImagePath',
+          imageFile.path,
+        ),
+      );
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      print("Status Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
+
+      if (response.statusCode == 200) {
+
+        Map<String, dynamic> responseData =
+        jsonDecode(response.body);
+
+        print("Decoded Response: $responseData");
+
+        if (responseData['Data'] != null &&
+            responseData['Data'].isNotEmpty) {
+
+          uplodedImage4 =
+          responseData['Data'][0]['sImagePath'];
+
+          print("Uploaded Image Path: $uplodedImage");
+        }
+
+      } else {
+        print("API Error: ${response.reasonPhrase}");
+      }
+
+      hideLoader();
+
+    } catch (e) {
+
+      hideLoader();
+      print("Error uploading image: $e");
+
+    }
+  }
+  // Future<void> uploadImage4(String token, File imageFile) async {
+  //   print('----image file path--338---$imageFile');
+  //   var baseURL = BaseRepo().baseurl;
+  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
+  //   var uplodeImageApi = "$baseURL$endPoint";
+  //   try {
+  //     print('-----xx-x----214----');
+  //     showLoader();
+  //     // Create a multipart request
+  //     var request = http.MultipartRequest('POST',
+  //       Uri.parse('$uplodeImageApi'),
+  //     );
+  //     // Add headers
+  //     request.headers['token'] = token;
+  //     // Add the image file as a part of the request
+  //     request.files.add(await http.MultipartFile.fromPath(
+  //       'sImagePath',
+  //       imageFile.path,
+  //     ));
+  //     // Send the request
+  //     var streamedResponse = await request.send();
+  //
+  //     // Get the response
+  //     var response = await http.Response.fromStream(streamedResponse);
+  //     // Parse the response JSON
+  //     List<dynamic> responseData = json.decode(response.body);
+  //     // Extracting the image path
+  //     uplodedImage4 = responseData[0]['Data'][0]['sImagePath'];
+  //     print('Uploaded Image Path----362--: $uplodedImage4');
+  //     hideLoader();
+  //   } catch (error) {
+  //     hideLoader();
+  //     print('Error uploading image: $error');
+  //   }
+  // }
+  Future<void> uploadImage5(String token, File imageFile) async {
+
+    var baseURL = BaseRepo().baseurl;
+    var endPoint = "PostMultipleImage/PostMultipleImage";
+    var uplodeImageApi = "$baseURL$endPoint";
+
+    try {
+
+      showLoader();
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+          uplodeImageApi,
+        ),
+      );
+
+      request.headers['token'] = token;
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'sImagePath',
+          imageFile.path,
+        ),
+      );
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      print("Status Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
+
+      if (response.statusCode == 200) {
+
+        Map<String, dynamic> responseData =
+        jsonDecode(response.body);
+
+        print("Decoded Response: $responseData");
+
+        if (responseData['Data'] != null &&
+            responseData['Data'].isNotEmpty) {
+
+          uplodedImage5 =
+          responseData['Data'][0]['sImagePath'];
+
+          print("Uploaded Image Path: $uplodedImage");
+        }
+
+      } else {
+        print("API Error: ${response.reasonPhrase}");
+      }
+
+      hideLoader();
+
+    } catch (e) {
+
+      hideLoader();
+      print("Error uploading image: $e");
+
+    }
+  }
+  // Future<void> uploadImage5(String token, File imageFile) async {
+  //   print('----image file path--338---$imageFile');
+  //   var baseURL = BaseRepo().baseurl;
+  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
+  //   var uplodeImageApi = "$baseURL$endPoint";
+  //   try {
+  //     print('-----xx-x----214----');
+  //     showLoader();
+  //     // Create a multipart request
+  //     var request = http.MultipartRequest('POST',
+  //       Uri.parse('$uplodeImageApi'),
+  //     );
+  //     // Add headers
+  //     request.headers['token'] = token;
+  //     // Add the image file as a part of the request
+  //     request.files.add(await http.MultipartFile.fromPath(
+  //       'sImagePath',
+  //       imageFile.path,
+  //     ));
+  //     // Send the request
+  //     var streamedResponse = await request.send();
+  //
+  //     // Get the response
+  //     var response = await http.Response.fromStream(streamedResponse);
+  //     // Parse the response JSON
+  //     List<dynamic> responseData = json.decode(response.body);
+  //     // Extracting the image path
+  //     uplodedImage5 = responseData[0]['Data'][0]['sImagePath'];
+  //     print('Uploaded Image Path----362--: $uplodedImage5');
+  //     hideLoader();
+  //   } catch (error) {
+  //     hideLoader();
+  //     print('Error uploading image: $error');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -264,222 +950,602 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                 // SCROLLABLE AREA
                 Expanded(
                   child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        // Push form below image
-                        const SizedBox(height: 120),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          // Push form below image
+                          const SizedBox(height: 120),
 
-                        // FORM CARD
-                        Container(
-                          width: double.infinity,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30),
+                          // FORM CARD
+                          Container(
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30),
+                              ),
                             ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              children: [
-                                // Continue remaining widgets...
-                                Container(
-                                  height: 50,
-                                  color: Colors.white,
-                                  child: const Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.ac_unit,
-                                        size: 20,
-                                        color: Color(0xFF6503AB),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                children: [
+                                  // Continue remaining widgets...
+                                  Container(
+                                    height: 50,
+                                    color: Colors.white,
+                                    child: const Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.ac_unit,
+                                          size: 20,
+                                          color: Color(0xFF6503AB),
+                                        ),
+                                        SizedBox(width: 20),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              'Supporting Documents',
+                                              style: TextStyle(
+                                                color: Color(0xFF6503AB),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Upload up to 5 supporting documents',
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Text(
+                                    "Supported Documents - 1",
+                                    style: TextStyle(
+                                      // color: Color(0xFF6503AB),
+                                      color: Color(0xFF6503AB),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  uploadDocumentCard(
+                                    onCameraTap: () {
+                                      print("Open Camera");
+                                      pickImage();
+
+                                    },
+                                    onGalleryTap: () {
+                                      print("Open Gallery");
+
+                                      //pickDocument_1();
+                                      pickImageGallery();
+                                    },
+                                  ),
+
+                                  // here to apply a conditon if a image is not null then set a images as a file
+                                  Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        image != null
+                                            ? Stack(
+                                          children: [
+                                            GestureDetector(
+                                              behavior:
+                                              HitTestBehavior.translucent,
+                                              onTap: () {
+                                              },
+                                              child: Container(
+                                                  color:
+                                                  Colors.lightGreenAccent,
+                                                  height: 100,
+                                                  width: 70,
+                                                  child: Image.file(
+                                                    image!,
+                                                    fit: BoxFit.fill,
+                                                  )),
+                                            ),
+                                            Positioned(
+                                                bottom: 65,
+                                                left: 35,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    image = null;
+                                                    uplodedImage=null;
+                                                    /// todo here you should also clear uplodeImage
+                                                    setState(() {});
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.red,
+                                                    size: 30,
+                                                  ),
+                                                ))
+                                          ],
+                                        )
+                                            : Text(
+                                          "",
+                                          style: TextStyle(
+                                              color: Colors.red[700]),
+                                        )
+                                      ]),
+                                  buildPreview(),
+                                  SizedBox(height: 5),
+                                  const Text(
+                                    "Supported Documents - 2",
+                                    style: TextStyle(
+                                      // color: Color(0xFF6503AB),
+                                      color: Color(0xFF6503AB),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  uploadDocumentCard(
+                                    onCameraTap: () {
+                                      print("Open Camera");
+                                      pickImage2();
+                                    },
+                                    onGalleryTap: () {
+                                      print("Open Gallery");
+                                      pickImageGallery2();
+                                    },
+                                  ),
+                                  SizedBox(height: 5),
+                                  //  set a images
+                                  Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        image2 != null
+                                            ? Stack(
+                                          children: [
+                                            GestureDetector(
+                                              behavior:
+                                              HitTestBehavior.translucent,
+                                              onTap: () {
+                                                // Navigator.push(
+                                                //     context,
+                                                //     MaterialPageRoute(
+                                                //         builder: (context) =>
+                                                //             FullScreenPage(
+                                                //               child: image!,
+                                                //               dark: true,
+                                                //             )));
+                                              },
+                                              child: Container(
+                                                  color:
+                                                  Colors.lightGreenAccent,
+                                                  height: 100,
+                                                  width: 70,
+                                                  child: Image.file(
+                                                    image2!,
+                                                    fit: BoxFit.fill,
+                                                  )),
+                                            ),
+                                            Positioned(
+                                                bottom: 65,
+                                                left: 35,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    image2 = null;
+                                                    uplodedImage2 = null;
+                                                    setState(() {});
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.red,
+                                                    size: 30,
+                                                  ),
+                                                ))
+                                          ],
+                                        )
+                                            : Text(
+                                          "",
+                                          style: TextStyle(
+                                              color: Colors.red[700]),
+                                        )
+                                      ]),
+                                  const Text(
+                                    "Supported Documents - 3",
+                                    style: TextStyle(
+                                      // color: Color(0xFF6503AB),
+                                      color: Color(0xFF6503AB),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  uploadDocumentCard(
+                                    onCameraTap: () {
+                                      print("Open Camera");
+                                      pickImage3();
+                                    },
+                                    onGalleryTap: () {
+                                      print("Open Gallery");
+                                      pickImageGallery3();
+                                    },
+                                  ),
+                                  // set a document 3
+                                  Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        image3 != null
+                                            ? Stack(
+                                          children: [
+                                            GestureDetector(
+                                              behavior:
+                                              HitTestBehavior.translucent,
+                                              onTap: () {
+                                                // Navigator.push(
+                                                //     context,
+                                                //     MaterialPageRoute(
+                                                //         builder: (context) =>
+                                                //             FullScreenPage(
+                                                //               child: image!,
+                                                //               dark: true,
+                                                //             )));
+                                              },
+                                              child: Container(
+                                                  color:
+                                                  Colors.lightGreenAccent,
+                                                  height: 100,
+                                                  width: 70,
+                                                  child: Image.file(
+                                                    image3!,
+                                                    fit: BoxFit.fill,
+                                                  )),
+                                            ),
+                                            Positioned(
+                                                bottom: 65,
+                                                left: 35,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    image3 = null;
+                                                    uplodedImage3 = null;
+                                                    setState(() {});
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.red,
+                                                    size: 30,
+                                                  ),
+                                                ))
+                                          ],
+                                        )
+                                            : Text(
+                                          "",
+                                          style: TextStyle(
+                                              color: Colors.red[700]),
+                                        )
+                                      ]),
+
+                                  SizedBox(height: 5),
+                                  const Text(
+                                    "Supported Documents - 4",
+                                    style: TextStyle(
+                                      // color: Color(0xFF6503AB),
+                                      color: Color(0xFF6503AB),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  uploadDocumentCard(
+                                    onCameraTap: () {
+                                      print("Open Camera");
+                                      pickImage4();
+                                    },
+                                    onGalleryTap: () {
+                                      print("Open Gallery");
+                                      pickImageGallery4();
+                                    },
+                                  ),
+                                  SizedBox(height: 5),
+                                  // set a image 4
+                                  Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        image4 != null
+                                            ? Stack(
+                                          children: [
+                                            GestureDetector(
+                                              behavior:
+                                              HitTestBehavior.translucent,
+                                              onTap: () {
+                                                // Navigator.push(
+                                                //     context,
+                                                //     MaterialPageRoute(
+                                                //         builder: (context) =>
+                                                //             FullScreenPage(
+                                                //               child: image!,
+                                                //               dark: true,
+                                                //             )));
+                                              },
+                                              child: Container(
+                                                  color:
+                                                  Colors.lightGreenAccent,
+                                                  height: 100,
+                                                  width: 70,
+                                                  child: Image.file(
+                                                    image4!,
+                                                    fit: BoxFit.fill,
+                                                  )),
+                                            ),
+                                            Positioned(
+                                                bottom: 65,
+                                                left: 35,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    image4 = null;
+                                                    uplodedImage4 = null;
+                                                    setState(() {});
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.red,
+                                                    size: 30,
+                                                  ),
+                                                ))
+                                          ],
+                                        )
+                                            : Text(
+                                          "",
+                                          style: TextStyle(
+                                              color: Colors.red[700]),
+                                        )
+                                      ]),
+                                  const Text(
+                                    "Supported Documents - 5",
+                                    style: TextStyle(
+                                      // color: Color(0xFF6503AB),
+                                      color: Color(0xFF6503AB),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  uploadDocumentCard(
+                                    onCameraTap: () {
+                                      print("Open Camera");
+                                      pickImage5();
+                                    },
+                                    onGalleryTap: () {
+                                      print("Open Gallery");
+                                      pickImageGallery5();
+                                    },
+                                  ),
+                                  SizedBox(height: 5),
+                                  Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        image5 != null
+                                            ? Stack(
+                                          children: [
+                                            GestureDetector(
+                                              behavior:
+                                              HitTestBehavior.translucent,
+                                              onTap: () {
+                                                // Navigator.push(
+                                                //     context,
+                                                //     MaterialPageRoute(
+                                                //         builder: (context) =>
+                                                //             FullScreenPage(
+                                                //               child: image!,
+                                                //               dark: true,
+                                                //             )));
+                                              },
+                                              child: Container(
+                                                  color:
+                                                  Colors.lightGreenAccent,
+                                                  height: 100,
+                                                  width: 70,
+                                                  child: Image.file(
+                                                    image5!,
+                                                    fit: BoxFit.fill,
+                                                  )),
+                                            ),
+                                            Positioned(
+                                                bottom: 65,
+                                                left: 35,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    image5 = null;
+                                                    uplodedImage5 = null;
+                                                    setState(() {});
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.red,
+                                                    size: 30,
+                                                  ),
+                                                ))
+                                          ],
+                                        )
+                                            : Text(
+                                          "",
+                                          style: TextStyle(
+                                              color: Colors.red[700]),
+                                        )
+                                      ]),
+                                  SizedBox(height: 5),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      SizedBox(
+                                        height: 120,
+                                        child: TextFormField(
+                                          controller: _expenseController,
+                                          maxLines: null,
+                                          expands: true,
+                                          maxLength: 500,
+                                          textAlignVertical:
+                                              TextAlignVertical.top,
+                                          decoration: InputDecoration(
+                                            hintText: "Enter Expense Details",
+                                            contentPadding: const EdgeInsets.only(
+                                              left: 12,
+                                              right: 12,
+                                              top: 12,
+                                              bottom: 12,
+                                            ),
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            counterText: "",
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(
+                                                12,
+                                              ),
+                                            ),
+                                          ),
+                                          onChanged: (_) {
+                                            setState(() {});
+                                          },
+                                        ),
                                       ),
-                                      SizedBox(width: 20),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            'Supporting Documents',
-                                            style: TextStyle(
-                                              color: Color(0xFF6503AB),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                            ),
+
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 4,
+                                          right: 8,
+                                        ),
+                                        child: Text(
+                                          "${_expenseController.text.length}/500",
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 12,
                                           ),
-                                          Text(
-                                            'Upload up to 5 supporting documents',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     ],
                                   ),
-                                ),
-                                const Text(
-                                  "Supported Documents - 1",
-                                  style: TextStyle(
-                                    // color: Color(0xFF6503AB),
-                                    color: Color(0xFF6503AB),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                uploadDocumentCard(
-                                  onCameraTap: () {
-                                    print("Open Camera");
-                                  },
-                                  onGalleryTap: () {
-                                    print("Open Gallery");
-                                  },
-                                ),
-                                SizedBox(height: 5),
-                                const Text(
-                                  "Supported Documents - 2",
-                                  style: TextStyle(
-                                    // color: Color(0xFF6503AB),
-                                    color: Color(0xFF6503AB),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                uploadDocumentCard(
-                                  onCameraTap: () {
-                                    print("Open Camera");
-                                  },
-                                  onGalleryTap: () {
-                                    print("Open Gallery");
-                                  },
-                                ),
-                                SizedBox(height: 5),
-                                const Text(
-                                  "Supported Documents - 3",
-                                  style: TextStyle(
-                                    // color: Color(0xFF6503AB),
-                                    color: Color(0xFF6503AB),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                uploadDocumentCard(
-                                  onCameraTap: () {
-                                    print("Open Camera");
-                                  },
-                                  onGalleryTap: () {
-                                    print("Open Gallery");
-                                  },
-                                ),
-                                SizedBox(height: 5),
-                                const Text(
-                                  "Supported Documents - 4",
-                                  style: TextStyle(
-                                    // color: Color(0xFF6503AB),
-                                    color: Color(0xFF6503AB),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                uploadDocumentCard(
-                                  onCameraTap: () {
-                                    print("Open Camera");
-                                  },
-                                  onGalleryTap: () {
-                                    print("Open Gallery");
-                                  },
-                                ),
-                                SizedBox(height: 5),
-                                const Text(
-                                  "Supported Documents - 5",
-                                  style: TextStyle(
-                                    // color: Color(0xFF6503AB),
-                                    color: Color(0xFF6503AB),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                uploadDocumentCard(
-                                  onCameraTap: () {
-                                    print("Open Camera");
-                                  },
-                                  onGalleryTap: () {
-                                    print("Open Gallery");
-                                  },
-                                ),
-                                SizedBox(height: 5),
-                                SizedBox(height: 5),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
-                                      height: 120,
-                                      child: TextFormField(
-                                        controller: _expenseController,
-                                        maxLines: null,
-                                        expands: true,
-                                        maxLength: 500,
-                                        textAlignVertical:
-                                            TextAlignVertical.top,
-                                        decoration: InputDecoration(
-                                          hintText: "Enter Expense Details",
-                                          contentPadding: const EdgeInsets.only(
-                                            left: 12,
-                                            right: 12,
-                                            top: 12,
-                                            bottom: 12,
-                                          ),
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                          counterText: "",
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                          ),
-                                        ),
-                                        onChanged: (_) {
-                                          setState(() {});
-                                        },
-                                      ),
-                                    ),
+                                  commonGradientButton(
+                                    label: "Submit Reimbursement",
+                                    onPressed: () async {
+                                      String expense = _expenseController.text.trim();
 
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 4,
-                                        right: 8,
-                                      ),
-                                      child: Text(
-                                        "${_expenseController.text.length}/500",
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                commonGradientButton(
-                                  label: "Submit Reimbursement",
-                                  onPressed: () {
-                                    print("Submit Reimbursement");
-                                  },
-                                ),
-                              ],
+                                      print("----image----$image");
+                                      print("----image2----$image2");
+                                      print("----image3----$image3");
+                                      print("----image4----$image4");
+                                      print("----image5----$image5");
+                                      print("-----1126---$expense");
+
+                                      if (uplodedImage == null ) {
+                                        displayToast("Please upload document");
+                                        return;
+                                      }
+                                      if (expense.isEmpty) {
+                                        displayToast("Please enter expense details");
+                                        return;
+                                      }
+
+                                      if (!_formKey.currentState!.validate()) {
+                                        return;
+                                      }
+
+                                      try {
+                                        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                                        String? iUserId = prefs.getString('iUserId');
+
+                                        print('----iUserId----$iUserId');
+                                        print("-----call api----");
+
+                                        var hrmsPopWarning =
+                                        await HrmsPostReimbursementRepo().hrmsPostReimbursement(
+                                          context,
+                                          uplodedImage,
+                                          uplodedImage2,
+                                          uplodedImage3,
+                                          uplodedImage4,
+                                          uplodedImage5,
+                                          expense,
+                                        );
+
+                                        print('--------Response----$hrmsPopWarning');
+
+                                        String result = "${hrmsPopWarning['Result']}";
+                                         msg = "${hrmsPopWarning['Msg']}";
+
+                                        displayToast(msg);
+
+                                        if (result == "1") {
+                                          //displayToast(msg);
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => const Loginaftersplace(),
+                                            ),
+                                          );
+                                        }
+                                      } catch (e) {
+                                        print("Error: $e");
+                                        displayToast(msg);
+                                      }
+                                    },
+                                    // onPressed: ()  async{
+                                    //   var expense = _expenseController.text.trim();
+                                    //
+                                    //   SharedPreferences prefs = await SharedPreferences.getInstance();
+                                    //   String? iUserId = prefs.getString('iUserId');
+                                    //   print('----iUserId--15---$iUserId');
+                                    //   if(_formKey.currentState!.validate() && uplodedImage!=null && expense.isNotEmpty){
+                                    //
+                                    //     print("-----call api----");
+                                    //
+                                    //     print("-----uplodedImage---$uplodedImage");
+                                    //     print("-----uplodedImag2---$uplodedImage2");
+                                    //     print("-----uplodedImag3---$uplodedImage3");
+                                    //     print("-----uplodedImag4---$uplodedImage4");
+                                    //     print("-----uplodedImag5---$uplodedImage5");
+                                    //
+                                    //      var hrmsPopWarning = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,uplodedImage, uplodedImage2, uplodedImage3, uplodedImage4, uplodedImage5,expense);
+                                    //      print('--------1097----xxx--$hrmsPopWarning');
+                                    //
+                                    //      result = "${hrmsPopWarning[0]['Result']}";
+                                    //      msg = "${hrmsPopWarning[0]['Msg']}";
+                                    //      print("---1139------$hrmsPopWarning");
+                                    //
+                                    //
+                                    //   }else{
+                                    //     if(uplodedImage==null){
+                                    //       displayToast("Please upload document");
+                                    //     }else if(expense==null && expense.isEmpty){
+                                    //       displayToast("Please enter expense details");
+                                    //     }else{
+                                    //       displayToast(msg);
+                                    //       // navigate to login screen
+                                    //       Navigator.push(
+                                    //         context,
+                                    //         MaterialPageRoute(
+                                    //           builder: (context) => const Loginaftersplace(),
+                                    //         ),
+                                    //       );
+                                    //     }
+                                    //
+                                    //   }
+                                    //
+                                    // },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

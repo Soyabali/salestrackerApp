@@ -4,7 +4,12 @@ class BaseRepo {
    // final baseurl = Uri.parse("http://49.50.107.91/hmel");
    //final baseurl = Uri.parse("http://upegov.in/NoidaOneCitizenApis/Api/");
    //final baseurl = Uri.parse("http://upegov.in/NoidaOneApi/Api/");
-   final baseurl = Uri.parse("https://upegov.in/VistorManagementSystemApis/Api/");
+   //final baseurl = Uri.parse("https://upegov.in/VistorManagementSystemApis/Api/");
+
+   final baseurl = Uri.parse("http://upegov.in/SalesTrackerApis/Api/");
+   //final baseurl = Uri.parse("http://49.50.76.136/hrmsapis/api/");
+
+   //final baseurl_image = Uri.parse("http://49.50.76.136/hrmsapis/api/");
    //     https://upegov.in/VistorManagementSystemApis/Api/VerifyAppVersion/VerifyAppVersion
   // final baseurl = Uri.parse("http://115.244.7.153/diucitizenapi/api/");
    final baseHeader = {'Content-Type': 'application/json'};

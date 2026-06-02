@@ -884,6 +884,7 @@ class _MyHomePageState extends State<UpdateServeyInfo> {
               },
               items: distList.map((dynamic item) {
                 return DropdownMenuItem(
+                  value: item["sProjectName"].toString(),
                   child: Row(
                     children: [
                       Expanded(
@@ -900,7 +901,6 @@ class _MyHomePageState extends State<UpdateServeyInfo> {
                       ),
                     ],
                   ),
-                  value: item["sProjectName"].toString(),
                 );
               }).toList(),
             ),
@@ -2732,7 +2732,7 @@ class _MyHomePageState extends State<UpdateServeyInfo> {
                                     // Call Api
                                     print('---call Api---');
 
-                                   // var hrmsPopWarning = await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode, dExpDate, amount);
+                                    //var hrmsPopWarning = await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode, dExpDate, amount);
                                     var hrmsPopWarning;
                                     print('--------1097----xxx--$hrmsPopWarning');
 
