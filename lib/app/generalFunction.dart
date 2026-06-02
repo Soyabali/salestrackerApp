@@ -833,10 +833,13 @@ class GeneralFunction {
                       // Navigator.of(context).pushReplacement(
                       //   MaterialPageRoute(builder: (context) => VisitorDashboard()),
                       // );
+                      // Navigator.of(context).pushReplacement(
+                      //   MaterialPageRoute(builder: (context) => UpdateServeyInfo()),
+                      // );
+
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => UpdateServeyInfo()),
-                      );
-                    },
+                        MaterialPageRoute(builder: (context) => UpdateServeSalesTracker()),
+                      );                    },
 
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,

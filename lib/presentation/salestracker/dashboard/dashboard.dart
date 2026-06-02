@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../app/generalFunction.dart';
 
@@ -13,56 +14,33 @@ class DashBoardSalesTrackerHome extends StatefulWidget {
 class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
 
   GeneralFunction generalFunction = GeneralFunction();
+  var sUserName;
+  var sContactNo;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getLocaData();
+    super.initState();
+  }
+  getLocaData() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    sUserName = prefs.getString('sUserName');
+    sContactNo = prefs.getString('sContactNo');
+    setState(() {
+
+    });
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(title: Text("Sales Tracker"), actions: <Widget>[
-        // Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: Stack(
-        //     clipBehavior: Clip.none,
-        //     children: [
-        //       IconButton(
-        //         icon: const Icon(Icons.notifications,size: 30,color: Colors.red,),
-        //         tooltip: 'Setting Icon',
-        //         onPressed: () async {
-        //           print("-------xxxxxxx-----445------xxxxxxxxx-------$iUserId");
-        //           if(iUserId!=null){
-        //             // call api
-        //             var  checkVisitorDetail = await CheckVisitorDetailsRepo().checkVisitorDetail(context,iUserId);
-        //             print("-------checkVisitorDertails------449---$checkVisitorDetail");
-        //             result = '${checkVisitorDetail['Result']}';
-        //             msg  = '${checkVisitorDetail['Msg']}';
-        //             print('-----result----xxxxx----xxxxx--x-$result');
-        //             setState(() {
-        //             });
-        //
-        //             if(result=="1"){
-        //               // Open a new Widget to show a Detail
-        //               // VisitorList
-        //               result=null;
-        //
-        //               Navigator.push(
-        //                 context,
-        //                 MaterialPageRoute(builder: (context) => VisitorList(payload:"")),
-        //               );
-        //               // CheckVisitorDetailsRepo().checkVisitorDetail(context,iUserId);
-        //             }else{
-        //               displayToast(msg);
-        //             }
-        //           }else{
-        //             displayToast("There is not a UserId");
-        //           }
-        //         },
-        //       ),
-        //     ],
-        //
-        //   ),
-        // ),
-      ],),
-      drawer: generalFunction.drawerFunction_2(context,"Soyab","Ali"),
+        ],),
+      drawer: generalFunction.drawerFunction_2(context,"$sUserName","$sContactNo"),
 
 
       body: const Column(

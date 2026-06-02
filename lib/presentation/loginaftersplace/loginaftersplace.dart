@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../app/generalFunction.dart' hide displayToast;
 import '../../app/sakestrackingtypography.dart';
 import '../../services/loginRepo.dart';
+import '../salestracker/dashboard/dashboard.dart';
 import '../salestracker/updateServy/updateservy.dart';
 import '../visitorList/visitorList.dart' hide displayToast;
 import '../vmsHome/vmsHome.dart' hide displayToast;
@@ -398,12 +399,20 @@ class _LoginPageState extends State<LoginPageAfterSplace> {
               //   context,
               //   MaterialPageRoute(builder: (context) => VisitorDashboard()),
               // );
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UpdateServeSalesTracker(),
-                  ),
-                );
+              //   Navigator.pushReplacement(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => UpdateServeSalesTracker(),
+              //     ),
+              //   );
+
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DashBoardSalesTrackerHome(),
+                ),
+              );
+
 
             }else {
               //displayToast(msg);

@@ -36,10 +36,11 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
   final TextEditingController _expenseController = TextEditingController();
   File? image, image2, image3, image4,image5;
   File? selectedFile;
+  String? selectedFileName;
+  bool isPdf = false;
   String? fileName;
   var msg;
   var result;
-  bool isPdf = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var uplodedImage, uplodedImage2, uplodedImage3, uplodedImage4,uplodedImage5;
   void clearAllImages() {
@@ -248,131 +249,38 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
   // you shold add 1 more
 
   // pick image from a Gallery
-  Future pickImageGallery() async {
-    image=null;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? sToken = prefs.getString('sToken');
-    print('---Token----113--$sToken');
-
+  Future<void> pickImageGallery() async {
     try {
-      final pickFileid = await ImagePicker()
-          .pickImage(source: ImageSource.gallery, imageQuality: 65);
-      if (pickFileid != null) {
-        image = File(pickFileid.path);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? sToken = prefs.getString('sToken');
+
+      final result = await fp.FilePicker.platform.pickFiles(
+        type: fp.FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+      );
+
+      if (result != null && result.files.single.path != null) {
+        image = File(result.files.single.path!);
+        selectedFileName = result.files.single.name;
+
+        isPdf = selectedFileName!.toLowerCase().endsWith('.pdf');
+
         setState(() {});
-        print('Image File path Id Proof-------167----->$image');
-        // multipartProdecudre();
+
+        print("Selected File Name: $selectedFileName");
+        print("Selected File Path: ${image!.path}");
+        print("Is PDF: $isPdf");
+
         uploadImage(sToken!, image!);
       } else {
-        print('no image selected');
+        print("No file selected");
       }
-    } catch (e) {}
+    } catch (e) {
+      print("Error picking file: $e");
+    }
   }
-  Future pickImageGallery2() async {
-    // clearAllImages();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? sToken = prefs.getString('sToken');
-    print('---Token----113--$sToken');
 
-    try {
-      final pickFileid = await ImagePicker()
-          .pickImage(source: ImageSource.gallery, imageQuality: 65);
-      if (pickFileid != null) {
-        // image2 = File(pickFileid.path);
-        setState(() {
-          image2 = File(pickFileid.path);
-        });
-        print('Image File path Id Proof-------273----->$image2');
-        // multipartProdecudre();
-        uploadImage2(sToken!, image2!);
-      } else {
-        print('no image selected');
-      }
-    } catch (e) {}
-  }
-  Future pickImageGallery3() async {
-    image3=null;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? sToken = prefs.getString('sToken');
-    print('---Token----113--$sToken');
-    try {
-      final pickFileid = await ImagePicker()
-          .pickImage(source: ImageSource.gallery, imageQuality: 65);
-      if (pickFileid != null) {
-        image3 = File(pickFileid.path);
-        setState(() {});
-        print('Image File path Id Proof-------167----->$image');
-        // multipartProdecudre();
-        uploadImage3(sToken!, image3!);
-      } else {
-        print('no image selected');
-      }
-    } catch (e) {}
-  }
-  Future pickImageGallery4() async {
-    image4=null;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? sToken = prefs.getString('sToken');
-    print('---Token----113--$sToken');
 
-    try {
-      final pickFileid = await ImagePicker()
-          .pickImage(source: ImageSource.gallery, imageQuality: 65);
-      if (pickFileid != null) {
-        image4 = File(pickFileid.path);
-        setState(() {});
-        print('Image File path Id Proof-------167----->$image');
-        // multipartProdecudre();
-        uploadImage4(sToken!, image4!);
-      } else {
-        print('no image selected');
-      }
-    } catch (e) {}
-  }
-  Future pickImageGallery5() async {
-    image5=null;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? sToken = prefs.getString('sToken');
-    print('---Token----113--$sToken');
-
-    try {
-      final pickFileid = await ImagePicker()
-          .pickImage(source: ImageSource.gallery, imageQuality: 65);
-      if (pickFileid != null) {
-        image5 = File(pickFileid.path);
-        setState(() {});
-        print('Image File path Id Proof-------167----->$image');
-        // multipartProdecudre();
-        uploadImage5(sToken!, image5!);
-      } else {
-        print('no image selected');
-      }
-    } catch (e) {}
-  }
-  // // camra code
-  // Future pickImage() async {
-  //   image=null;
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? sToken = prefs.getString('sToken');
-  //   print('---Token----113--$sToken');
-  //   try {
-  //     final pickFileid = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 65);
-  //     if (pickFileid != null) {
-  //
-  //       print("-------227------$pickFileid");
-  //       image = File(pickFileid.path);
-  //       setState(() {
-  //         image = File(pickFileid.path);
-  //       });
-  //       //  print('Image File path Id Proof-------167----->$image');
-  //       // multipartProdecudre();
-  //       uploadImage(sToken!, image!);
-  //     } else {
-  //       print('no image selected');
-  //     }
-  //   } catch (e) {}
-  // }
-  // // image pick a gallery
   // Future pickImageGallery() async {
   //   image=null;
   //   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -393,45 +301,209 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
   //     }
   //   } catch (e) {}
   // }
-  // api call
-  // Future<void> uploadImage(String token, File imageFile) async {
-  //   print('----image file path--338---$imageFile');
-  //   var baseURL = BaseRepo().baseurl;
-  //     // http://49.50.76.136/hrmsapis/api/
-  //   var endPoint = "PostMultipleImage/PostMultipleImage";
-  //   var uplodeImageApi = "$baseURL$endPoint";
-  //  // var uplodeImageApi = "http://49.50.76.136/hrmsapis/api/UploadTrackingImage/UploadTrackingImage";
-  //   try {
-  //     print('-----xx-x----214----');
-  //     showLoader();
-  //     // Create a multipart request
-  //     var request = http.MultipartRequest('POST',
-  //       Uri.parse('$uplodeImageApi'),
-  //     );
-  //     // Add headers
-  //     request.headers['token'] = token;
-  //     // Add the image file as a part of the request
-  //     request.files.add(await http.MultipartFile.fromPath(
-  //       'sImagePath',
-  //       imageFile.path,
-  //     ));
-  //     // Send the request
-  //     var streamedResponse = await request.send();
+  Future<void> pickImageGallery2() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? sToken = prefs.getString('sToken');
+
+      final result = await fp.FilePicker.platform.pickFiles(
+        type: fp.FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+      );
+
+      if (result != null && result.files.single.path != null) {
+        image2 = File(result.files.single.path!);
+        selectedFileName = result.files.single.name;
+
+        isPdf = selectedFileName!.toLowerCase().endsWith('.pdf');
+
+        setState(() {});
+
+        print("Selected File Name: $selectedFileName");
+        print("Selected File Path: ${image2!.path}");
+        print("Is PDF: $isPdf");
+
+        uploadImage(sToken!, image2!);
+      } else {
+        print("No file selected");
+      }
+    } catch (e) {
+      print("Error picking file: $e");
+    }
+  }
+  // Future pickImageGallery2() async {
+  //   // clearAllImages();
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? sToken = prefs.getString('sToken');
+  //   print('---Token----113--$sToken');
   //
-  //     // Get the response
-  //     var response = await http.Response.fromStream(streamedResponse);
-  //     // Parse the response JSON
-  //     List<dynamic> responseData = json.decode(response.body);
-  //     // Extracting the image path
-  //     uplodedImage = responseData[0]['Data'][0]['sImagePath'];
-  //     print('Uploaded Image Path----375--: $uplodedImage');
-  //     hideLoader();
-  //   } catch (error) {
-  //     hideLoader();
-  //     print('Error uploading image: $error');
-  //   }
+  //   try {
+  //     final pickFileid = await ImagePicker()
+  //         .pickImage(source: ImageSource.gallery, imageQuality: 65);
+  //     if (pickFileid != null) {
+  //       // image2 = File(pickFileid.path);
+  //       setState(() {
+  //         image2 = File(pickFileid.path);
+  //       });
+  //       print('Image File path Id Proof-------273----->$image2');
+  //       // multipartProdecudre();
+  //       uploadImage2(sToken!, image2!);
+  //     } else {
+  //       print('no image selected');
+  //     }
+  //   } catch (e) {}
   // }
-  Future<void> uploadImage(String token, File imageFile) async {
+  Future<void> pickImageGallery3() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? sToken = prefs.getString('sToken');
+
+      final result = await fp.FilePicker.platform.pickFiles(
+        type: fp.FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+      );
+
+      if (result != null && result.files.single.path != null) {
+        image3 = File(result.files.single.path!);
+        selectedFileName = result.files.single.name;
+
+        isPdf = selectedFileName!.toLowerCase().endsWith('.pdf');
+
+        setState(() {});
+
+        print("Selected File Name: $selectedFileName");
+        print("Selected File Path: ${image3!.path}");
+        print("Is PDF: $isPdf");
+
+        uploadImage(sToken!, image3!);
+      } else {
+        print("No file selected");
+      }
+    } catch (e) {
+      print("Error picking file: $e");
+    }
+  }
+  // Future pickImageGallery3() async {
+  //   image3=null;
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? sToken = prefs.getString('sToken');
+  //   print('---Token----113--$sToken');
+  //   try {
+  //     final pickFileid = await ImagePicker()
+  //         .pickImage(source: ImageSource.gallery, imageQuality: 65);
+  //     if (pickFileid != null) {
+  //       image3 = File(pickFileid.path);
+  //       setState(() {});
+  //       print('Image File path Id Proof-------167----->$image');
+  //       // multipartProdecudre();
+  //       uploadImage3(sToken!, image3!);
+  //     } else {
+  //       print('no image selected');
+  //     }
+  //   } catch (e) {}
+  // }
+  Future<void> pickImageGallery4() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? sToken = prefs.getString('sToken');
+
+      final result = await fp.FilePicker.platform.pickFiles(
+        type: fp.FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+      );
+
+      if (result != null && result.files.single.path != null) {
+        image4 = File(result.files.single.path!);
+        selectedFileName = result.files.single.name;
+
+        isPdf = selectedFileName!.toLowerCase().endsWith('.pdf');
+
+        setState(() {});
+
+        print("Selected File Name: $selectedFileName");
+        print("Selected File Path: ${image4!.path}");
+        print("Is PDF: $isPdf");
+
+        uploadImage(sToken!, image4!);
+      } else {
+        print("No file selected");
+      }
+    } catch (e) {
+      print("Error picking file: $e");
+    }
+  }
+  // Future pickImageGallery4() async {
+  //   image4=null;
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? sToken = prefs.getString('sToken');
+  //   print('---Token----113--$sToken');
+  //
+  //   try {
+  //     final pickFileid = await ImagePicker()
+  //         .pickImage(source: ImageSource.gallery, imageQuality: 65);
+  //     if (pickFileid != null) {
+  //       image4 = File(pickFileid.path);
+  //       setState(() {});
+  //       print('Image File path Id Proof-------167----->$image');
+  //       // multipartProdecudre();
+  //       uploadImage4(sToken!, image4!);
+  //     } else {
+  //       print('no image selected');
+  //     }
+  //   } catch (e) {}
+  // }
+  Future<void> pickImageGallery5() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? sToken = prefs.getString('sToken');
+
+      final result = await fp.FilePicker.platform.pickFiles(
+        type: fp.FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+      );
+
+      if (result != null && result.files.single.path != null) {
+        image5 = File(result.files.single.path!);
+        selectedFileName = result.files.single.name;
+
+        isPdf = selectedFileName!.toLowerCase().endsWith('.pdf');
+
+        setState(() {});
+
+        print("Selected File Name: $selectedFileName");
+        print("Selected File Path: ${image5!.path}");
+        print("Is PDF: $isPdf");
+
+        uploadImage(sToken!, image5!);
+
+      } else {
+        print("No file selected");
+      }
+    } catch (e) {
+      print("Error picking file: $e");
+    }
+  }
+  // Future pickImageGallery5() async {
+  //   image5=null;
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? sToken = prefs.getString('sToken');
+  //   print('---Token----113--$sToken');
+  //
+  //   try {
+  //     final pickFileid = await ImagePicker()
+  //         .pickImage(source: ImageSource.gallery, imageQuality: 65);
+  //     if (pickFileid != null) {
+  //       image5 = File(pickFileid.path);
+  //       setState(() {});
+  //       print('Image File path Id Proof-------167----->$image');
+  //       // multipartProdecudre();
+  //       uploadImage5(sToken!, image5!);
+  //     } else {
+  //       print('no image selected');
+  //     }
+  //   } catch (e) {}
+  // }
+   Future<void> uploadImage(String token, File imageFile) async {
 
     var baseURL = BaseRepo().baseurl;
     var endPoint = "PostMultipleImage/PostMultipleImage";
@@ -557,41 +629,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
     }
   }
 
-  // Future<void> uploadImage2(String token, File imageFile) async {
-  //   print('----image file path--338---$imageFile');
-  //   var baseURL = BaseRepo().baseurl;
-  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
-  //   var uplodeImageApi = "$baseURL$endPoint";
-  //   try {
-  //     print('-----xx-x----214----');
-  //     showLoader();
-  //     // Create a multipart request
-  //     var request = http.MultipartRequest('POST',
-  //       Uri.parse('$uplodeImageApi'),
-  //     );
-  //     // Add headers
-  //     request.headers['token'] = token;
-  //     // Add the image file as a part of the request
-  //     request.files.add(await http.MultipartFile.fromPath(
-  //       'sImagePath',
-  //       imageFile.path,
-  //     ));
-  //     // Send the request
-  //     var streamedResponse = await request.send();
-  //
-  //     // Get the response
-  //     var response = await http.Response.fromStream(streamedResponse);
-  //     // Parse the response JSON
-  //     List<dynamic> responseData = json.decode(response.body);
-  //     // Extracting the image path
-  //     uplodedImage2 = responseData[0]['Data'][0]['sImagePath'];
-  //     print('Uploaded Image 2 Path----423--: $uplodedImage2');
-  //     hideLoader();
-  //   } catch (error) {
-  //     hideLoader();
-  //     print('Error uploading image: $error');
-  //   }
-  // }
+
   Future<void> uploadImage3(String token, File imageFile) async {
 
     var baseURL = BaseRepo().baseurl;
@@ -654,41 +692,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
 
     }
   }
-  // Future<void> uploadImage3(String token, File imageFile) async {
-  //   print('----image file path--338---$imageFile');
-  //   var baseURL = BaseRepo().baseurl;
-  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
-  //   var uplodeImageApi = "$baseURL$endPoint";
-  //   try {
-  //     print('-----xx-x----214----');
-  //     showLoader();
-  //     // Create a multipart request
-  //     var request = http.MultipartRequest('POST',
-  //       Uri.parse('$uplodeImageApi'),
-  //     );
-  //     // Add headers
-  //     request.headers['token'] = token;
-  //     // Add the image file as a part of the request
-  //     request.files.add(await http.MultipartFile.fromPath(
-  //       'sImagePath',
-  //       imageFile.path,
-  //     ));
-  //     // Send the request
-  //     var streamedResponse = await request.send();
-  //
-  //     // Get the response
-  //     var response = await http.Response.fromStream(streamedResponse);
-  //     // Parse the response JSON
-  //     List<dynamic> responseData = json.decode(response.body);
-  //     // Extracting the image path
-  //     uplodedImage3 = responseData[0]['Data'][0]['sImagePath'];
-  //     print('Uploaded Image Path----495--: $uplodedImage3');
-  //     hideLoader();
-  //   } catch (error) {
-  //     hideLoader();
-  //     print('Error uploading image: $error');
-  //   }
-  // }
   Future<void> uploadImage4(String token, File imageFile) async {
 
     var baseURL = BaseRepo().baseurl;
@@ -751,41 +754,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
 
     }
   }
-  // Future<void> uploadImage4(String token, File imageFile) async {
-  //   print('----image file path--338---$imageFile');
-  //   var baseURL = BaseRepo().baseurl;
-  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
-  //   var uplodeImageApi = "$baseURL$endPoint";
-  //   try {
-  //     print('-----xx-x----214----');
-  //     showLoader();
-  //     // Create a multipart request
-  //     var request = http.MultipartRequest('POST',
-  //       Uri.parse('$uplodeImageApi'),
-  //     );
-  //     // Add headers
-  //     request.headers['token'] = token;
-  //     // Add the image file as a part of the request
-  //     request.files.add(await http.MultipartFile.fromPath(
-  //       'sImagePath',
-  //       imageFile.path,
-  //     ));
-  //     // Send the request
-  //     var streamedResponse = await request.send();
-  //
-  //     // Get the response
-  //     var response = await http.Response.fromStream(streamedResponse);
-  //     // Parse the response JSON
-  //     List<dynamic> responseData = json.decode(response.body);
-  //     // Extracting the image path
-  //     uplodedImage4 = responseData[0]['Data'][0]['sImagePath'];
-  //     print('Uploaded Image Path----362--: $uplodedImage4');
-  //     hideLoader();
-  //   } catch (error) {
-  //     hideLoader();
-  //     print('Error uploading image: $error');
-  //   }
-  // }
   Future<void> uploadImage5(String token, File imageFile) async {
 
     var baseURL = BaseRepo().baseurl;
@@ -848,711 +816,933 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
 
     }
   }
-  // Future<void> uploadImage5(String token, File imageFile) async {
-  //   print('----image file path--338---$imageFile');
-  //   var baseURL = BaseRepo().baseurl;
-  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
-  //   var uplodeImageApi = "$baseURL$endPoint";
-  //   try {
-  //     print('-----xx-x----214----');
-  //     showLoader();
-  //     // Create a multipart request
-  //     var request = http.MultipartRequest('POST',
-  //       Uri.parse('$uplodeImageApi'),
-  //     );
-  //     // Add headers
-  //     request.headers['token'] = token;
-  //     // Add the image file as a part of the request
-  //     request.files.add(await http.MultipartFile.fromPath(
-  //       'sImagePath',
-  //       imageFile.path,
-  //     ));
-  //     // Send the request
-  //     var streamedResponse = await request.send();
-  //
-  //     // Get the response
-  //     var response = await http.Response.fromStream(streamedResponse);
-  //     // Parse the response JSON
-  //     List<dynamic> responseData = json.decode(response.body);
-  //     // Extracting the image path
-  //     uplodedImage5 = responseData[0]['Data'][0]['sImagePath'];
-  //     print('Uploaded Image Path----362--: $uplodedImage5');
-  //     hideLoader();
-  //   } catch (error) {
-  //     hideLoader();
-  //     print('Error uploading image: $error');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          // TOP IMAGE
-          Container(
-            height: 200,
-            width: double.infinity,
-            child: Image.asset('assets/images/bg.png', fit: BoxFit.cover),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            // TOP IMAGE
+            Container(
+              height: 200,
+              width: double.infinity,
+              child: Image.asset('assets/images/bg.png', fit: BoxFit.cover),
 
-            // child: Image.asset(
-            //   'assets/images/updateseverbg.png',
-            //   fit: BoxFit.cover,
-            // ),
-          ),
+              // child: Image.asset(
+              //   'assets/images/updateseverbg.png',
+              //   fit: BoxFit.cover,
+              // ),
+            ),
 
-          SafeArea(
-            child: Column(
-              children: [
-                // HEADER (FIXED)
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                         // Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Loginaftersplace(),
-                            ),
-                          );
-
-                        },
-                        child: Container(
-                          height: 42,
-                          width: 42,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(21),
-                          ),
-                          child: const Icon(Icons.arrow_back_ios_new, size: 18),
-                        ),
-                      ),
-
-                      const SizedBox(width: 16),
-
-                      const Expanded(
-                        child: Text(
-                          'Add Reimbursement',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // SCROLLABLE AREA
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          // Push form below image
-                          const SizedBox(height: 120),
-
-                          // FORM CARD
-                          Container(
-                            width: double.infinity,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                topRight: Radius.circular(30),
+            SafeArea(
+              child: Column(
+                children: [
+                  // HEADER (FIXED)
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                           // Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Loginaftersplace(),
                               ),
+                            );
+
+                          },
+                          child: Container(
+                            height: 42,
+                            width: 42,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(21),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                children: [
-                                  // Continue remaining widgets...
-                                  Container(
-                                    height: 50,
-                                    color: Colors.white,
-                                    child: const Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        Icon(
-                                          Icons.ac_unit,
-                                          size: 20,
-                                          color: Color(0xFF6503AB),
-                                        ),
-                                        SizedBox(width: 20),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              'Supporting Documents',
-                                              style: TextStyle(
-                                                color: Color(0xFF6503AB),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
+                            child: const Icon(Icons.arrow_back_ios_new, size: 18),
+                          ),
+                        ),
+
+                        const SizedBox(width: 16),
+
+                        const Expanded(
+                          child: Text(
+                            'Add Reimbursement',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // SCROLLABLE AREA
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            // Push form below image
+                            const SizedBox(height: 120),
+
+                            // FORM CARD
+                            Container(
+                              width: double.infinity,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  topRight: Radius.circular(30),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  children: [
+                                    // Continue remaining widgets...
+                                    Container(
+                                      height: 50,
+                                      color: Colors.white,
+                                      child: const Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.ac_unit,
+                                            size: 20,
+                                            color: Color(0xFF6503AB),
+                                          ),
+                                          SizedBox(width: 20),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                'Supporting Documents',
+                                                style: TextStyle(
+                                                  color: Color(0xFF6503AB),
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              'Upload up to 5 supporting documents',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w400,
+                                              Text(
+                                                'Upload up to 5 supporting documents',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  const Text(
-                                    "Supported Documents - 1",
-                                    style: TextStyle(
-                                      // color: Color(0xFF6503AB),
-                                      color: Color(0xFF6503AB),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
+                                    const Text(
+                                      "Supported Documents - 1",
+                                      style: TextStyle(
+                                        // color: Color(0xFF6503AB),
+                                        color: Color(0xFF6503AB),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  uploadDocumentCard(
-                                    onCameraTap: () {
-                                      print("Open Camera");
-                                      pickImage();
+                                    SizedBox(height: 5),
+                                    uploadDocumentCard(
+                                      onCameraTap: () {
+                                        print("Open Camera");
+                                        pickImage();
 
-                                    },
-                                    onGalleryTap: () {
-                                      print("Open Gallery");
+                                      },
+                                      onGalleryTap: () {
+                                        print("Open Gallery");
 
-                                      //pickDocument_1();
-                                      pickImageGallery();
-                                    },
-                                  ),
+                                        //pickDocument_1();
+                                        pickImageGallery();
+                                      },
+                                    ),
 
-                                  // here to apply a conditon if a image is not null then set a images as a file
-                                  Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                    // here to apply a conditon if a image is not null then set a images as a file
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         image != null
                                             ? Stack(
                                           children: [
                                             GestureDetector(
-                                              behavior:
-                                              HitTestBehavior.translucent,
-                                              onTap: () {
-                                              },
+                                              behavior: HitTestBehavior.translucent,
+                                              onTap: () {},
                                               child: Container(
-                                                  color:
-                                                  Colors.lightGreenAccent,
-                                                  height: 100,
-                                                  width: 70,
+                                                height: 100,
+                                                width: 80,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey.shade200,
+                                                  border: Border.all(color: Colors.grey.shade300),
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                child: isPdf
+                                                    ? Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.picture_as_pdf,
+                                                      color: Colors.red,
+                                                      size: 50,
+                                                    ),
+                                                    Text(
+                                                      fileName ?? "PDF",
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: const TextStyle(fontSize: 10),
+                                                    ),
+                                                  ],
+                                                )
+                                                    : ClipRRect(
+                                                  borderRadius: BorderRadius.circular(8),
                                                   child: Image.file(
                                                     image!,
-                                                    fit: BoxFit.fill,
-                                                  )),
-                                            ),
-                                            Positioned(
-                                                bottom: 65,
-                                                left: 35,
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    image = null;
-                                                    uplodedImage=null;
-                                                    /// todo here you should also clear uplodeImage
-                                                    setState(() {});
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.close,
-                                                    color: Colors.red,
-                                                    size: 30,
+                                                    fit: BoxFit.cover,
+                                                    width: 80,
+                                                    height: 100,
                                                   ),
-                                                ))
+                                                ),
+                                              ),
+                                            ),
+
+                                            Positioned(
+                                              top: -5,
+                                              right: -5,
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    image = null;
+                                                    fileName = null;
+                                                    isPdf = false;
+                                                    uplodedImage = null;
+                                                  });
+                                                },
+                                                icon: const Icon(
+                                                  Icons.close,
+                                                  color: Colors.red,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         )
-                                            : Text(
-                                          "",
-                                          style: TextStyle(
-                                              color: Colors.red[700]),
-                                        )
-                                      ]),
-                                  buildPreview(),
-                                  SizedBox(height: 5),
-                                  const Text(
-                                    "Supported Documents - 2",
-                                    style: TextStyle(
-                                      // color: Color(0xFF6503AB),
-                                      color: Color(0xFF6503AB),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
+                                            : const SizedBox(),
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  uploadDocumentCard(
-                                    onCameraTap: () {
-                                      print("Open Camera");
-                                      pickImage2();
-                                    },
-                                    onGalleryTap: () {
-                                      print("Open Gallery");
-                                      pickImageGallery2();
-                                    },
-                                  ),
-                                  SizedBox(height: 5),
-                                  //  set a images
-                                  Row(
+                                                                     buildPreview(),
+                                    SizedBox(height: 5),
+                                    const Text(
+                                      "Supported Documents - 2",
+                                      style: TextStyle(
+                                        // color: Color(0xFF6503AB),
+                                        color: Color(0xFF6503AB),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    uploadDocumentCard(
+                                      onCameraTap: () {
+                                        print("Open Camera");
+                                        pickImage2();
+                                      },
+                                      onGalleryTap: () {
+                                        print("Open Gallery");
+                                        pickImageGallery2();
+                                      },
+                                    ),
+                                    SizedBox(height: 5),
+                                    //  set a images
+                                    Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         image2 != null
                                             ? Stack(
                                           children: [
                                             GestureDetector(
-                                              behavior:
-                                              HitTestBehavior.translucent,
-                                              onTap: () {
-                                                // Navigator.push(
-                                                //     context,
-                                                //     MaterialPageRoute(
-                                                //         builder: (context) =>
-                                                //             FullScreenPage(
-                                                //               child: image!,
-                                                //               dark: true,
-                                                //             )));
-                                              },
+                                              behavior: HitTestBehavior.translucent,
+                                              onTap: () {},
                                               child: Container(
-                                                  color:
-                                                  Colors.lightGreenAccent,
-                                                  height: 100,
-                                                  width: 70,
+                                                height: 100,
+                                                width: 80,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey.shade200,
+                                                  border: Border.all(color: Colors.grey.shade300),
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                child: isPdf
+                                                    ? Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.picture_as_pdf,
+                                                      color: Colors.red,
+                                                      size: 50,
+                                                    ),
+                                                    Text(
+                                                      fileName ?? "PDF",
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: const TextStyle(fontSize: 10),
+                                                    ),
+                                                  ],
+                                                )
+                                                    : ClipRRect(
+                                                  borderRadius: BorderRadius.circular(8),
                                                   child: Image.file(
                                                     image2!,
-                                                    fit: BoxFit.fill,
-                                                  )),
-                                            ),
-                                            Positioned(
-                                                bottom: 65,
-                                                left: 35,
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    image2 = null;
-                                                    uplodedImage2 = null;
-                                                    setState(() {});
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.close,
-                                                    color: Colors.red,
-                                                    size: 30,
+                                                    fit: BoxFit.cover,
+                                                    width: 80,
+                                                    height: 100,
                                                   ),
-                                                ))
+                                                ),
+                                              ),
+                                            ),
+
+                                            Positioned(
+                                              top: -5,
+                                              right: -5,
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    image = null;
+                                                    fileName = null;
+                                                    isPdf = false;
+                                                    uplodedImage2 = null;
+                                                  });
+                                                },
+                                                icon: const Icon(
+                                                  Icons.close,
+                                                  color: Colors.red,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         )
-                                            : Text(
-                                          "",
-                                          style: TextStyle(
-                                              color: Colors.red[700]),
-                                        )
-                                      ]),
-                                  const Text(
-                                    "Supported Documents - 3",
-                                    style: TextStyle(
-                                      // color: Color(0xFF6503AB),
-                                      color: Color(0xFF6503AB),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
+                                            : const SizedBox(),
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  uploadDocumentCard(
-                                    onCameraTap: () {
-                                      print("Open Camera");
-                                      pickImage3();
-                                    },
-                                    onGalleryTap: () {
-                                      print("Open Gallery");
-                                      pickImageGallery3();
-                                    },
-                                  ),
-                                  // set a document 3
-                                  Row(
+                                    const Text(
+                                      "Supported Documents - 3",
+                                      style: TextStyle(
+                                        // color: Color(0xFF6503AB),
+                                        color: Color(0xFF6503AB),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    uploadDocumentCard(
+                                      onCameraTap: () {
+                                        print("Open Camera");
+                                        pickImage3();
+                                      },
+                                      onGalleryTap: () {
+                                        print("Open Gallery");
+                                        pickImageGallery3();
+                                      },
+                                    ),
+                                    // set a document 3
+                                    Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         image3 != null
                                             ? Stack(
                                           children: [
                                             GestureDetector(
-                                              behavior:
-                                              HitTestBehavior.translucent,
-                                              onTap: () {
-                                                // Navigator.push(
-                                                //     context,
-                                                //     MaterialPageRoute(
-                                                //         builder: (context) =>
-                                                //             FullScreenPage(
-                                                //               child: image!,
-                                                //               dark: true,
-                                                //             )));
-                                              },
+                                              behavior: HitTestBehavior.translucent,
+                                              onTap: () {},
                                               child: Container(
-                                                  color:
-                                                  Colors.lightGreenAccent,
-                                                  height: 100,
-                                                  width: 70,
+                                                height: 100,
+                                                width: 80,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey.shade200,
+                                                  border: Border.all(color: Colors.grey.shade300),
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                child: isPdf
+                                                    ? Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.picture_as_pdf,
+                                                      color: Colors.red,
+                                                      size: 50,
+                                                    ),
+                                                    Text(
+                                                      fileName ?? "PDF",
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: const TextStyle(fontSize: 10),
+                                                    ),
+                                                  ],
+                                                )
+                                                    : ClipRRect(
+                                                  borderRadius: BorderRadius.circular(8),
                                                   child: Image.file(
                                                     image3!,
-                                                    fit: BoxFit.fill,
-                                                  )),
-                                            ),
-                                            Positioned(
-                                                bottom: 65,
-                                                left: 35,
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    image3 = null;
-                                                    uplodedImage3 = null;
-                                                    setState(() {});
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.close,
-                                                    color: Colors.red,
-                                                    size: 30,
+                                                    fit: BoxFit.cover,
+                                                    width: 80,
+                                                    height: 100,
                                                   ),
-                                                ))
+                                                ),
+                                              ),
+                                            ),
+
+                                            Positioned(
+                                              top: -5,
+                                              right: -5,
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    image3 = null;
+                                                    fileName = null;
+                                                    isPdf = false;
+                                                    uplodedImage3 = null;
+                                                  });
+                                                },
+                                                icon: const Icon(
+                                                  Icons.close,
+                                                  color: Colors.red,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         )
-                                            : Text(
-                                          "",
-                                          style: TextStyle(
-                                              color: Colors.red[700]),
-                                        )
-                                      ]),
-
-                                  SizedBox(height: 5),
-                                  const Text(
-                                    "Supported Documents - 4",
-                                    style: TextStyle(
-                                      // color: Color(0xFF6503AB),
-                                      color: Color(0xFF6503AB),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
+                                            : const SizedBox(),
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  uploadDocumentCard(
-                                    onCameraTap: () {
-                                      print("Open Camera");
-                                      pickImage4();
-                                    },
-                                    onGalleryTap: () {
-                                      print("Open Gallery");
-                                      pickImageGallery4();
-                                    },
-                                  ),
-                                  SizedBox(height: 5),
-                                  // set a image 4
-                                  Row(
+                                    // Row(
+                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    //     children: <Widget>[
+                                    //       image3 != null
+                                    //           ? Stack(
+                                    //         children: [
+                                    //           GestureDetector(
+                                    //             behavior:
+                                    //             HitTestBehavior.translucent,
+                                    //             onTap: () {
+                                    //               // Navigator.push(
+                                    //               //     context,
+                                    //               //     MaterialPageRoute(
+                                    //               //         builder: (context) =>
+                                    //               //             FullScreenPage(
+                                    //               //               child: image!,
+                                    //               //               dark: true,
+                                    //               //             )));
+                                    //             },
+                                    //             child: Container(
+                                    //                 color:
+                                    //                 Colors.lightGreenAccent,
+                                    //                 height: 100,
+                                    //                 width: 70,
+                                    //                 child: Image.file(
+                                    //                   image3!,
+                                    //                   fit: BoxFit.fill,
+                                    //                 )),
+                                    //           ),
+                                    //           Positioned(
+                                    //               bottom: 65,
+                                    //               left: 35,
+                                    //               child: IconButton(
+                                    //                 onPressed: () {
+                                    //                   image3 = null;
+                                    //                   uplodedImage3 = null;
+                                    //                   setState(() {});
+                                    //                 },
+                                    //                 icon: const Icon(
+                                    //                   Icons.close,
+                                    //                   color: Colors.red,
+                                    //                   size: 30,
+                                    //                 ),
+                                    //               ))
+                                    //         ],
+                                    //       )
+                                    //           : Text(
+                                    //         "",
+                                    //         style: TextStyle(
+                                    //             color: Colors.red[700]),
+                                    //       )
+                                    //     ]),
+
+                                    SizedBox(height: 5),
+                                    const Text(
+                                      "Supported Documents - 4",
+                                      style: TextStyle(
+                                        // color: Color(0xFF6503AB),
+                                        color: Color(0xFF6503AB),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    uploadDocumentCard(
+                                      onCameraTap: () {
+                                        print("Open Camera");
+                                        pickImage4();
+                                      },
+                                      onGalleryTap: () {
+                                        print("Open Gallery");
+                                        pickImageGallery4();
+                                      },
+                                    ),
+                                    SizedBox(height: 5),
+                                    // set a image 4
+                                    Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         image4 != null
                                             ? Stack(
                                           children: [
                                             GestureDetector(
-                                              behavior:
-                                              HitTestBehavior.translucent,
-                                              onTap: () {
-                                                // Navigator.push(
-                                                //     context,
-                                                //     MaterialPageRoute(
-                                                //         builder: (context) =>
-                                                //             FullScreenPage(
-                                                //               child: image!,
-                                                //               dark: true,
-                                                //             )));
-                                              },
+                                              behavior: HitTestBehavior.translucent,
+                                              onTap: () {},
                                               child: Container(
-                                                  color:
-                                                  Colors.lightGreenAccent,
-                                                  height: 100,
-                                                  width: 70,
+                                                height: 100,
+                                                width: 80,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey.shade200,
+                                                  border: Border.all(color: Colors.grey.shade300),
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                child: isPdf
+                                                    ? Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.picture_as_pdf,
+                                                      color: Colors.red,
+                                                      size: 50,
+                                                    ),
+                                                    Text(
+                                                      fileName ?? "PDF",
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: const TextStyle(fontSize: 10),
+                                                    ),
+                                                  ],
+                                                )
+                                                    : ClipRRect(
+                                                  borderRadius: BorderRadius.circular(8),
                                                   child: Image.file(
                                                     image4!,
-                                                    fit: BoxFit.fill,
-                                                  )),
-                                            ),
-                                            Positioned(
-                                                bottom: 65,
-                                                left: 35,
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    image4 = null;
-                                                    uplodedImage4 = null;
-                                                    setState(() {});
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.close,
-                                                    color: Colors.red,
-                                                    size: 30,
+                                                    fit: BoxFit.cover,
+                                                    width: 80,
+                                                    height: 100,
                                                   ),
-                                                ))
+                                                ),
+                                              ),
+                                            ),
+
+                                            Positioned(
+                                              top: -5,
+                                              right: -5,
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    image4 = null;
+                                                    fileName = null;
+                                                    isPdf = false;
+                                                    uplodedImage4 = null;
+                                                  });
+                                                },
+                                                icon: const Icon(
+                                                  Icons.close,
+                                                  color: Colors.red,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         )
-                                            : Text(
-                                          "",
-                                          style: TextStyle(
-                                              color: Colors.red[700]),
-                                        )
-                                      ]),
-                                  const Text(
-                                    "Supported Documents - 5",
-                                    style: TextStyle(
-                                      // color: Color(0xFF6503AB),
-                                      color: Color(0xFF6503AB),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
+                                            : const SizedBox(),
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  uploadDocumentCard(
-                                    onCameraTap: () {
-                                      print("Open Camera");
-                                      pickImage5();
-                                    },
-                                    onGalleryTap: () {
-                                      print("Open Gallery");
-                                      pickImageGallery5();
-                                    },
-                                  ),
-                                  SizedBox(height: 5),
-                                  Row(
+                                    // Row(
+                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    //     children: <Widget>[
+                                    //       image4 != null
+                                    //           ? Stack(
+                                    //         children: [
+                                    //           GestureDetector(
+                                    //             behavior:
+                                    //             HitTestBehavior.translucent,
+                                    //             onTap: () {
+                                    //               // Navigator.push(
+                                    //               //     context,
+                                    //               //     MaterialPageRoute(
+                                    //               //         builder: (context) =>
+                                    //               //             FullScreenPage(
+                                    //               //               child: image!,
+                                    //               //               dark: true,
+                                    //               //             )));
+                                    //             },
+                                    //             child: Container(
+                                    //                 color:
+                                    //                 Colors.lightGreenAccent,
+                                    //                 height: 100,
+                                    //                 width: 70,
+                                    //                 child: Image.file(
+                                    //                   image4!,
+                                    //                   fit: BoxFit.fill,
+                                    //                 )),
+                                    //           ),
+                                    //           Positioned(
+                                    //               bottom: 65,
+                                    //               left: 35,
+                                    //               child: IconButton(
+                                    //                 onPressed: () {
+                                    //                   image4 = null;
+                                    //                   uplodedImage4 = null;
+                                    //                   setState(() {});
+                                    //                 },
+                                    //                 icon: const Icon(
+                                    //                   Icons.close,
+                                    //                   color: Colors.red,
+                                    //                   size: 30,
+                                    //                 ),
+                                    //               ))
+                                    //         ],
+                                    //       )
+                                    //           : Text(
+                                    //         "",
+                                    //         style: TextStyle(
+                                    //             color: Colors.red[700]),
+                                    //       )
+                                    //     ]),
+                                    const Text(
+                                      "Supported Documents - 5",
+                                      style: TextStyle(
+                                        // color: Color(0xFF6503AB),
+                                        color: Color(0xFF6503AB),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    uploadDocumentCard(
+                                      onCameraTap: () {
+                                        print("Open Camera");
+                                        pickImage5();
+                                      },
+                                      onGalleryTap: () {
+                                        print("Open Gallery");
+                                        pickImageGallery5();
+                                      },
+                                    ),
+                                    SizedBox(height: 5),
+                                    Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         image5 != null
                                             ? Stack(
                                           children: [
                                             GestureDetector(
-                                              behavior:
-                                              HitTestBehavior.translucent,
-                                              onTap: () {
-                                                // Navigator.push(
-                                                //     context,
-                                                //     MaterialPageRoute(
-                                                //         builder: (context) =>
-                                                //             FullScreenPage(
-                                                //               child: image!,
-                                                //               dark: true,
-                                                //             )));
-                                              },
+                                              behavior: HitTestBehavior.translucent,
+                                              onTap: () {},
                                               child: Container(
-                                                  color:
-                                                  Colors.lightGreenAccent,
-                                                  height: 100,
-                                                  width: 70,
+                                                height: 100,
+                                                width: 80,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey.shade200,
+                                                  border: Border.all(color: Colors.grey.shade300),
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                child: isPdf
+                                                    ? Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.picture_as_pdf,
+                                                      color: Colors.red,
+                                                      size: 50,
+                                                    ),
+                                                    Text(
+                                                      fileName ?? "PDF",
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: const TextStyle(fontSize: 10),
+                                                    ),
+                                                  ],
+                                                )
+                                                    : ClipRRect(
+                                                  borderRadius: BorderRadius.circular(8),
                                                   child: Image.file(
                                                     image5!,
-                                                    fit: BoxFit.fill,
-                                                  )),
-                                            ),
-                                            Positioned(
-                                                bottom: 65,
-                                                left: 35,
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    image5 = null;
-                                                    uplodedImage5 = null;
-                                                    setState(() {});
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.close,
-                                                    color: Colors.red,
-                                                    size: 30,
+                                                    fit: BoxFit.cover,
+                                                    width: 80,
+                                                    height: 100,
                                                   ),
-                                                ))
-                                          ],
-                                        )
-                                            : Text(
-                                          "",
-                                          style: TextStyle(
-                                              color: Colors.red[700]),
-                                        )
-                                      ]),
-                                  SizedBox(height: 5),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      SizedBox(
-                                        height: 120,
-                                        child: TextFormField(
-                                          controller: _expenseController,
-                                          maxLines: null,
-                                          expands: true,
-                                          maxLength: 500,
-                                          textAlignVertical:
-                                              TextAlignVertical.top,
-                                          decoration: InputDecoration(
-                                            hintText: "Enter Expense Details",
-                                            contentPadding: const EdgeInsets.only(
-                                              left: 12,
-                                              right: 12,
-                                              top: 12,
-                                              bottom: 12,
-                                            ),
-                                            filled: true,
-                                            fillColor: Colors.white,
-                                            counterText: "",
-                                            border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(
-                                                12,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          onChanged: (_) {
-                                            setState(() {});
-                                          },
-                                        ),
-                                      ),
 
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 4,
-                                          right: 8,
-                                        ),
-                                        child: Text(
-                                          "${_expenseController.text.length}/500",
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  commonGradientButton(
-                                    label: "Submit Reimbursement",
-                                    onPressed: () async {
-                                      String expense = _expenseController.text.trim();
-
-                                      print("----image----$image");
-                                      print("----image2----$image2");
-                                      print("----image3----$image3");
-                                      print("----image4----$image4");
-                                      print("----image5----$image5");
-                                      print("-----1126---$expense");
-
-                                      if (uplodedImage == null ) {
-                                        displayToast("Please upload document");
-                                        return;
-                                      }
-                                      if (expense.isEmpty) {
-                                        displayToast("Please enter expense details");
-                                        return;
-                                      }
-
-                                      if (!_formKey.currentState!.validate()) {
-                                        return;
-                                      }
-
-                                      try {
-                                        SharedPreferences prefs = await SharedPreferences.getInstance();
-
-                                        String? iUserId = prefs.getString('iUserId');
-
-                                        print('----iUserId----$iUserId');
-                                        print("-----call api----");
-
-                                        var hrmsPopWarning =
-                                        await HrmsPostReimbursementRepo().hrmsPostReimbursement(
-                                          context,
-                                          uplodedImage,
-                                          uplodedImage2,
-                                          uplodedImage3,
-                                          uplodedImage4,
-                                          uplodedImage5,
-                                          expense,
-                                        );
-
-                                        print('--------Response----$hrmsPopWarning');
-
-                                        String result = "${hrmsPopWarning['Result']}";
-                                         msg = "${hrmsPopWarning['Msg']}";
-
-                                        displayToast(msg);
-
-                                        if (result == "1") {
-                                          //displayToast(msg);
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => const Loginaftersplace(),
+                                            Positioned(
+                                              top: -5,
+                                              right: -5,
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    image5 = null;
+                                                    fileName = null;
+                                                    isPdf = false;
+                                                    uplodedImage5 = null;
+                                                  });
+                                                },
+                                                icon: const Icon(
+                                                  Icons.close,
+                                                  color: Colors.red,
+                                                  size: 24,
+                                                ),
+                                              ),
                                             ),
-                                          );
+                                          ],
+                                        )
+                                            : const SizedBox(),
+                                      ],
+                                    ),
+                                    // Row(
+                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    //     children: <Widget>[
+                                    //       image5 != null
+                                    //           ? Stack(
+                                    //         children: [
+                                    //           GestureDetector(
+                                    //             behavior:
+                                    //             HitTestBehavior.translucent,
+                                    //             onTap: () {
+                                    //               // Navigator.push(
+                                    //               //     context,
+                                    //               //     MaterialPageRoute(
+                                    //               //         builder: (context) =>
+                                    //               //             FullScreenPage(
+                                    //               //               child: image!,
+                                    //               //               dark: true,
+                                    //               //             )));
+                                    //             },
+                                    //             child: Container(
+                                    //                 color:
+                                    //                 Colors.lightGreenAccent,
+                                    //                 height: 100,
+                                    //                 width: 70,
+                                    //                 child: Image.file(
+                                    //                   image5!,
+                                    //                   fit: BoxFit.fill,
+                                    //                 )),
+                                    //           ),
+                                    //           Positioned(
+                                    //               bottom: 65,
+                                    //               left: 35,
+                                    //               child: IconButton(
+                                    //                 onPressed: () {
+                                    //                   image5 = null;
+                                    //                   uplodedImage5 = null;
+                                    //                   setState(() {});
+                                    //                 },
+                                    //                 icon: const Icon(
+                                    //                   Icons.close,
+                                    //                   color: Colors.red,
+                                    //                   size: 30,
+                                    //                 ),
+                                    //               ))
+                                    //         ],
+                                    //       )
+                                    //           : Text(
+                                    //         "",
+                                    //         style: TextStyle(
+                                    //             color: Colors.red[700]),
+                                    //       )
+                                    //     ]),
+                                    SizedBox(height: 5),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        SizedBox(
+                                          height: 120,
+                                          child: TextFormField(
+                                            controller: _expenseController,
+                                            maxLines: null,
+                                            expands: true,
+                                            maxLength: 500,
+                                            textAlignVertical:
+                                                TextAlignVertical.top,
+                                            decoration: InputDecoration(
+                                              hintText: "Enter Expense Details",
+                                              contentPadding: const EdgeInsets.only(
+                                                left: 12,
+                                                right: 12,
+                                                top: 12,
+                                                bottom: 12,
+                                              ),
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              counterText: "",
+                                              border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                  12,
+                                                ),
+                                              ),
+                                            ),
+                                            onChanged: (_) {
+                                              setState(() {});
+                                            },
+                                          ),
+                                        ),
+
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 4,
+                                            right: 8,
+                                          ),
+                                          child: Text(
+                                            "${_expenseController.text.length}/500",
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    commonGradientButton(
+                                      label: "Submit Reimbursement",
+                                      onPressed: () async {
+                                        String expense = _expenseController.text.trim();
+
+                                        print("----image----$image");
+                                        print("----image2----$image2");
+                                        print("----image3----$image3");
+                                        print("----image4----$image4");
+                                        print("----image5----$image5");
+                                        print("-----1126---$expense");
+
+                                        if (uplodedImage == null ) {
+                                          displayToast("Please upload document");
+                                          return;
                                         }
-                                      } catch (e) {
-                                        print("Error: $e");
-                                        displayToast(msg);
-                                      }
-                                    },
-                                    // onPressed: ()  async{
-                                    //   var expense = _expenseController.text.trim();
-                                    //
-                                    //   SharedPreferences prefs = await SharedPreferences.getInstance();
-                                    //   String? iUserId = prefs.getString('iUserId');
-                                    //   print('----iUserId--15---$iUserId');
-                                    //   if(_formKey.currentState!.validate() && uplodedImage!=null && expense.isNotEmpty){
-                                    //
-                                    //     print("-----call api----");
-                                    //
-                                    //     print("-----uplodedImage---$uplodedImage");
-                                    //     print("-----uplodedImag2---$uplodedImage2");
-                                    //     print("-----uplodedImag3---$uplodedImage3");
-                                    //     print("-----uplodedImag4---$uplodedImage4");
-                                    //     print("-----uplodedImag5---$uplodedImage5");
-                                    //
-                                    //      var hrmsPopWarning = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,uplodedImage, uplodedImage2, uplodedImage3, uplodedImage4, uplodedImage5,expense);
-                                    //      print('--------1097----xxx--$hrmsPopWarning');
-                                    //
-                                    //      result = "${hrmsPopWarning[0]['Result']}";
-                                    //      msg = "${hrmsPopWarning[0]['Msg']}";
-                                    //      print("---1139------$hrmsPopWarning");
-                                    //
-                                    //
-                                    //   }else{
-                                    //     if(uplodedImage==null){
-                                    //       displayToast("Please upload document");
-                                    //     }else if(expense==null && expense.isEmpty){
-                                    //       displayToast("Please enter expense details");
-                                    //     }else{
-                                    //       displayToast(msg);
-                                    //       // navigate to login screen
-                                    //       Navigator.push(
-                                    //         context,
-                                    //         MaterialPageRoute(
-                                    //           builder: (context) => const Loginaftersplace(),
-                                    //         ),
-                                    //       );
-                                    //     }
-                                    //
-                                    //   }
-                                    //
-                                    // },
-                                  ),
-                                ],
+                                        if (expense.isEmpty) {
+                                          displayToast("Please enter expense details");
+                                          return;
+                                        }
+
+                                        if (!_formKey.currentState!.validate()) {
+                                          return;
+                                        }
+
+                                        try {
+                                          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                                          String? iUserId = prefs.getString('iUserId');
+
+                                          print('----iUserId----$iUserId');
+                                          print("-----call api----");
+
+                                          var hrmsPopWarning =
+                                          await HrmsPostReimbursementRepo().hrmsPostReimbursement(
+                                            context,
+                                            uplodedImage,
+                                            uplodedImage2,
+                                            uplodedImage3,
+                                            uplodedImage4,
+                                            uplodedImage5,
+                                            expense,
+                                          );
+
+                                          print('--------Response----$hrmsPopWarning');
+
+                                          String result = "${hrmsPopWarning['Result']}";
+                                           msg = "${hrmsPopWarning['Msg']}";
+
+                                          displayToast(msg);
+
+                                          if (result == "1") {
+                                            //displayToast(msg);
+                                            // Navigator.pushReplacement(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //     builder: (context) => const Loginaftersplace(),
+                                            //   ),
+                                            // );
+                                          }
+                                        } catch (e) {
+                                          print("Error: $e");
+                                          displayToast(msg);
+                                        }
+                                      },
+                                      // onPressed: ()  async{
+                                      //   var expense = _expenseController.text.trim();
+                                      //
+                                      //   SharedPreferences prefs = await SharedPreferences.getInstance();
+                                      //   String? iUserId = prefs.getString('iUserId');
+                                      //   print('----iUserId--15---$iUserId');
+                                      //   if(_formKey.currentState!.validate() && uplodedImage!=null && expense.isNotEmpty){
+                                      //
+                                      //     print("-----call api----");
+                                      //
+                                      //     print("-----uplodedImage---$uplodedImage");
+                                      //     print("-----uplodedImag2---$uplodedImage2");
+                                      //     print("-----uplodedImag3---$uplodedImage3");
+                                      //     print("-----uplodedImag4---$uplodedImage4");
+                                      //     print("-----uplodedImag5---$uplodedImage5");
+                                      //
+                                      //      var hrmsPopWarning = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,uplodedImage, uplodedImage2, uplodedImage3, uplodedImage4, uplodedImage5,expense);
+                                      //      print('--------1097----xxx--$hrmsPopWarning');
+                                      //
+                                      //      result = "${hrmsPopWarning[0]['Result']}";
+                                      //      msg = "${hrmsPopWarning[0]['Msg']}";
+                                      //      print("---1139------$hrmsPopWarning");
+                                      //
+                                      //
+                                      //   }else{
+                                      //     if(uplodedImage==null){
+                                      //       displayToast("Please upload document");
+                                      //     }else if(expense==null && expense.isEmpty){
+                                      //       displayToast("Please enter expense details");
+                                      //     }else{
+                                      //       displayToast(msg);
+                                      //       // navigate to login screen
+                                      //       Navigator.push(
+                                      //         context,
+                                      //         MaterialPageRoute(
+                                      //           builder: (context) => const Loginaftersplace(),
+                                      //         ),
+                                      //       );
+                                      //     }
+                                      //
+                                      //   }
+                                      //
+                                      // },
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
     // return Scaffold(
