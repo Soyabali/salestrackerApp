@@ -512,10 +512,11 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
         if (responseData['Data'] != null &&
             responseData['Data'].isNotEmpty) {
 
-          uplodedImage2 =
-          responseData['Data'][0]['sImagePath'];
-
-          print("Uploaded Image Path: $uplodedImage");
+          setState(() {
+            uplodedImage2 =
+            responseData['Data'][0]['sImagePath'];
+          });
+          print("Uploaded Image Path: $uplodedImage2");
         }
 
       } else {
@@ -574,8 +575,10 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
         if (responseData['Data'] != null &&
             responseData['Data'].isNotEmpty) {
 
-          uplodedImage3 =
-          responseData['Data'][0]['sImagePath'];
+         setState(() {
+           uplodedImage3 =
+           responseData['Data'][0]['sImagePath'];
+         });
 
           print("Uploaded Image Path: $uplodedImage");
         }
@@ -636,10 +639,11 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
         if (responseData['Data'] != null &&
             responseData['Data'].isNotEmpty) {
 
-          uplodedImage4 =
-          responseData['Data'][0]['sImagePath'];
-
-          print("Uploaded Image Path: $uplodedImage");
+         setState(() {
+           uplodedImage4 =
+           responseData['Data'][0]['sImagePath'];
+         });
+         print("Uploaded Image Path: $uplodedImage4");
         }
 
       } else {
@@ -698,10 +702,11 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
         if (responseData['Data'] != null &&
             responseData['Data'].isNotEmpty) {
 
-          uplodedImage5 =
-          responseData['Data'][0]['sImagePath'];
+          setState(() {
+            uplodedImage5 = responseData['Data'][0]['sImagePath'];
+          });
 
-          print("Uploaded Image Path: $uplodedImage");
+          print("Uploaded Image Path: $uplodedImage5");
         }
 
       } else {
@@ -733,9 +738,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
               width: double.infinity,
               child: Image.asset('assets/images/bg_banner.png', fit: BoxFit.cover),
              // child: Image.asset('assets/images/bg.png', fit: BoxFit.cover),
-
             ),
-
             SafeArea(
               child: Column(
                 children: [
@@ -1373,15 +1376,96 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
 
                                     commonGradientButton(
                                       label: "Submit",
+                                      // onPressed: () async {
+                                      //   String expense = _expenseController.text.trim();
+                                      //
+                                      //   print("----uplodedImage----$uplodedImage");
+                                      //   print("----uplodedImage2----$uplodedImage2");
+                                      //   print("----uplodedImage3----$uplodedImage3");
+                                      //   print("----uplodedImage4----$uplodedImage4");
+                                      //   print("----uplodedImage5----$uplodedImage5");
+                                      //   print("-----1126--textfiled ---$expense");
+                                      //
+                                      //
+                                      //   // if (uplodedImage == null ) {
+                                      //   //   displayToast("Please upload document");
+                                      //   //   return;
+                                      //   // }
+                                      //   // if (expense.isEmpty) {
+                                      //   //   displayToast("Please Enter Remarks");
+                                      //   //   return;
+                                      //   // }
+                                      //   //
+                                      //   // if (!_formKey.currentState!.validate()) {
+                                      //   //   return;
+                                      //   // }
+                                      //   //
+                                      //   // try {
+                                      //   //   SharedPreferences prefs = await SharedPreferences.getInstance();
+                                      //   //
+                                      //   //   String? iUserId = prefs.getString('iUserId');
+                                      //   //
+                                      //   //   print('----iUserId----$iUserId');
+                                      //   //   print("-----call api----");
+                                      //   //
+                                      //   //   var hrmsPopWarning =
+                                      //   //   await HrmsPostReimbursementRepo().hrmsPostReimbursement(
+                                      //   //     context,
+                                      //   //     uplodedImage,
+                                      //   //     uplodedImage2,
+                                      //   //     uplodedImage3,
+                                      //   //     uplodedImage4,
+                                      //   //     uplodedImage5,
+                                      //   //     expense,
+                                      //   //   );
+                                      //   //
+                                      //   //   print('--------Response----$hrmsPopWarning');
+                                      //   //
+                                      //   //   String result = "${hrmsPopWarning['Result']}";
+                                      //   //   msg = "${hrmsPopWarning['Msg']}";
+                                      //   //
+                                      //   //   displayToast2(msg);
+                                      //   //   // clear textfield
+                                      //   //   _expenseController.clear();
+                                      //   //   image=null;
+                                      //   //   image2=null;
+                                      //   //   image3=null;
+                                      //   //   image4=null;
+                                      //   //   image5=null;
+                                      //   //   uplodedImage=null;
+                                      //   //   uplodedImage2=null;
+                                      //   //   uplodedImage3=null;
+                                      //   //   uplodedImage4=null;
+                                      //   //   uplodedImage5=null;
+                                      //   //   setState(() {
+                                      //   //
+                                      //   //   });
+                                      //   //
+                                      //   //   if (result == "1") {
+                                      //   //
+                                      //   //   }
+                                      //   // } catch (e) {
+                                      //   //   print("Error: $e");
+                                      //   //   displayToast(msg);
+                                      //   // }
+                                      // },
+
+
+
+
+
+
+
                                       onPressed: () async {
                                         String expense = _expenseController.text.trim();
 
-                                        print("----image----$image");
-                                        print("----image2----$image2");
-                                        print("----image3----$image3");
-                                        print("----image4----$image4");
-                                        print("----image5----$image5");
+                                        print("----uplodedImage----$uplodedImage");
+                                        print("----uplodedImage2----$uplodedImage2");
+                                        print("----uplodedImage3----$uplodedImage3");
+                                        print("----uplodedImage4----$uplodedImage4");
+                                        print("----uplodedImage5----$uplodedImage5");
                                         print("-----1126---$expense");
+
 
                                         if (uplodedImage == null ) {
                                           displayToast("Please upload document");
