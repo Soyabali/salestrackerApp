@@ -542,16 +542,6 @@ class _LoginPageState extends State<LoginPageAfterSplace> {
               prefs.setString('iUserType',iUserType).toString();
               prefs.setString('dLastLoginAt',dLastLoginAt).toString();
 
-              // Navigator.pushReplacement(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => VisitorDashboard()),
-              // );
-              //   Navigator.pushReplacement(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => UpdateServeSalesTracker(),
-              //     ),
-              //   );
 
               Navigator.pushReplacement(
                 context,

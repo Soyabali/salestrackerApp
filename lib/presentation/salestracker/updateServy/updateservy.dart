@@ -449,8 +449,9 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
         if (responseData['Data'] != null &&
             responseData['Data'].isNotEmpty) {
 
-          uplodedImage =
-          responseData['Data'][0]['sImagePath'];
+          setState(() {
+            uplodedImage = responseData['Data'][0]['sImagePath'];
+          });
 
           print("Uploaded Image Path: $uplodedImage");
         }
