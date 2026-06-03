@@ -3,17 +3,16 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart' as fp;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../app/generalFunction.dart';
 import '../../../app/loader_helper.dart';
 import '../../../app/sakestrackingtypography.dart' hide displayToast;
-import '../../../services/BindWhomToMeetVisitor.dart';
 import '../../../services/baseurl.dart';
 import '../../../services/reimbursement.dart';
 import '../../loginaftersplace/loginaftersplace.dart';
-import '../../resources/app_text_style.dart';
 
 class UpdateServeSalesTracker extends StatefulWidget {
   const UpdateServeSalesTracker({super.key});
@@ -280,27 +279,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
     }
   }
 
-
-  // Future pickImageGallery() async {
-  //   image=null;
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? sToken = prefs.getString('sToken');
-  //   print('---Token----113--$sToken');
-  //
-  //   try {
-  //     final pickFileid = await ImagePicker()
-  //         .pickImage(source: ImageSource.gallery, imageQuality: 65);
-  //     if (pickFileid != null) {
-  //       image = File(pickFileid.path);
-  //       setState(() {});
-  //       print('Image File path Id Proof-------167----->$image');
-  //       // multipartProdecudre();
-  //       uploadImage(sToken!, image!);
-  //     } else {
-  //       print('no image selected');
-  //     }
-  //   } catch (e) {}
-  // }
   Future<void> pickImageGallery2() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -331,28 +309,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
       print("Error picking file: $e");
     }
   }
-  // Future pickImageGallery2() async {
-  //   // clearAllImages();
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? sToken = prefs.getString('sToken');
-  //   print('---Token----113--$sToken');
-  //
-  //   try {
-  //     final pickFileid = await ImagePicker()
-  //         .pickImage(source: ImageSource.gallery, imageQuality: 65);
-  //     if (pickFileid != null) {
-  //       // image2 = File(pickFileid.path);
-  //       setState(() {
-  //         image2 = File(pickFileid.path);
-  //       });
-  //       print('Image File path Id Proof-------273----->$image2');
-  //       // multipartProdecudre();
-  //       uploadImage2(sToken!, image2!);
-  //     } else {
-  //       print('no image selected');
-  //     }
-  //   } catch (e) {}
-  // }
   Future<void> pickImageGallery3() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -383,25 +339,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
       print("Error picking file: $e");
     }
   }
-  // Future pickImageGallery3() async {
-  //   image3=null;
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? sToken = prefs.getString('sToken');
-  //   print('---Token----113--$sToken');
-  //   try {
-  //     final pickFileid = await ImagePicker()
-  //         .pickImage(source: ImageSource.gallery, imageQuality: 65);
-  //     if (pickFileid != null) {
-  //       image3 = File(pickFileid.path);
-  //       setState(() {});
-  //       print('Image File path Id Proof-------167----->$image');
-  //       // multipartProdecudre();
-  //       uploadImage3(sToken!, image3!);
-  //     } else {
-  //       print('no image selected');
-  //     }
-  //   } catch (e) {}
-  // }
   Future<void> pickImageGallery4() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -432,26 +369,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
       print("Error picking file: $e");
     }
   }
-  // Future pickImageGallery4() async {
-  //   image4=null;
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? sToken = prefs.getString('sToken');
-  //   print('---Token----113--$sToken');
-  //
-  //   try {
-  //     final pickFileid = await ImagePicker()
-  //         .pickImage(source: ImageSource.gallery, imageQuality: 65);
-  //     if (pickFileid != null) {
-  //       image4 = File(pickFileid.path);
-  //       setState(() {});
-  //       print('Image File path Id Proof-------167----->$image');
-  //       // multipartProdecudre();
-  //       uploadImage4(sToken!, image4!);
-  //     } else {
-  //       print('no image selected');
-  //     }
-  //   } catch (e) {}
-  // }
   Future<void> pickImageGallery5() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -483,27 +400,8 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
       print("Error picking file: $e");
     }
   }
-  // Future pickImageGallery5() async {
-  //   image5=null;
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? sToken = prefs.getString('sToken');
-  //   print('---Token----113--$sToken');
-  //
-  //   try {
-  //     final pickFileid = await ImagePicker()
-  //         .pickImage(source: ImageSource.gallery, imageQuality: 65);
-  //     if (pickFileid != null) {
-  //       image5 = File(pickFileid.path);
-  //       setState(() {});
-  //       print('Image File path Id Proof-------167----->$image');
-  //       // multipartProdecudre();
-  //       uploadImage5(sToken!, image5!);
-  //     } else {
-  //       print('no image selected');
-  //     }
-  //   } catch (e) {}
-  // }
-   Future<void> uploadImage(String token, File imageFile) async {
+
+ Future<void> uploadImage(String token, File imageFile) async {
 
     var baseURL = BaseRepo().baseurl;
     var endPoint = "PostMultipleImage/PostMultipleImage";
@@ -565,8 +463,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
 
     }
   }
-
-  Future<void> uploadImage2(String token, File imageFile) async {
+ Future<void> uploadImage2(String token, File imageFile) async {
 
     var baseURL = BaseRepo().baseurl;
     var endPoint = "PostMultipleImage/PostMultipleImage";
@@ -628,9 +525,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
 
     }
   }
-
-
-  Future<void> uploadImage3(String token, File imageFile) async {
+ Future<void> uploadImage3(String token, File imageFile) async {
 
     var baseURL = BaseRepo().baseurl;
     var endPoint = "PostMultipleImage/PostMultipleImage";
@@ -832,10 +727,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
               width: double.infinity,
               child: Image.asset('assets/images/bg.png', fit: BoxFit.cover),
 
-              // child: Image.asset(
-              //   'assets/images/updateseverbg.png',
-              //   fit: BoxFit.cover,
-              // ),
             ),
 
             SafeArea(
@@ -1228,58 +1119,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                             : const SizedBox(),
                                       ],
                                     ),
-                                    // Row(
-                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    //     children: <Widget>[
-                                    //       image3 != null
-                                    //           ? Stack(
-                                    //         children: [
-                                    //           GestureDetector(
-                                    //             behavior:
-                                    //             HitTestBehavior.translucent,
-                                    //             onTap: () {
-                                    //               // Navigator.push(
-                                    //               //     context,
-                                    //               //     MaterialPageRoute(
-                                    //               //         builder: (context) =>
-                                    //               //             FullScreenPage(
-                                    //               //               child: image!,
-                                    //               //               dark: true,
-                                    //               //             )));
-                                    //             },
-                                    //             child: Container(
-                                    //                 color:
-                                    //                 Colors.lightGreenAccent,
-                                    //                 height: 100,
-                                    //                 width: 70,
-                                    //                 child: Image.file(
-                                    //                   image3!,
-                                    //                   fit: BoxFit.fill,
-                                    //                 )),
-                                    //           ),
-                                    //           Positioned(
-                                    //               bottom: 65,
-                                    //               left: 35,
-                                    //               child: IconButton(
-                                    //                 onPressed: () {
-                                    //                   image3 = null;
-                                    //                   uplodedImage3 = null;
-                                    //                   setState(() {});
-                                    //                 },
-                                    //                 icon: const Icon(
-                                    //                   Icons.close,
-                                    //                   color: Colors.red,
-                                    //                   size: 30,
-                                    //                 ),
-                                    //               ))
-                                    //         ],
-                                    //       )
-                                    //           : Text(
-                                    //         "",
-                                    //         style: TextStyle(
-                                    //             color: Colors.red[700]),
-                                    //       )
-                                    //     ]),
 
                                     SizedBox(height: 5),
                                     const Text(
@@ -1374,58 +1213,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                             : const SizedBox(),
                                       ],
                                     ),
-                                    // Row(
-                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    //     children: <Widget>[
-                                    //       image4 != null
-                                    //           ? Stack(
-                                    //         children: [
-                                    //           GestureDetector(
-                                    //             behavior:
-                                    //             HitTestBehavior.translucent,
-                                    //             onTap: () {
-                                    //               // Navigator.push(
-                                    //               //     context,
-                                    //               //     MaterialPageRoute(
-                                    //               //         builder: (context) =>
-                                    //               //             FullScreenPage(
-                                    //               //               child: image!,
-                                    //               //               dark: true,
-                                    //               //             )));
-                                    //             },
-                                    //             child: Container(
-                                    //                 color:
-                                    //                 Colors.lightGreenAccent,
-                                    //                 height: 100,
-                                    //                 width: 70,
-                                    //                 child: Image.file(
-                                    //                   image4!,
-                                    //                   fit: BoxFit.fill,
-                                    //                 )),
-                                    //           ),
-                                    //           Positioned(
-                                    //               bottom: 65,
-                                    //               left: 35,
-                                    //               child: IconButton(
-                                    //                 onPressed: () {
-                                    //                   image4 = null;
-                                    //                   uplodedImage4 = null;
-                                    //                   setState(() {});
-                                    //                 },
-                                    //                 icon: const Icon(
-                                    //                   Icons.close,
-                                    //                   color: Colors.red,
-                                    //                   size: 30,
-                                    //                 ),
-                                    //               ))
-                                    //         ],
-                                    //       )
-                                    //           : Text(
-                                    //         "",
-                                    //         style: TextStyle(
-                                    //             color: Colors.red[700]),
-                                    //       )
-                                    //     ]),
                                     const Text(
                                       "Supported Documents - 5",
                                       style: TextStyle(
@@ -1517,58 +1304,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                             : const SizedBox(),
                                       ],
                                     ),
-                                    // Row(
-                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    //     children: <Widget>[
-                                    //       image5 != null
-                                    //           ? Stack(
-                                    //         children: [
-                                    //           GestureDetector(
-                                    //             behavior:
-                                    //             HitTestBehavior.translucent,
-                                    //             onTap: () {
-                                    //               // Navigator.push(
-                                    //               //     context,
-                                    //               //     MaterialPageRoute(
-                                    //               //         builder: (context) =>
-                                    //               //             FullScreenPage(
-                                    //               //               child: image!,
-                                    //               //               dark: true,
-                                    //               //             )));
-                                    //             },
-                                    //             child: Container(
-                                    //                 color:
-                                    //                 Colors.lightGreenAccent,
-                                    //                 height: 100,
-                                    //                 width: 70,
-                                    //                 child: Image.file(
-                                    //                   image5!,
-                                    //                   fit: BoxFit.fill,
-                                    //                 )),
-                                    //           ),
-                                    //           Positioned(
-                                    //               bottom: 65,
-                                    //               left: 35,
-                                    //               child: IconButton(
-                                    //                 onPressed: () {
-                                    //                   image5 = null;
-                                    //                   uplodedImage5 = null;
-                                    //                   setState(() {});
-                                    //                 },
-                                    //                 icon: const Icon(
-                                    //                   Icons.close,
-                                    //                   color: Colors.red,
-                                    //                   size: 30,
-                                    //                 ),
-                                    //               ))
-                                    //         ],
-                                    //       )
-                                    //           : Text(
-                                    //         "",
-                                    //         style: TextStyle(
-                                    //             color: Colors.red[700]),
-                                    //       )
-                                    //     ]),
                                     SizedBox(height: 5),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -1669,65 +1404,18 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                           String result = "${hrmsPopWarning['Result']}";
                                            msg = "${hrmsPopWarning['Msg']}";
 
-                                          displayToast(msg);
+                                          displayToast2(msg);
+                                          // clear textfield
+                                          _expenseController.clear();
 
                                           if (result == "1") {
-                                            //displayToast(msg);
-                                            // Navigator.pushReplacement(
-                                            //   context,
-                                            //   MaterialPageRoute(
-                                            //     builder: (context) => const Loginaftersplace(),
-                                            //   ),
-                                            // );
+
                                           }
                                         } catch (e) {
                                           print("Error: $e");
                                           displayToast(msg);
                                         }
                                       },
-                                      // onPressed: ()  async{
-                                      //   var expense = _expenseController.text.trim();
-                                      //
-                                      //   SharedPreferences prefs = await SharedPreferences.getInstance();
-                                      //   String? iUserId = prefs.getString('iUserId');
-                                      //   print('----iUserId--15---$iUserId');
-                                      //   if(_formKey.currentState!.validate() && uplodedImage!=null && expense.isNotEmpty){
-                                      //
-                                      //     print("-----call api----");
-                                      //
-                                      //     print("-----uplodedImage---$uplodedImage");
-                                      //     print("-----uplodedImag2---$uplodedImage2");
-                                      //     print("-----uplodedImag3---$uplodedImage3");
-                                      //     print("-----uplodedImag4---$uplodedImage4");
-                                      //     print("-----uplodedImag5---$uplodedImage5");
-                                      //
-                                      //      var hrmsPopWarning = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,uplodedImage, uplodedImage2, uplodedImage3, uplodedImage4, uplodedImage5,expense);
-                                      //      print('--------1097----xxx--$hrmsPopWarning');
-                                      //
-                                      //      result = "${hrmsPopWarning[0]['Result']}";
-                                      //      msg = "${hrmsPopWarning[0]['Msg']}";
-                                      //      print("---1139------$hrmsPopWarning");
-                                      //
-                                      //
-                                      //   }else{
-                                      //     if(uplodedImage==null){
-                                      //       displayToast("Please upload document");
-                                      //     }else if(expense==null && expense.isEmpty){
-                                      //       displayToast("Please enter expense details");
-                                      //     }else{
-                                      //       displayToast(msg);
-                                      //       // navigate to login screen
-                                      //       Navigator.push(
-                                      //         context,
-                                      //         MaterialPageRoute(
-                                      //           builder: (context) => const Loginaftersplace(),
-                                      //         ),
-                                      //       );
-                                      //     }
-                                      //
-                                      //   }
-                                      //
-                                      // },
                                     ),
                                   ],
                                 ),
@@ -1745,294 +1433,15 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
         ),
       ),
     );
-    // return Scaffold(
-    //   body: Stack(
-    //         children: [
-    //           Positioned.fill(
-    //             child: Image.asset(
-    //               'assets/images/updateseverbg.png',
-    //               fit: BoxFit.cover,
-    //             ),
-    //           ),
-    //           // Content Above Image
-    //           SafeArea(
-    //             child:Padding(
-    //               padding: const EdgeInsets.all(16.0),
-    //               child: Column(
-    //                   //crossAxisAlignment: CrossAxisAlignment.start,
-    //                   children: [
-    //                     // header part
-    //                     Row(
-    //                         children: [
-    //                           GestureDetector(
-    //                             //onTap: () => Navigator.pop(context),
-    //                             onTap: (){
-    //                               //print('-------45-----');
-    //                               Navigator.push(
-    //                                 context,
-    //                                 MaterialPageRoute(
-    //                                   builder: (context) => const LoginPageAfterSplace(),
-    //                                 ),
-    //                               );
-    //                             },
-    //                             child:Container(
-    //                               height: 42,
-    //                               width: 42,
-    //                               decoration: BoxDecoration(
-    //                                 color: Colors.white,
-    //                                 borderRadius: BorderRadius.circular(21),
-    //                               ),
-    //                               child: const Center(
-    //                                 child: Icon(
-    //                                   Icons.arrow_back_ios_new,
-    //                                   size: 18,
-    //                                   color: Colors.black87,
-    //                                 ),
-    //                               ),
-    //                             ),
-    //                           ),
-    //
-    //                           const SizedBox(width: 16),
-    //                           const Expanded(
-    //                             child: Text(
-    //                               'Add Reimbursement',
-    //                               style: TextStyle(
-    //                                 color: Colors.white,
-    //                                 fontSize: 18,
-    //                                 fontWeight: FontWeight.w700,
-    //                               ),
-    //                             ),
-    //                           ),
-    //                         ],
-    //                       ),
-    //
-    //
-    //                     // Scrollable Part
-    //                     Expanded(
-    //                       child: SingleChildScrollView(
-    //                         child: Column(
-    //                           children: [
-    //                             //const SizedBox(height: 180),
-    //                             Container(
-    //                               width: double.infinity,
-    //                               child: Padding(
-    //                                 padding: const EdgeInsets.all(8.0),
-    //                                 child: Column(
-    //                                   // widget
-    //                                   children: [
-    //                                     // Supporting Documents
-    //                                     SizedBox(height: 200),
-    //                                     Container(
-    //                                       height: 50,
-    //                                       color: Colors.white,
-    //                                       child: const Row(
-    //                                         mainAxisAlignment: MainAxisAlignment.start,
-    //                                         children: <Widget>[
-    //                                           Icon(Icons.ac_unit,size: 20,
-    //                                               color: Color(0xFF6503AB)),
-    //                                           SizedBox(width: 20),
-    //                                           Column(
-    //                                             mainAxisAlignment: MainAxisAlignment.start,
-    //                                             crossAxisAlignment: CrossAxisAlignment.start,
-    //                                             children: <Widget>[
-    //                                               Text(
-    //                                                 'Supporting Documents',
-    //                                                 style: TextStyle(
-    //                                                   color: Color(0xFF6503AB),
-    //                                                   fontSize: 14,
-    //                                                   fontWeight: FontWeight.w400,
-    //                                                 ),
-    //                                               ),
-    //                                               Text(
-    //                                                 'Upload up to 5 supporting documents',
-    //                                                 style: TextStyle(
-    //                                                   color: Colors.grey,
-    //                                                   fontSize: 12,
-    //                                                   fontWeight: FontWeight.w400,
-    //                                                 ),
-    //                                               ),
-    //                                             ],
-    //                                           ),
-    //
-    //                                         ],
-    //                                       ),
-    //                                     ),
-    //                                     const Text(
-    //                                       "Supported Documents - 1",
-    //                                       style: TextStyle(
-    //                                         // color: Color(0xFF6503AB),
-    //                                         color: Color(0xFF6503AB),
-    //                                         fontSize: 14,
-    //                                         fontWeight: FontWeight.w400,
-    //                                       ),
-    //                                     ),
-    //                                     SizedBox(height: 5),
-    //                                     uploadDocumentCard(
-    //                                       onCameraTap: () {
-    //                                         print("Open Camera");
-    //                                       },
-    //                                       onGalleryTap: () {
-    //                                         print("Open Gallery");
-    //                                       },
-    //                                     ),
-    //                                     SizedBox(height: 5),
-    //                                     const Text(
-    //                                       "Supported Documents - 2",
-    //                                       style: TextStyle(
-    //                                         // color: Color(0xFF6503AB),
-    //                                         color: Color(0xFF6503AB),
-    //                                         fontSize: 14,
-    //                                         fontWeight: FontWeight.w400,
-    //                                       ),
-    //                                     ),
-    //                                     SizedBox(height: 5),
-    //                                     uploadDocumentCard(
-    //                                       onCameraTap: () {
-    //                                         print("Open Camera");
-    //                                       },
-    //                                       onGalleryTap: () {
-    //                                         print("Open Gallery");
-    //                                       },
-    //                                     ),
-    //                                     SizedBox(height: 5),
-    //                                     const Text(
-    //                                       "Supported Documents - 3",
-    //                                       style: TextStyle(
-    //                                         // color: Color(0xFF6503AB),
-    //                                         color: Color(0xFF6503AB),
-    //                                         fontSize: 14,
-    //                                         fontWeight: FontWeight.w400,
-    //                                       ),
-    //                                     ),
-    //                                     SizedBox(height: 5),
-    //                                     uploadDocumentCard(
-    //                                       onCameraTap: () {
-    //                                         print("Open Camera");
-    //                                       },
-    //                                       onGalleryTap: () {
-    //                                         print("Open Gallery");
-    //                                       },
-    //                                     ),
-    //                                     SizedBox(height: 5),
-    //                                     const Text(
-    //                                       "Supported Documents - 4",
-    //                                       style: TextStyle(
-    //                                         // color: Color(0xFF6503AB),
-    //                                         color: Color(0xFF6503AB),
-    //                                         fontSize: 14,
-    //                                         fontWeight: FontWeight.w400,
-    //                                       ),
-    //                                     ),
-    //                                     SizedBox(height: 5),
-    //                                     uploadDocumentCard(
-    //                                       onCameraTap: () {
-    //                                         print("Open Camera");
-    //                                       },
-    //                                       onGalleryTap: () {
-    //                                         print("Open Gallery");
-    //                                       },
-    //                                     ),
-    //                                     SizedBox(height: 5),
-    //                                     const Text(
-    //                                       "Supported Documents - 5",
-    //                                       style: TextStyle(
-    //                                         // color: Color(0xFF6503AB),
-    //                                         color: Color(0xFF6503AB),
-    //                                         fontSize: 14,
-    //                                         fontWeight: FontWeight.w400,
-    //                                       ),
-    //                                     ),
-    //                                     SizedBox(height: 5),
-    //                                     uploadDocumentCard(
-    //                                       onCameraTap: () {
-    //                                         print("Open Camera");
-    //                                       },
-    //                                       onGalleryTap: () {
-    //                                         print("Open Gallery");
-    //                                       },
-    //                                     ),
-    //
-    //
-    //                                     const Text(
-    //                                       "Expense Details",
-    //                                       style: TextStyle(
-    //                                         // color: Color(0xFF6503AB),
-    //                                         color: Colors.black,
-    //                                         fontSize: 14,
-    //                                         fontWeight: FontWeight.w400,
-    //                                       ),
-    //                                     ),
-    //                                     SizedBox(height: 5),
-    //                                     Column(
-    //                                       crossAxisAlignment: CrossAxisAlignment.end,
-    //                                       children: [
-    //                                         SizedBox(
-    //                                           height: 120,
-    //                                           child: TextFormField(
-    //                                             controller: _expenseController,
-    //                                             maxLines: null,
-    //                                             expands: true,
-    //                                             maxLength: 500,
-    //                                             textAlignVertical: TextAlignVertical.top,
-    //                                             decoration: InputDecoration(
-    //                                               hintText: "Enter Expense Details",
-    //                                               contentPadding: const EdgeInsets.only(
-    //                                                 left: 12,
-    //                                                 right: 12,
-    //                                                 top: 12,
-    //                                                 bottom: 12,
-    //                                               ),
-    //                                               filled: true,
-    //                                               fillColor: Colors.white,
-    //                                               counterText: "",
-    //                                               border: OutlineInputBorder(
-    //                                                 borderRadius: BorderRadius.circular(12),
-    //                                               ),
-    //                                             ),
-    //                                             onChanged: (_) {
-    //                                               setState(() {});
-    //                                             },
-    //                                           ),
-    //                                         ),
-    //
-    //                                         Padding(
-    //                                           padding: const EdgeInsets.only(
-    //                                             top: 4,
-    //                                             right: 8,
-    //                                           ),
-    //                                           child: Text(
-    //                                             "${_expenseController.text.length}/500",
-    //                                             style: const TextStyle(
-    //                                               color: Colors.grey,
-    //                                               fontSize: 12,
-    //                                             ),
-    //                                           ),
-    //                                         ),
-    //                                       ],
-    //                                     ),
-    //                                     SizedBox(height: 10),
-    //                                     commonGradientButton(
-    //                                         label: "Submit Reimbursement",
-    //                                         onPressed: (){
-    //                                           print("Submit Reimbursement");
-    //                                         }
-    //                                     ),
-    //                                   ],
-    //                                 ),
-    //                               ),
-    //                             )
-    //
-    //                           ],
-    //                         ),
-    //                       ),
-    //                     )
-    //                   ],
-    //                 ),
-    //             ),
-    //             ),
-    //         ],
-    //
-    //     )
-    // );
+  }
+  void displayToast2(String msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 }
