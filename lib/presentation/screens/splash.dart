@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/verifyAppVersion.dart';
+import '../loginaftersplace/loginaftersplace.dart';
+import '../salestracker/dashboard/dashboard.dart';
 
 
 class SplashView extends StatefulWidget {
@@ -106,9 +108,16 @@ class _SplaceState extends State<SplashView> {
     if (iUserType != null && iUserType != '' && iUserType == '2') {
 
       print('-----89---Visitor DashBoard');//
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (_) => DashBoardSalesTrackerHome(),
+        ),
+            (route) => false,
+      );
 
-     // context.go('/VisitorDashboard');
-      context.go('/Loginaftersplace');
+      //context.go('/DashBoardSalesTrackerHome');
+      //context.go('/Loginaftersplace');
 
 
     } else if(iUserType != null && iUserType != '' && iUserType == '1') {
@@ -116,12 +125,26 @@ class _SplaceState extends State<SplashView> {
       print('-----112----vms HOME WITH ONLY vistitor box-------');
 
      // context.go('/Loginaftersplace');
-     // context.go('/VmsHome');
-      context.go('/UpdateServeSalesTracker');
+      //context.go('/DashBoardSalesTrackerHome');
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (_) => DashBoardSalesTrackerHome(),
+        ),
+            (route) => false,
+      );
 
     }else{
       print('-----117----FirstTime go login after splace-------');
-      context.go('/Loginaftersplace');
+     // context.go('/Loginaftersplace');
+      //DashBoardSalesTrackerHome();
+       Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (_) => Loginaftersplace(),
+        ),
+            (route) => false,
+      );
 
     }
 

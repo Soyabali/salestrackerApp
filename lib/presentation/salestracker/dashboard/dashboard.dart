@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../app/customdrawer.dart';
 import '../../../app/generalFunction.dart';
 
 
@@ -30,8 +31,8 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
     setState(() {
 
     });
-
-
+    print("----------33--$sUserName");
+    print("----------34--$sContactNo");
   }
 
   @override
@@ -40,8 +41,8 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
       backgroundColor: Colors.white,
       appBar: AppBar(title: Text("Sales Tracker"), actions: <Widget>[
         ],),
-      drawer: generalFunction.drawerFunction_2(context,"$sUserName","$sContactNo"),
-
+      //drawer: generalFunction.drawerFunction_2(context,"$sUserName","$sContactNo"),
+      drawer: const CustomDrawer(),
 
       body: const Column(
           mainAxisAlignment: MainAxisAlignment.start,

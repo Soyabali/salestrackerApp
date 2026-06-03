@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:go_router/go_router.dart';
 import 'package:puri/presentation/login/loginScreen_2.dart';
 import 'package:puri/presentation/loginaftersplace/loginaftersplace.dart';
+import 'package:puri/presentation/salestracker/dashboard/dashboard.dart';
 import 'package:puri/presentation/salestracker/updateServy/updateservy.dart';
 import 'package:puri/presentation/screens/splash.dart';
 import 'package:puri/presentation/visitorDashboard/visitorDashBoard.dart';
@@ -146,7 +146,9 @@ Future<void> openVisitorListDirectly() async {
   } else {
     // here you simple navigate Dashboard
    // safeNavigate('/VisitorList');
-    safeNavigate('/LoginScreen_2');
+    //safeNavigate('/LoginScreen_2');
+    safeNavigate('/DashBoardSalesTrackerHome');
+    // DashBoardSalesTrackerHome
   }
 }
 
@@ -187,7 +189,7 @@ Future<void> safeNavigate(String route, {String? payload}) async {
   await Future.delayed(const Duration(milliseconds: 300)); // small delay
   if (navigatorKey.currentContext != null) {
 
-    GoRouter.of(navigatorKey.currentContext!).go(route, extra: payload);
+   // GoRouter.of(navigatorKey.currentContext!).go(route, extra: payload);
 
   } else {
     print("Navigator still not ready, retrying...");
@@ -223,39 +225,59 @@ void navigateToNotificationScreen(String payload) async {
 
 /// ✅ MyApp with GoRouter
 class MyApp extends StatelessWidget {
-  final _router = GoRouter(
-    navigatorKey: navigatorKey,
-    initialLocation: '/',
-    routes: [
-      GoRoute(name: 'splace', path: '/', builder: (context, state) => SplashView()),
-      GoRoute(name: 'Loginaftersplace', path: '/Loginaftersplace', builder: (context, state) => Loginaftersplace()),
-      GoRoute(name: 'VisitorDashboard', path: '/VisitorDashboard', builder: (context, state) => VisitorDashboard()),
-      GoRoute(name: 'VmsHome', path: '/VmsHome', builder: (context, state) => VmsHome()),
-      GoRoute(name: 'VisitorLoginEntry', path: '/VisitorLoginEntry', builder: (context, state) => VisitorLoginEntry()),
-      GoRoute(name: 'LoginScreen_2', path: '/LoginScreen_2', builder: (context, state) => LoginScreen_2()),
-      GoRoute(name: 'UpdateServeSalesTracker', path: '/UpdateServeSalesTracker', builder: (context, state) => UpdateServeSalesTracker()),
-      GoRoute(
-        name: 'VisitorList',
-        path: '/VisitorList',
-        builder: (context, state) {
-          final payload = state.extra as String?;
-          return VisitorList(payload: payload ?? '');
-        },
-      ),
-    ],
-  );
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      routerDelegate: _router.routerDelegate,
-      routeInformationParser: _router.routeInformationParser,
-      routeInformationProvider: _router.routeInformationProvider,
       builder: EasyLoading.init(),
+
+      // First Screen
+      home: SplashView(),
     );
   }
 }
+// class MyApp extends StatelessWidget {
+//   final _router = GoRouter(
+//     navigatorKey: navigatorKey,
+//     initialLocation: '/',
+//     routes: [
+//       GoRoute(name: 'splace', path: '/', builder: (context, state) => SplashView()),
+//       GoRoute(name: 'Loginaftersplace', path: '/Loginaftersplace', builder: (context, state) => Loginaftersplace()),
+//       GoRoute(name: 'VisitorDashboard', path: '/VisitorDashboard', builder: (context, state) => VisitorDashboard()),
+//       GoRoute(name: 'VmsHome', path: '/VmsHome', builder: (context, state) => VmsHome()),
+//       GoRoute(name: 'VisitorLoginEntry', path: '/VisitorLoginEntry', builder: (context, state) => VisitorLoginEntry()),
+//       GoRoute(name: 'LoginScreen_2', path: '/LoginScreen_2', builder: (context, state) => LoginScreen_2()),
+//
+//       //GoRoute(name: 'UpdateServeSalesTracker', path: '/UpdateServeSalesTracker', builder: (context, state) => UpdateServeSalesTracker()),
+//       // DashBoardSalesTrackerHome()
+//
+//       GoRoute(name: 'DashBoardSalesTrackerHome', path: '/DashBoardSalesTrackerHome', builder: (context, state) => DashBoardSalesTrackerHome()),
+//
+//       GoRoute(
+//         name: 'VisitorList',
+//         path: '/VisitorList',
+//         builder: (context, state) {
+//           final payload = state.extra as String?;
+//           return VisitorList(payload: payload ?? '');
+//         },
+//       ),
+//     ],
+//   );
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp.router(
+//       debugShowCheckedModeBanner: false,
+//       routerDelegate: _router.routerDelegate,
+//       routeInformationParser: _router.routeInformationParser,
+//       routeInformationProvider: _router.routeInformationProvider,
+//       builder: EasyLoading.init(),
+//     );
+//   }
+// }
 
 /// ✅ Initialize Notifications
 void initializeNotifications() {

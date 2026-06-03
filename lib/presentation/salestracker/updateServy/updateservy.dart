@@ -13,6 +13,7 @@ import '../../../app/sakestrackingtypography.dart' hide displayToast;
 import '../../../services/baseurl.dart';
 import '../../../services/reimbursement.dart';
 import '../../loginaftersplace/loginaftersplace.dart';
+import '../dashboard/dashboard.dart';
 
 class UpdateServeSalesTracker extends StatefulWidget {
   const UpdateServeSalesTracker({super.key});
@@ -28,8 +29,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
   var distList, _selectedSectorId;
   GeneralFunction generalFunction = GeneralFunction();
   List<dynamic> whomToMeet = [];
-  var _dropDownWhomToValue;
-  var _selectedWhomToMeetValue;
   final TextEditingController dateController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _expenseController = TextEditingController();
@@ -37,6 +36,12 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
   File? selectedFile;
   String? selectedFileName;
   bool isPdf = false;
+  bool isPdf2 = false;
+  bool isPdf3 = false;
+  bool isPdf4 = false;
+  bool isPdf5 = false;
+
+
   String? fileName;
   var msg;
   var result;
@@ -88,7 +93,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
   // pdf set
   Widget buildPreview() {
     if (selectedFile == null) {
-      return const Text("No file selected");
+      return const Text("");
     }
 
     if (isPdf) {
@@ -293,15 +298,15 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
         image2 = File(result.files.single.path!);
         selectedFileName = result.files.single.name;
 
-        isPdf = selectedFileName!.toLowerCase().endsWith('.pdf');
+        isPdf2 = selectedFileName!.toLowerCase().endsWith('.pdf');
 
         setState(() {});
 
         print("Selected File Name: $selectedFileName");
         print("Selected File Path: ${image2!.path}");
-        print("Is PDF: $isPdf");
+        print("Is PDF: $isPdf2");
 
-        uploadImage(sToken!, image2!);
+        uploadImage2(sToken!, image2!);
       } else {
         print("No file selected");
       }
@@ -323,15 +328,15 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
         image3 = File(result.files.single.path!);
         selectedFileName = result.files.single.name;
 
-        isPdf = selectedFileName!.toLowerCase().endsWith('.pdf');
+        isPdf3 = selectedFileName!.toLowerCase().endsWith('.pdf');
 
         setState(() {});
 
         print("Selected File Name: $selectedFileName");
         print("Selected File Path: ${image3!.path}");
-        print("Is PDF: $isPdf");
+        print("Is PDF: $isPdf3");
 
-        uploadImage(sToken!, image3!);
+        uploadImage3(sToken!, image3!);
       } else {
         print("No file selected");
       }
@@ -353,15 +358,15 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
         image4 = File(result.files.single.path!);
         selectedFileName = result.files.single.name;
 
-        isPdf = selectedFileName!.toLowerCase().endsWith('.pdf');
+        isPdf4 = selectedFileName!.toLowerCase().endsWith('.pdf');
 
         setState(() {});
 
         print("Selected File Name: $selectedFileName");
         print("Selected File Path: ${image4!.path}");
-        print("Is PDF: $isPdf");
+        print("Is PDF: $isPdf4");
 
-        uploadImage(sToken!, image4!);
+        uploadImage4(sToken!, image4!);
       } else {
         print("No file selected");
       }
@@ -383,15 +388,15 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
         image5 = File(result.files.single.path!);
         selectedFileName = result.files.single.name;
 
-        isPdf = selectedFileName!.toLowerCase().endsWith('.pdf');
+        isPdf5 = selectedFileName!.toLowerCase().endsWith('.pdf');
 
         setState(() {});
 
         print("Selected File Name: $selectedFileName");
         print("Selected File Path: ${image5!.path}");
-        print("Is PDF: $isPdf");
+        print("Is PDF: $isPdf5");
 
-        uploadImage(sToken!, image5!);
+        uploadImage5(sToken!, image5!);
 
       } else {
         print("No file selected");
@@ -725,7 +730,8 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
             Container(
               height: 200,
               width: double.infinity,
-              child: Image.asset('assets/images/bg.png', fit: BoxFit.cover),
+              child: Image.asset('assets/images/bg_banner.png', fit: BoxFit.cover),
+             // child: Image.asset('assets/images/bg.png', fit: BoxFit.cover),
 
             ),
 
@@ -740,12 +746,19 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                         GestureDetector(
                           onTap: () {
                            // Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Loginaftersplace(),
-                              ),
-                            );
+
+                             Navigator.push(
+                               context,
+                               MaterialPageRoute(
+                                 builder: (context) => const DashBoardSalesTrackerHome(),
+                               ),
+                             );
+                           //  Navigator.push(
+                           //    context,
+                           //    MaterialPageRoute(
+                           //      builder: (context) => const Loginaftersplace(),
+                           //    ),
+                           //  );
 
                           },
                           child: Container(
@@ -763,7 +776,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
 
                         const Expanded(
                           child: Text(
-                            'Add Reimbursement',
+                            'Opportunity',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
@@ -774,7 +787,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                       ],
                     ),
                   ),
-
                   // SCROLLABLE AREA
                   Expanded(
                     child: SingleChildScrollView(
@@ -848,7 +860,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    SizedBox(height: 5),
+                                    SizedBox(height: 10),
                                     uploadDocumentCard(
                                       onCameraTap: () {
                                         print("Open Camera");
@@ -935,7 +947,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                       ],
                                     ),
                                                                      buildPreview(),
-                                    SizedBox(height: 5),
+                                  //  SizedBox(height: 5),
                                     const Text(
                                       "Supported Documents - 2",
                                       style: TextStyle(
@@ -945,7 +957,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    SizedBox(height: 5),
+                                    SizedBox(height: 10),
                                     uploadDocumentCard(
                                       onCameraTap: () {
                                         print("Open Camera");
@@ -956,7 +968,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                         pickImageGallery2();
                                       },
                                     ),
-                                    SizedBox(height: 5),
+                                   // SizedBox(height: 5),
                                     //  set a images
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -975,7 +987,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                                   border: Border.all(color: Colors.grey.shade300),
                                                   borderRadius: BorderRadius.circular(8),
                                                 ),
-                                                child: isPdf
+                                                child: isPdf2
                                                     ? Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
@@ -1010,9 +1022,9 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                               child: IconButton(
                                                 onPressed: () {
                                                   setState(() {
-                                                    image = null;
+                                                    image2 = null;
                                                     fileName = null;
-                                                    isPdf = false;
+                                                    isPdf2 = false;
                                                     uplodedImage2 = null;
                                                   });
                                                 },
@@ -1028,6 +1040,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                             : const SizedBox(),
                                       ],
                                     ),
+                                    SizedBox(height: 10),
                                     const Text(
                                       "Supported Documents - 3",
                                       style: TextStyle(
@@ -1037,7 +1050,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    SizedBox(height: 5),
+                                    SizedBox(height: 10),
                                     uploadDocumentCard(
                                       onCameraTap: () {
                                         print("Open Camera");
@@ -1066,7 +1079,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                                   border: Border.all(color: Colors.grey.shade300),
                                                   borderRadius: BorderRadius.circular(8),
                                                 ),
-                                                child: isPdf
+                                                child: isPdf3
                                                     ? Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
@@ -1103,7 +1116,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                                   setState(() {
                                                     image3 = null;
                                                     fileName = null;
-                                                    isPdf = false;
+                                                    isPdf3 = false;
                                                     uplodedImage3 = null;
                                                   });
                                                 },
@@ -1120,7 +1133,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                       ],
                                     ),
 
-                                    SizedBox(height: 5),
+                                    SizedBox(height: 10),
                                     const Text(
                                       "Supported Documents - 4",
                                       style: TextStyle(
@@ -1130,7 +1143,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    SizedBox(height: 5),
+                                    SizedBox(height: 10),
                                     uploadDocumentCard(
                                       onCameraTap: () {
                                         print("Open Camera");
@@ -1160,7 +1173,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                                   border: Border.all(color: Colors.grey.shade300),
                                                   borderRadius: BorderRadius.circular(8),
                                                 ),
-                                                child: isPdf
+                                                child: isPdf4
                                                     ? Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
@@ -1197,7 +1210,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                                   setState(() {
                                                     image4 = null;
                                                     fileName = null;
-                                                    isPdf = false;
+                                                    isPdf4 = false;
                                                     uplodedImage4 = null;
                                                   });
                                                 },
@@ -1213,6 +1226,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                             : const SizedBox(),
                                       ],
                                     ),
+                                    SizedBox(height: 10),
                                     const Text(
                                       "Supported Documents - 5",
                                       style: TextStyle(
@@ -1251,7 +1265,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                                   border: Border.all(color: Colors.grey.shade300),
                                                   borderRadius: BorderRadius.circular(8),
                                                 ),
-                                                child: isPdf
+                                                child: isPdf5
                                                     ? Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
@@ -1288,7 +1302,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                                   setState(() {
                                                     image5 = null;
                                                     fileName = null;
-                                                    isPdf = false;
+                                                    isPdf5 = false;
                                                     uplodedImage5 = null;
                                                   });
                                                 },
@@ -1318,7 +1332,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                             textAlignVertical:
                                                 TextAlignVertical.top,
                                             decoration: InputDecoration(
-                                              hintText: "Enter Expense Details",
+                                              hintText: "Enter Remarks",
                                               contentPadding: const EdgeInsets.only(
                                                 left: 12,
                                                 right: 12,
@@ -1355,8 +1369,9 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                         ),
                                       ],
                                     ),
+
                                     commonGradientButton(
-                                      label: "Submit Reimbursement",
+                                      label: "Submit",
                                       onPressed: () async {
                                         String expense = _expenseController.text.trim();
 
@@ -1372,7 +1387,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                           return;
                                         }
                                         if (expense.isEmpty) {
-                                          displayToast("Please enter expense details");
+                                          displayToast("Please Enter Remarks");
                                           return;
                                         }
 
@@ -1407,6 +1422,19 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                           displayToast2(msg);
                                           // clear textfield
                                           _expenseController.clear();
+                                          image=null;
+                                          image2=null;
+                                          image3=null;
+                                          image4=null;
+                                          image5=null;
+                                          uplodedImage=null;
+                                          uplodedImage2=null;
+                                          uplodedImage3=null;
+                                          uplodedImage4=null;
+                                          uplodedImage5=null;
+                                          setState(() {
+
+                                          });
 
                                           if (result == "1") {
 

@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../presentation/changePassword/changePassword.dart';
 import '../presentation/login/loginScreen_2.dart';
+import '../presentation/loginaftersplace/loginaftersplace.dart';
 import '../presentation/resources/app_text_style.dart';
 import '../presentation/resources/assets_manager.dart';
 import '../presentation/resources/values_manager.dart';
@@ -736,7 +737,7 @@ class GeneralFunction {
     );
   }
 
-  drawerFunction_2(BuildContext context, String sName, String sContactNo) {
+  drawerFunction_2(BuildContext context, String sName, String sContactNo)  {
     return Drawer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -744,7 +745,7 @@ class GeneralFunction {
            DrawerHeader(
              decoration: const BoxDecoration(
                image: DecorationImage(
-                 image: AssetImage("assets/images/bg1.jpeg"), // Replace with your image path
+                 image: AssetImage("assets/images/bg_banner.png"), // Replace with your image path
                  fit: BoxFit.cover, // Ensures the image covers the entire header
                ),
              ),
@@ -764,12 +765,6 @@ class GeneralFunction {
                     ),
                   ),
                 ),
-                // const CircleAvatar(
-                //   radius: 30,
-                //   backgroundImage: AssetImage('assets/images/login_icon.png',
-                //   ),
-                // ),
-
                 Text(
                   sName,
                   style: AppTextStyle.font16OpenSansRegularBlackTextStyle,
@@ -782,7 +777,7 @@ class GeneralFunction {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      sContactNo,
+                      sContactNo!,
                       style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
                     ),
                   ],
@@ -798,12 +793,13 @@ class GeneralFunction {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      // Navigator.of(context).pushReplacement(
-                      //   MaterialPageRoute(builder: (context) => VisitorDashboard()),
-                      // );
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => DashBoardSalesTrackerHome()),
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DashBoardSalesTrackerHome(),
+                        ),
                       );
+
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -830,35 +826,34 @@ class GeneralFunction {
                   SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
-                      // Navigator.of(context).pushReplacement(
-                      //   MaterialPageRoute(builder: (context) => VisitorDashboard()),
-                      // );
-                      // Navigator.of(context).pushReplacement(
-                      //   MaterialPageRoute(builder: (context) => UpdateServeyInfo()),
-                      // );
 
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => UpdateServeSalesTracker()),
-                      );                    },
+                      Future.delayed(Duration.zero, () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => UpdateServeSalesTracker()),
+                        );
+                      });
+
+                      },
 
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Image.asset('assets/images/home_nw.png',
+                        Image.asset('assets/images/opportunative.png',
                           width: 25,
                           height: 25,
                           fit: BoxFit.fill,
                         ),
                         // color: Colors.red),
                         const SizedBox(width: 10),
-                        Text('Update Serve',
+                        Text('Opportunity',
                             style: AppTextStyle
                                 .font16penSansExtraboldBlackTextStyle),
                       ],
                     ),
                   ),
 
-                   SizedBox(height: 10),
+                  SizedBox(height: 10),
                   const Divider(
                     height: 1, // space above & below divider
                     thickness: 1, // actual line thickness
@@ -867,12 +862,12 @@ class GeneralFunction {
                   SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => ChangePassword(name: "null",)),
-                      );
-                      // Navigator.of(context).pushReplacement(
-                      //   MaterialPageRoute(builder: (context) => ComplaintHomePage()),
-                      // );
+                      Future.delayed(Duration.zero, () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => ChangePassword(name: null,)));
+                      });
+
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -890,40 +885,12 @@ class GeneralFunction {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Divider(
+                  const Divider(
                     height: 1, // space above & below divider
                     thickness: 1, // actual line thickness
                     color: Colors.grey, // line color
                   ),
                   const SizedBox(height: 10),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     print("-----Deleting Account-----");
-                  //     showDialog(
-                  //       context: context,
-                  //       builder: (BuildContext context) {
-                  //         return _buildDialogSucces(context);
-                  //       },
-                  //     );
-                  //   },
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.start,
-                  //     children: <Widget>[
-                  //       //Icon(Icons.delete,size: 25,color: Colors.red),
-                  //       Image.asset(
-                  //         'assets/images/deleteaccount.png',
-                  //         width: 25,
-                  //         height: 25,
-                  //       ),
-                  //       const SizedBox(width: 10),
-                  //       Text(
-                  //         'Delete Account',
-                  //         style:
-                  //             AppTextStyle.font16penSansExtraboldBlackTextStyle,
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   // const SizedBox(height: 15),
                   GestureDetector(
                     onTap: () async {
@@ -931,18 +898,12 @@ class GeneralFunction {
                      // _logoutDiuCitizen(context);
                       final prefs = await SharedPreferences.getInstance();
                       await prefs.clear(); // This removes all stored data
+                      Future.delayed(Duration.zero, () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => Loginaftersplace()));
+                      });
 
-                      // Navigator.pushAndRemoveUntil(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => VmsHome()),
-                      //       (Route<dynamic> route) => false, // Condition to retain routes
-                      // );
-                      // Navigator.pushAndRemoveUntil(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => Loginaftersplace()),
-                      //       (Route<dynamic> route) => false, // Condition to retain routes
-                      // );
-                      context.go('/Loginaftersplace');
 
                       },
                     child: Row(
