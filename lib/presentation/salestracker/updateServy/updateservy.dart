@@ -1376,85 +1376,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
 
                                     commonGradientButton(
                                       label: "Submit",
-                                      // onPressed: () async {
-                                      //   String expense = _expenseController.text.trim();
-                                      //
-                                      //   print("----uplodedImage----$uplodedImage");
-                                      //   print("----uplodedImage2----$uplodedImage2");
-                                      //   print("----uplodedImage3----$uplodedImage3");
-                                      //   print("----uplodedImage4----$uplodedImage4");
-                                      //   print("----uplodedImage5----$uplodedImage5");
-                                      //   print("-----1126--textfiled ---$expense");
-                                      //
-                                      //
-                                      //   // if (uplodedImage == null ) {
-                                      //   //   displayToast("Please upload document");
-                                      //   //   return;
-                                      //   // }
-                                      //   // if (expense.isEmpty) {
-                                      //   //   displayToast("Please Enter Remarks");
-                                      //   //   return;
-                                      //   // }
-                                      //   //
-                                      //   // if (!_formKey.currentState!.validate()) {
-                                      //   //   return;
-                                      //   // }
-                                      //   //
-                                      //   // try {
-                                      //   //   SharedPreferences prefs = await SharedPreferences.getInstance();
-                                      //   //
-                                      //   //   String? iUserId = prefs.getString('iUserId');
-                                      //   //
-                                      //   //   print('----iUserId----$iUserId');
-                                      //   //   print("-----call api----");
-                                      //   //
-                                      //   //   var hrmsPopWarning =
-                                      //   //   await HrmsPostReimbursementRepo().hrmsPostReimbursement(
-                                      //   //     context,
-                                      //   //     uplodedImage,
-                                      //   //     uplodedImage2,
-                                      //   //     uplodedImage3,
-                                      //   //     uplodedImage4,
-                                      //   //     uplodedImage5,
-                                      //   //     expense,
-                                      //   //   );
-                                      //   //
-                                      //   //   print('--------Response----$hrmsPopWarning');
-                                      //   //
-                                      //   //   String result = "${hrmsPopWarning['Result']}";
-                                      //   //   msg = "${hrmsPopWarning['Msg']}";
-                                      //   //
-                                      //   //   displayToast2(msg);
-                                      //   //   // clear textfield
-                                      //   //   _expenseController.clear();
-                                      //   //   image=null;
-                                      //   //   image2=null;
-                                      //   //   image3=null;
-                                      //   //   image4=null;
-                                      //   //   image5=null;
-                                      //   //   uplodedImage=null;
-                                      //   //   uplodedImage2=null;
-                                      //   //   uplodedImage3=null;
-                                      //   //   uplodedImage4=null;
-                                      //   //   uplodedImage5=null;
-                                      //   //   setState(() {
-                                      //   //
-                                      //   //   });
-                                      //   //
-                                      //   //   if (result == "1") {
-                                      //   //
-                                      //   //   }
-                                      //   // } catch (e) {
-                                      //   //   print("Error: $e");
-                                      //   //   displayToast(msg);
-                                      //   // }
-                                      // },
-
-
-
-
-
-
 
                                       onPressed: () async {
                                         String expense = _expenseController.text.trim();
@@ -1517,6 +1438,15 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                           uplodedImage3=null;
                                           uplodedImage4=null;
                                           uplodedImage5=null;
+                                          selectedFile = null;
+                                          selectedFileName = null;
+                                          fileName = null;
+
+                                          isPdf = false;
+                                          isPdf2 = false;
+                                          isPdf3 = false;
+                                          isPdf4 = false;
+                                          isPdf5 = false;
                                           setState(() {
 
                                           });
