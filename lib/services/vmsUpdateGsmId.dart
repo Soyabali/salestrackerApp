@@ -16,10 +16,12 @@ class VmsUpdateGsmid {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     String? iUserId = prefs.getString('iUserId');
+    String? sUserName = prefs.getString('sUserName');
+    // sContactNo
+    String? sContactNo = prefs.getString('sContactNo');
 
     try {
       print("----firebase Token------------$token");
-      print("----iUserId ---$iUserId");
 
       var baseURL = BaseRepo().baseurl;
       var endPoint = "UdpateGSMId/UdpateGSMId";

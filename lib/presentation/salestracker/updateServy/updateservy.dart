@@ -722,6 +722,34 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
 
     }
   }
+  // clearAllData
+  void clearFormData() {
+    _expenseController.clear();
+
+    image = null;
+    image2 = null;
+    image3 = null;
+    image4 = null;
+    image5 = null;
+
+    uplodedImage = null;
+    uplodedImage2 = null;
+    uplodedImage3 = null;
+    uplodedImage4 = null;
+    uplodedImage5 = null;
+
+    selectedFile = null;
+    selectedFileName = null;
+    fileName = null;
+
+    isPdf = false;
+    isPdf2 = false;
+    isPdf3 = false;
+    isPdf4 = false;
+    isPdf5 = false;
+
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1425,34 +1453,37 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                           String result = "${hrmsPopWarning['Result']}";
                                            msg = "${hrmsPopWarning['Msg']}";
 
-                                          displayToast2(msg);
+
                                           // clear textfield
-                                          _expenseController.clear();
-                                          image=null;
-                                          image2=null;
-                                          image3=null;
-                                          image4=null;
-                                          image5=null;
-                                          uplodedImage=null;
-                                          uplodedImage2=null;
-                                          uplodedImage3=null;
-                                          uplodedImage4=null;
-                                          uplodedImage5=null;
-                                          selectedFile = null;
-                                          selectedFileName = null;
-                                          fileName = null;
-
-                                          isPdf = false;
-                                          isPdf2 = false;
-                                          isPdf3 = false;
-                                          isPdf4 = false;
-                                          isPdf5 = false;
-                                          setState(() {
-
-                                          });
+                                          // _expenseController.clear();
+                                          // image=null;
+                                          // image2=null;
+                                          // image3=null;
+                                          // image4=null;
+                                          // image5=null;
+                                          // uplodedImage=null;
+                                          // uplodedImage2=null;
+                                          // uplodedImage3=null;
+                                          // uplodedImage4=null;
+                                          // uplodedImage5=null;
+                                          // selectedFile = null;
+                                          // selectedFileName = null;
+                                          // fileName = null;
+                                          //
+                                          // isPdf = false;
+                                          // isPdf2 = false;
+                                          // isPdf3 = false;
+                                          // isPdf4 = false;
+                                          // isPdf5 = false;
+                                          // setState(() {
+                                          //
+                                          // });
 
                                           if (result == "1") {
-
+                                            displayToast2(msg);
+                                            clearFormData();
+                                          }else{
+                                            displayToast2(msg);
                                           }
                                         } catch (e) {
                                           print("Error: $e");
