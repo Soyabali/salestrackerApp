@@ -1,14 +1,25 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:puri/presentation/salestracker/dashboard/payslippdf.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../app/customdrawer.dart';
 import '../../../app/generalFunction.dart';
+import '../../../app/loader_helper.dart';
 import '../../../main.dart';
 import '../../../model/OpportunityListModel.dart';
 import '../../../services/OpportunityDetailsRepo.dart';
+import '../../../services/baseurl.dart';
 import '../../../services/vmsUpdateGsmId.dart';
 import 'package:dotted_border/dotted_border.dart';
+
+import '../updateServy/updateservy.dart';
 
 
 class DashBoardSalesTrackerHome extends StatefulWidget {
@@ -26,17 +37,28 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
   var token;
   AudioPlayer player = AudioPlayer();
   var result,msg;
+  File? image;
   List<OpportunityData> opportunityList = [];
   List<String> uploadedDocuments = [];
+  var uplodedImage;
+  var sUserName2;
 
   @override
   void initState() {
     // TODO: implement initState
     setupPushNotifications();
     OpportunityDetails();
+    toGetLocalData();
     super.initState();
   }
    // callOpportunityDetails
+
+  toGetLocalData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+     sUserName2 = prefs.getString('sUserName');
+    print("----UserName-----$sUserName2");
+
+  }
 
   void OpportunityDetails() async {
 
@@ -242,25 +264,42 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
         child: Column(
           children: [
             /// HEADER ROW
-            Row(
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 const Text(
-                 "BID",    //item.sUserName ?? "Ali",
+                  "BID",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Color(0xff651FFF),
                   ),
                 ),
-
-                const Spacer(),
-
+                const SizedBox(width: 10),
                 statusContainer(item),
                 const SizedBox(width: 10),
-
                 dateContainer(item),
               ],
             ),
+            // Row(
+            //   children: [
+            //     const Text(
+            //      "BID",    //item.sUserName ?? "Ali",
+            //       style: TextStyle(
+            //         fontSize: 16,
+            //         fontWeight: FontWeight.bold,
+            //         color: Color(0xff651FFF),
+            //       ),
+            //     ),
+            //
+            //     const Spacer(),
+            //     statusContainer(item),
+            //     const SizedBox(width: 10),
+            //
+            //     dateContainer(item),
+            //   ],
+            // ),
             const SizedBox(height: 5),
             const Divider(),
             const SizedBox(height: 5),
@@ -462,20 +501,30 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
 
           return GestureDetector(
             onTap: (){
-              print("--------491----");
-              print("Clicked Index => $index");
-              print("Clicked File => $fileUrl");
-              print("Is PDF => $isPdf");
+
+              String fileUrl = docs[index];
+              bool isPdf =
+              fileUrl.toLowerCase().endsWith('.pdf');
 
               if (isPdf) {
 
-                print("Open PDF");
+                print("Open PDF => $fileUrl");
+                print("--475-pdf  --$fileUrl");
 
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PaySlipPdf(pdfFile: fileUrl)),
+                );
                 // Open PDF Screen
 
               } else {
-                print("Open Image");
-                // Open Full Screen Image
+                // print("Open Image => $fileUrl");
+                print("--475-image  --$fileUrl");
+                openFullScreenDialog(
+                    context,
+                    fileUrl);
+
+              // Open Image Screen
               }
             },
             child: attachmentCard(
@@ -564,31 +613,34 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
         ),
         child: Container(
           width: double.infinity,
-          height: 50, // Reduced from 85
+          height: 35, // Reduced from 85
           alignment: Alignment.center,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                height: 36,
-                width: 36,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: const Color(0xFF651FFF),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(
-                        0xFF651FFF,
-                      ).withOpacity(0.25),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 22,
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Container(
+                  height: 30,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: const Color(0xFF651FFF),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(
+                          0xFF651FFF,
+                        ).withOpacity(0.25),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 22,
+                  ),
                 ),
               ),
 
@@ -609,6 +661,92 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
     );
   }
   // code
+  //  image Camra
+  Future pickImage() async {
+    String? sToken = 'xyz';
+    print('---Token----107--$sToken');
+    // sVisitorImage=null;
+    // uplodedImage=null;
+    try {
+      final pickFileid = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        imageQuality: 65,
+      );
+      if (pickFileid != null) {
+        image = File(pickFileid.path);
+        setState(() {});
+        print('Image File path Id Proof-------109----->$image');
+        // multipartProdecudre();
+        //uploadImage(sToken, image!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+  // uplodeimage
+  Future<void> uploadImage(String token, File imageFile) async {
+
+    var baseURL = BaseRepo().baseurl;
+    var endPoint = "PostMultipleImage/PostMultipleImage";
+    var uplodeImageApi = "$baseURL$endPoint";
+
+    try {
+
+      showLoader();
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+          uplodeImageApi,
+        ),
+      );
+
+      request.headers['token'] = token;
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'sImagePath',
+          imageFile.path,
+        ),
+      );
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      print("Status Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
+
+      if (response.statusCode == 200) {
+
+        Map<String, dynamic> responseData =
+        jsonDecode(response.body);
+
+        print("Decoded Response: $responseData");
+
+        if (responseData['Data'] != null &&
+            responseData['Data'].isNotEmpty) {
+
+          setState(() {
+            uplodedImage = responseData['Data'][0]['sImagePath'];
+          });
+
+          print("Uploaded Image Path: $uplodedImage");
+        }
+
+      } else {
+        print("API Error: ${response.reasonPhrase}");
+      }
+
+      hideLoader();
+
+    } catch (e) {
+
+      hideLoader();
+      print("Error uploading image: $e");
+
+    }
+  }
 
 
   @override
@@ -633,28 +771,80 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
                     fit: BoxFit.cover,
                   ),
 
-                  const Positioned(
+                  Positioned(
                     top: 20,
                     left: 20,
                     right: 20,
                     child: Row(
                       children: [
-
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: AssetImage(
-                            "assets/images/profile.jpg",
+                        image!=null
+                            ?
+                        Center(
+                          child: Container(
+                            margin: const EdgeInsets.all(2),
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 1,
+                              ),
+                            ),
+                            child: ClipOval(
+                              child: SizedBox(
+                                width: 60,
+                                height: 60,
+                                child: Image.file(
+                                  image!,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        )
+                            :
+                        GestureDetector(
+                          onTap: (){
 
+                            print("-------655------");
+                            print("---camra open----");
+                            pickImage();
+
+                            },
+                          child:Center(
+                            child: Container(
+                              margin: const EdgeInsets.all(2),
+                              padding: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: 1,
+                                ),
+                              ),
+                              child: ClipOval(
+                                child: SizedBox(
+                                  width: 60,
+                                  height: 60,
+                                  child: Image.asset(
+                                    "assets/images/profile.jpg",
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ),
                         const SizedBox(width: 20),
 
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            const Text(
-                              "Soyab Ali",
-                              style: TextStyle(
+                          children:[
+                            Text(
+                              sUserName2 ?? '',
+                              style: const TextStyle(
                                 color: Colors.white,
                                 // color: Color(0xFF6503AB),
                                // color: Color(0xFF6503AB),
@@ -663,9 +853,9 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
                               ),
                             ),
 
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
 
-                            Text(
+                            const Text(
                               "Here's your bidding overview",
                               style: TextStyle(
                                 color: Colors.white,
@@ -708,6 +898,13 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
                    child: createNewBidButton(
                      onTap: () {
                        print("Create New Bid Click");
+                       Navigator.pushAndRemoveUntil(
+                         context,
+                         MaterialPageRoute(
+                           builder: (context) => const UpdateServeSalesTracker(),
+                         ),
+                             (route) => false,
+                       );
                      },
                    ),
                  ),

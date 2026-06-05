@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../presentation/changePassword/changePassword.dart';
@@ -20,6 +23,32 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   String sUserName = "";
   String sContactNo = "";
+  File? image;
+
+
+
+  // camraCode
+  Future pickImage() async {
+    String? sToken = 'xyz';
+    print('---Token----107--$sToken');
+    // sVisitorImage=null;
+    // uplodedImage=null;
+    try {
+      final pickFileid = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        imageQuality: 65,
+      );
+      if (pickFileid != null) {
+        image = File(pickFileid.path);
+        setState(() {});
+        print('Image File path Id Proof-------109----->$image');
+        // multipartProdecudre();
+        //uploadImage(sToken, image!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
 
   @override
   void initState() {
@@ -64,16 +93,72 @@ class _CustomDrawerState extends State<CustomDrawer> {
               MainAxisAlignment.end,
               children: [
 
-                ClipOval(
-                  child: SizedBox(
-                    height: 70,
-                    width: 70,
-                    child: Image.asset(
-                      'assets/images/human.png',
-                      fit: BoxFit.cover,
+                GestureDetector(
+                  onTap: (){
+                    print("-----98----");
+                    pickImage();
+                    //  image
+                  },
+                  child: image!=null
+                      ?
+                   Container(
+                      margin: const EdgeInsets.all(2),
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 1,
+                        ),
+                      ),
+                      child: ClipOval(
+                        child: SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: Image.file(
+                            image!,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                  )
+                  :
+
+                  // ClipOval(
+                  //   child: SizedBox(
+                  //     height: 70,
+                  //     width: 70,
+                  //     child: Image.asset(
+                  //       'assets/images/profile.jpg',
+                  //       fit: BoxFit.cover,
+                  //     ),
+                  //   ),
+                  // ),
+                  Container(
+                      margin: const EdgeInsets.all(2),
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 1,
+                        ),
+                      ),
+                      child: ClipOval(
+                        child: SizedBox(
+                          width: 70,
+                          height: 70,
+                          child: Image.asset(
+                            'assets/images/profile.jpg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+
 
                 const SizedBox(height: 10),
 

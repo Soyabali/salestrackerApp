@@ -1498,37 +1498,20 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
 
                                           print('--------Response----$hrmsPopWarning');
 
-                                          String result = "${hrmsPopWarning['Result']}";
+                                            String result = "${hrmsPopWarning['Result']}";
                                            msg = "${hrmsPopWarning['Msg']}";
 
 
-                                          // clear textfield
-                                          // _expenseController.clear();
-                                          // image=null;
-                                          // image2=null;
-                                          // image3=null;
-                                          // image4=null;
-                                          // image5=null;
-                                          // uplodedImage=null;
-                                          // uplodedImage2=null;
-                                          // uplodedImage3=null;
-                                          // uplodedImage4=null;
-                                          // uplodedImage5=null;
-                                          // selectedFile = null;
-                                          // selectedFileName = null;
-                                          // fileName = null;
-                                          //
-                                          // isPdf = false;
-                                          // isPdf2 = false;
-                                          // isPdf3 = false;
-                                          // isPdf4 = false;
-                                          // isPdf5 = false;
-                                          // setState(() {
-                                          //
-                                          // });
-
                                           if (result == "1") {
                                             displayToast2(msg);
+                                            // navigate to Dashborad
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => const DashBoardSalesTrackerHome(),
+                                              ),
+                                            );
+
                                             clearFormData();
                                           }else{
                                             displayToast2(msg);

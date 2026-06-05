@@ -1257,3 +1257,68 @@ class GeneralFunction {
   }
 }
 //
+// Open full Screen Images
+void openFullScreenDialog(
+    BuildContext context, String imageUrl) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        backgroundColor: Colors.transparent, // Makes the dialog full screen
+        insetPadding: EdgeInsets.all(0),
+        child: Stack(
+          children: [
+            // Fullscreen Image
+            Positioned.fill(
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover, // Adjust the image to fill the dialog
+              ),
+            ),
+
+            // White container with Bill Date at the bottom
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: EdgeInsets.all(16),
+                color: Colors.white.withOpacity(0.8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("",
+                        style:
+                        AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                  ],
+                ),
+              ),
+            ),
+            // Close button in the bottom-right corner
+            Positioned(
+              right: 16,
+              bottom: 10,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.redAccent,
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
