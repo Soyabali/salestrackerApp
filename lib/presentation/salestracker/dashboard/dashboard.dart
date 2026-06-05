@@ -42,13 +42,31 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
   List<String> uploadedDocuments = [];
   var uplodedImage;
   var sUserName2;
+  String? uplodedImage2;
+
+
+
+  Future<void> getUploadedImage() async {
+    SharedPreferences prefs =
+    await SharedPreferences.getInstance();
+
+    String? imageUrl = prefs.getString('uplodedImage');
+
+    print("Retrieved Image URL -xxxxx---x => $imageUrl");
+
+    setState(() {
+      uplodedImage2 = imageUrl;
+    });
+  }
 
   @override
   void initState() {
     // TODO: implement initState
+    getUploadedImage();
     setupPushNotifications();
     OpportunityDetails();
     toGetLocalData();
+
     super.initState();
   }
    // callOpportunityDetails
@@ -597,7 +615,6 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
     );
   }
 
-  //
   Widget createNewBidButton({
     required VoidCallback onTap,
   }) {
@@ -662,9 +679,13 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
   }
   // code
   //  image Camra
+
   Future pickImage() async {
-    String? sToken = 'xyz';
-    print('---Token----107--$sToken');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    String? iUserId = prefs.getString('iUserId');
+
+
     // sVisitorImage=null;
     // uplodedImage=null;
     try {
@@ -674,10 +695,20 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
       );
       if (pickFileid != null) {
         image = File(pickFileid.path);
+        // to store in a shared Prefernce
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('profile_image_path', image!.path);
+
         setState(() {});
         print('Image File path Id Proof-------109----->$image');
         // multipartProdecudre();
-        //uploadImage(sToken, image!);
+        print('---Token----682--$sToken');
+        print('---iUserId----682--$iUserId');
+        print('---image----682--$image');
+
+        uploadImage(sToken!, image!);
+
+        //uploadImage(sToken!,iUserId!,image! as String);
       } else {
         print('no image selected');
       }
@@ -728,10 +759,27 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
             responseData['Data'].isNotEmpty) {
 
           setState(() {
-            uplodedImage = responseData['Data'][0]['sImagePath'];
+            uplodedImage2 = responseData['Data'][0]['sImagePath'];
           });
+          print("-------748-----$uplodedImage2");
+          if(uplodedImage2!=null){
+            print("-------748---xx----xx--$uplodedImage");
+            // to store a image
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setString('uplodedImage',uplodedImage2!).toString();
+            String? imageUrl = prefs.getString('uplodedImage');
 
-          print("Uploaded Image Path: $uplodedImage");
+            print("Retrieved Image URL => $imageUrl");
+
+            setState(() {
+              uplodedImage2 = imageUrl;
+            });
+
+          }else{
+
+          }
+
+          print("Uploaded Image Path:----747--- $uplodedImage");
         }
 
       } else {
@@ -770,16 +818,19 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
                     height: 220,
                     fit: BoxFit.cover,
                   ),
-
                   Positioned(
                     top: 20,
                     left: 20,
                     right: 20,
                     child: Row(
                       children: [
-                        image!=null
-                            ?
-                        Center(
+                        GestureDetector(
+                          onTap: () {
+                            if (uplodedImage2 == null ||
+                                uplodedImage2!.isEmpty) {
+                              pickImage();
+                            }
+                          },
                           child: Container(
                             margin: const EdgeInsets.all(2),
                             padding: const EdgeInsets.all(2),
@@ -795,75 +846,60 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
                               child: SizedBox(
                                 width: 60,
                                 height: 60,
-                                child: Image.file(
-                                  image!,
+                                child: uplodedImage2 != null &&
+                                    uplodedImage2!.isNotEmpty
+                                    ? Image.network(
+                                  uplodedImage2!,
+                                  fit: BoxFit.cover,
+                                  errorBuilder:
+                                      (context, error, stackTrace) {
+                                    return Image.asset(
+                                      "assets/images/profile.jpg",
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
+                                )
+                                    : Image.asset(
+                                  "assets/images/profile.jpg",
                                   fit: BoxFit.cover,
                                 ),
                               ),
                             ),
                           ),
-                        )
-                            :
-                        GestureDetector(
-                          onTap: (){
-
-                            print("-------655------");
-                            print("---camra open----");
-                            pickImage();
-
-                            },
-                          child:Center(
-                            child: Container(
-                              margin: const EdgeInsets.all(2),
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: Colors.grey.shade300,
-                                  width: 1,
-                                ),
-                              ),
-                              child: ClipOval(
-                                child: SizedBox(
-                                  width: 60,
-                                  height: 60,
-                                  child: Image.asset(
-                                    "assets/images/profile.jpg",
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
                         ),
+
                         const SizedBox(width: 20),
 
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children:[
-                            Text(
-                              sUserName2 ?? '',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                // color: Color(0xFF6503AB),
-                               // color: Color(0xFF6503AB),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                sUserName2 ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
 
-                            const SizedBox(height: 4),
+                              const SizedBox(height: 4),
 
-                            const Text(
-                              "Here's your bidding overview",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                              const Text(
+                                "Here's your bidding overview",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -911,8 +947,6 @@ class _DashBoardSalesTrackerHomeState extends State<DashBoardSalesTrackerHome> {
                  SizedBox(height: 10),
                ],
              )
-
-
             ]
           ),
       ),

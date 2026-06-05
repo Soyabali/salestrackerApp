@@ -24,6 +24,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   String sUserName = "";
   String sContactNo = "";
   File? image;
+  var imageUrl;
 
 
 
@@ -61,15 +62,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
     await SharedPreferences.getInstance();
 
     setState(() {
-      sUserName =
-          prefs.getString('sUserName') ?? "";
-      sContactNo =
-          prefs.getString('sContactNo') ?? "";
+      sUserName = prefs.getString('sUserName') ?? "";
+      sContactNo = prefs.getString('sContactNo') ?? "";
+      imageUrl = prefs.getString('uplodedImage');
     });
 
     print("Name -------35--: $sUserName");
     print("Mobile -------36: $sContactNo");
+    print("-------72------xx-----$imageUrl");
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,10 +100,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 GestureDetector(
                   onTap: (){
                     print("-----98----");
-                    pickImage();
+                   // pickImage();
                     //  image
                   },
-                  child: image!=null
+                  child: imageUrl!=null
                       ?
                    Container(
                       margin: const EdgeInsets.all(2),
@@ -116,11 +120,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: SizedBox(
                           width: 60,
                           height: 60,
-                          child: Image.file(
-                            image!,
+                          child: Image.network(
+                            imageUrl!,
                             fit: BoxFit.cover,
                           ),
-                        ),
+                        )
                       ),
                   )
                   :
