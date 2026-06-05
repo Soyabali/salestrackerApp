@@ -32,6 +32,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
   final TextEditingController dateController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _expenseController = TextEditingController();
+  final TextEditingController _opportunityName = TextEditingController();
   File? image, image2, image3, image4,image5;
   File? selectedFile;
   String? selectedFileName;
@@ -141,6 +142,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
   void dispose() {
     // TODO: implement dispose
     _phoneNumberController.dispose();
+    _opportunityName.dispose();
     super.dispose();
   }
   Future pickImage() async {
@@ -725,6 +727,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
   // clearAllData
   void clearFormData() {
     _expenseController.clear();
+    _opportunityName.clear();
 
     image = null;
     image2 = null;
@@ -760,7 +763,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
       child: Scaffold(
         body: Stack(
           children: [
-            // TOP IMAGE
+            // TOP IMAGEin
             Container(
               height: 200,
               width: double.infinity,
@@ -785,13 +788,6 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                  builder: (context) => const DashBoardSalesTrackerHome(),
                                ),
                              );
-                           //  Navigator.push(
-                           //    context,
-                           //    MaterialPageRoute(
-                           //      builder: (context) => const Loginaftersplace(),
-                           //    ),
-                           //  );
-
                           },
                           child: Container(
                             height: 42,
@@ -883,6 +879,44 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                         ],
                                       ),
                                     ),
+                                    SizedBox(height: 10),
+
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: SizedBox(
+                                        height: 45,
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: SizedBox(
+                                            height: 45,
+                                            child: TextFormField(
+                                              controller: _opportunityName,
+                                             // maxLength: 500,
+                                              decoration: InputDecoration(
+                                                hintText: "Opportunity Name",
+                                                counterText: "",
+                                                contentPadding: const EdgeInsets.symmetric(
+                                                  horizontal: 12,
+                                                  vertical: 12,
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                              ),
+                                              validator: (value) {
+                                                if (value == null || value.trim().isEmpty) {
+                                                  return "Please enter an Opportunity Name";
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+
+                                    SizedBox(height: 10),
                                     const Text(
                                       "Supported Documents - 1",
                                       style: TextStyle(
@@ -1407,6 +1441,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
 
                                       onPressed: () async {
                                         String expense = _expenseController.text.trim();
+                                        String opportunityName = _opportunityName.text.trim();
 
                                         print("----uplodedImage----$uplodedImage");
                                         print("----uplodedImage2----$uplodedImage2");
@@ -1414,7 +1449,18 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                         print("----uplodedImage4----$uplodedImage4");
                                         print("----uplodedImage5----$uplodedImage5");
                                         print("-----1126---$expense");
+                                        print("-----1457----xxx---$opportunityName");
 
+
+                                        if(opportunityName.isEmpty){
+                                          displayToast("Please enter Opportunity Name");
+                                          return;
+                                        }
+
+                                        // if(opportunityName.isEmpty){
+                                        //   displayToast("Please enter Opportunity Name");
+                                        //   return;
+                                        // }
 
                                         if (uplodedImage == null ) {
                                           displayToast("Please upload document");
@@ -1424,6 +1470,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                           displayToast("Please Enter Remarks");
                                           return;
                                         }
+
 
                                         if (!_formKey.currentState!.validate()) {
                                           return;
@@ -1446,6 +1493,7 @@ class _DashBoardSalesTrackerHomeState extends State<UpdateServeSalesTracker> {
                                             uplodedImage4,
                                             uplodedImage5,
                                             expense,
+                                            opportunityName
                                           );
 
                                           print('--------Response----$hrmsPopWarning');

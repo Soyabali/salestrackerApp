@@ -351,6 +351,7 @@ class _LoginPageState extends State<LoginPageAfterSplace> {
           focusNode: phoneNumberfocus,
           keyboardType: TextInputType.phone,
           labelText: "User Id",
+          maxLength: 10,
           prefixIcon: Icons.verified_user,
         ),
 

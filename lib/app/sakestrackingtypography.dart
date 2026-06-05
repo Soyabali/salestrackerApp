@@ -8,19 +8,21 @@ import 'package:google_fonts/google_fonts.dart';
 Widget commonTextFormField({
   required TextEditingController controller,
   required String labelText,
-   IconData? prefixIcon,
-
+  IconData? prefixIcon,
   FocusNode? focusNode,
   TextInputType keyboardType = TextInputType.text,
   TextInputAction textInputAction = TextInputAction.next,
-
   bool obscureText = false,
 
-  /// 🔥 NEW: password support
+  /// Password Support
   bool isPassword = false,
   VoidCallback? onTogglePassword,
 
   int maxLines = 1,
+
+  /// Max Character Length
+  int? maxLength,
+
   String? Function(String?)? validator,
   void Function(String)? onChanged,
 }) {
@@ -31,6 +33,7 @@ Widget commonTextFormField({
     textInputAction: textInputAction,
     obscureText: obscureText,
     maxLines: maxLines,
+    maxLength: maxLength,
     validator: validator,
     onChanged: onChanged,
 
@@ -43,6 +46,10 @@ Widget commonTextFormField({
 
     decoration: InputDecoration(
       labelText: labelText,
+
+      /// Hide counter text if you don't want "0/50"
+      counterText: "",
+
       labelStyle: GoogleFonts.lato(
         fontSize: 16,
         fontWeight: FontWeight.w600,
@@ -50,30 +57,20 @@ Widget commonTextFormField({
         letterSpacing: 1,
       ),
 
-      prefixIcon: Icon(
+      prefixIcon: prefixIcon != null
+          ? Icon(
         prefixIcon,
         color: const Color(0xFFB957FF),
-      ),
+      )
+          : null,
 
-      /// 🔥 PASSWORD TOGGLE ICON
-      // suffixIcon: isPassword
-      //     ? IconButton(
-      //   onPressed: onTogglePassword,
-      //   icon: Icon(
-      //     obscureText
-      //         ? Icons.visibility
-      //         : Icons.visibility_off,
-      //     color: Colors.grey,
-      //   ),
-      // )
-      //     : null,
       suffixIcon: isPassword
           ? IconButton(
         onPressed: onTogglePassword,
         icon: Icon(
           obscureText
-              ? Icons.visibility_off   // 👁️ hidden state
-              : Icons.visibility,      // 👁️ visible state
+              ? Icons.visibility_off
+              : Icons.visibility,
           color: Colors.grey,
         ),
       )
@@ -115,6 +112,117 @@ Widget commonTextFormField({
     ),
   );
 }
+// Widget commonTextFormField({
+//   required TextEditingController controller,
+//   required String labelText,
+//    IconData? prefixIcon,
+//
+//   FocusNode? focusNode,
+//   TextInputType keyboardType = TextInputType.text,
+//   TextInputAction textInputAction = TextInputAction.next,
+//
+//   bool obscureText = false,
+//
+//   /// 🔥 NEW: password support
+//   bool isPassword = false,
+//   VoidCallback? onTogglePassword,
+//
+//   int maxLines = 1,
+//   int? maxLength,
+//   String? Function(String?)? validator,
+//   void Function(String)? onChanged,
+// }) {
+//   return TextFormField(
+//     controller: controller,
+//     focusNode: focusNode,
+//     keyboardType: keyboardType,
+//     textInputAction: textInputAction,
+//     obscureText: obscureText,
+//     maxLines: maxLines,
+//     validator: validator,
+//     onChanged: onChanged,
+//
+//     style: GoogleFonts.lato(
+//       fontSize: 16,
+//       fontWeight: FontWeight.w700,
+//       color: Colors.black87,
+//       letterSpacing: 1.0,
+//     ),
+//
+//     decoration: InputDecoration(
+//       labelText: labelText,
+//       labelStyle: GoogleFonts.lato(
+//         fontSize: 16,
+//         fontWeight: FontWeight.w600,
+//         color: Colors.black54,
+//         letterSpacing: 1,
+//       ),
+//
+//       prefixIcon: Icon(
+//         prefixIcon,
+//         color: const Color(0xFFB957FF),
+//       ),
+//
+//       /// 🔥 PASSWORD TOGGLE ICON
+//       // suffixIcon: isPassword
+//       //     ? IconButton(
+//       //   onPressed: onTogglePassword,
+//       //   icon: Icon(
+//       //     obscureText
+//       //         ? Icons.visibility
+//       //         : Icons.visibility_off,
+//       //     color: Colors.grey,
+//       //   ),
+//       // )
+//       //     : null,
+//       suffixIcon: isPassword
+//           ? IconButton(
+//         onPressed: onTogglePassword,
+//         icon: Icon(
+//           obscureText
+//               ? Icons.visibility_off   // 👁️ hidden state
+//               : Icons.visibility,      // 👁️ visible state
+//           color: Colors.grey,
+//         ),
+//       )
+//           : null,
+//
+//       enabledBorder: OutlineInputBorder(
+//         borderRadius: BorderRadius.circular(14),
+//         borderSide: const BorderSide(
+//           color: Colors.grey,
+//           width: 1.2,
+//         ),
+//       ),
+//
+//       focusedBorder: OutlineInputBorder(
+//         borderRadius: BorderRadius.circular(14),
+//         borderSide: const BorderSide(
+//           color: Colors.grey,
+//           width: 1.8,
+//         ),
+//       ),
+//
+//       errorBorder: OutlineInputBorder(
+//         borderRadius: BorderRadius.circular(14),
+//         borderSide: const BorderSide(
+//           color: Colors.red,
+//         ),
+//       ),
+//
+//       focusedErrorBorder: OutlineInputBorder(
+//         borderRadius: BorderRadius.circular(14),
+//         borderSide: const BorderSide(
+//           color: Colors.red,
+//           width: 1.5,
+//         ),
+//       ),
+//
+//       filled: true,
+//       fillColor: Colors.white.withOpacity(0.15),
+//     ),
+//   );
+// }
 
 // button function
 

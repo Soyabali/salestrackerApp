@@ -12,7 +12,7 @@ class HrmsPostReimbursementRepo {
 
   GeneralFunction generalFunction = GeneralFunction();
   Future hrmsPostReimbursement(
-      BuildContext context, uplodedImage, uplodedImage2, uplodedImage3, uplodedImage4, uplodedImage5, String expense,
+      BuildContext context, uplodedImage, uplodedImage2, uplodedImage3, uplodedImage4, uplodedImage5, String expense, String opportunityName,
 
       ) async {
     try {
@@ -28,6 +28,8 @@ class HrmsPostReimbursementRepo {
       print('----uplodedImage2---$uplodedImage4');
       print('----uplodedImage2---$uplodedImage5');
       print('----expense---$expense');
+      print('----opportunityName---$opportunityName');
+      // opportunityName
 
       //
       var baseURL = BaseRepo().baseurl;
@@ -41,7 +43,7 @@ class HrmsPostReimbursementRepo {
 
       request.body = json.encode({
         "sOpportunityRevId": "",
-        "sOpportunityRevName": "",
+        "sOpportunityRevName":opportunityName ?? "",
 
         "sUploadDoc1":uplodedImage ?? "",
         "sUploadDoc2":uplodedImage2 ?? "",
